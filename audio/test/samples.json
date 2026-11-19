@@ -1,0 +1,204 @@
+{
+  "sentences": [
+    {
+      "key": "chao",
+      "text": "Chào con yêu! Hôm nay con cùng cô học chữ cái và chơi trò chơi thật vui nhé!"
+    },
+    {
+      "key": "khen",
+      "text": "Ôi, cô khen con yêu nhé! Con giỏi quá đi thôi! Tuyệt vời lắm con ơi!"
+    },
+    {
+      "key": "danhvan",
+      "text": "Mờ... eo... meo... huyền... mèo! Bạn mèo con kêu meo meo!"
+    }
+  ],
+  "profiles": [
+    {
+      "id": "m1_hoaimy_goc",
+      "title": "Mẫu 1: Hoài My (Bản hiện tại)",
+      "desc": "Giọng cô Hoài My đang chạy trên app — đọc chậm, hơi đều.",
+      "engine": "edge",
+      "voice": "vi-VN-HoaiMyNeural",
+      "clips": {
+        "chao": {
+          "file": "audio/test/m1_hoaimy_goc_chao.mp3",
+          "params": {
+            "rate": "-6%"
+          },
+          "bytes": 38160
+        },
+        "khen": {
+          "file": "audio/test/m1_hoaimy_goc_khen.mp3",
+          "params": {
+            "rate": "-6%"
+          },
+          "bytes": 44928
+        },
+        "danhvan": {
+          "file": "audio/test/m1_hoaimy_goc_danhvan.mp3",
+          "params": {},
+          "bytes": 32112
+        }
+      }
+    },
+    {
+      "id": "m2_hoaimy_vuituoi",
+      "title": "Mẫu 2: Hoài My — Vui tươi, sáng giọng",
+      "desc": "Tăng cao độ (+12Hz) và tốc độ tự nhiên (+4%) cho cảm giác rạng rỡ, hoạt bát hơn.",
+      "engine": "edge",
+      "voice": "vi-VN-HoaiMyNeural",
+      "clips": {
+        "chao": {
+          "file": "audio/test/m2_hoaimy_vuituoi_chao.mp3",
+          "params": {
+            "rate": "+4%"
+          },
+          "bytes": 34416
+        },
+        "khen": {
+          "file": "audio/test/m2_hoaimy_vuituoi_khen.mp3",
+          "params": {
+            "rate": "+4%",
+            "pitch": "+12Hz"
+          },
+          "bytes": 40608
+        },
+        "danhvan": {
+          "file": "audio/test/m2_hoaimy_vuituoi_danhvan.mp3",
+          "params": {},
+          "bytes": 32112
+        }
+      }
+    },
+    {
+      "id": "m3_hoaimy_diudang",
+      "title": "Mẫu 3: Hoài My — Ngọt ngào, kể chuyện",
+      "desc": "Giọng cao trong trẻo (+18Hz, nhịp 0%) êm ái kiểu cô giáo kể chuyện cho bé.",
+      "engine": "edge",
+      "voice": "vi-VN-HoaiMyNeural",
+      "clips": {
+        "chao": {
+          "file": "audio/test/m3_hoaimy_diudang_chao.mp3",
+          "params": {
+            "rate": "+0%",
+            "pitch": "+18Hz"
+          },
+          "bytes": 35856
+        },
+        "khen": {
+          "file": "audio/test/m3_hoaimy_diudang_khen.mp3",
+          "params": {
+            "rate": "+0%",
+            "pitch": "+18Hz"
+          },
+          "bytes": 42192
+        },
+        "danhvan": {
+          "file": "audio/test/m3_hoaimy_diudang_danhvan.mp3",
+          "params": {},
+          "bytes": 32112
+        }
+      }
+    },
+    {
+      "id": "m4_ava_multi",
+      "title": "Mẫu 4: Ava Multilingual (Giọng trò chuyện)",
+      "desc": "Giọng nữ đa ngôn ngữ (Microsoft Ava), ngữ điệu tự nhiên khi đọc câu dài.",
+      "engine": "edge",
+      "voice": "en-US-AvaMultilingualNeural",
+      "clips": {
+        "chao": {
+          "file": "audio/test/m4_ava_multi_chao.mp3",
+          "params": {
+            "rate": "-4%",
+            "pitch": "+6Hz"
+          },
+          "bytes": 32832
+        },
+        "khen": {
+          "file": "audio/test/m4_ava_multi_khen.mp3",
+          "params": {
+            "rate": "-4%",
+            "pitch": "+6Hz"
+          },
+          "bytes": 34416
+        },
+        "danhvan": {
+          "file": "audio/test/m4_ava_multi_danhvan.mp3",
+          "params": {
+            "rate": "-4%",
+            "pitch": "+6Hz"
+          },
+          "bytes": 31248
+        }
+      }
+    },
+    {
+      "id": "m5_emma_multi",
+      "title": "Mẫu 5: Emma Multilingual (Tươi sáng, thân thiện)",
+      "desc": "Giọng nữ đa ngôn ngữ (Microsoft Emma), âm sắc trẻ trung thân thiện.",
+      "engine": "edge",
+      "voice": "en-US-EmmaMultilingualNeural",
+      "clips": {
+        "chao": {
+          "file": "audio/test/m5_emma_multi_chao.mp3",
+          "params": {
+            "rate": "-4%",
+            "pitch": "+6Hz"
+          },
+          "bytes": 33696
+        },
+        "khen": {
+          "file": "audio/test/m5_emma_multi_khen.mp3",
+          "params": {
+            "rate": "-4%",
+            "pitch": "+6Hz"
+          },
+          "bytes": 37296
+        },
+        "danhvan": {
+          "file": "audio/test/m5_emma_multi_danhvan.mp3",
+          "params": {
+            "rate": "-4%",
+            "pitch": "+6Hz"
+          },
+          "bytes": 35856
+        }
+      }
+    },
+    {
+      "id": "m6_google",
+      "title": "Mẫu 6: Chị Google Tiếng Việt",
+      "desc": "Giọng Google Translate (gTTS) quen thuộc, phát âm rõ chữ.",
+      "engine": "gtts",
+      "voice": "google-vi",
+      "clips": {
+        "chao": {
+          "file": "audio/test/m6_google_chao.mp3",
+          "params": {
+            "lang": "vi",
+            "slow": false
+          },
+          "bytes": 49728
+        },
+        "khen": {
+          "file": "audio/test/m6_google_khen.mp3",
+          "params": {
+            "lang": "vi",
+            "slow": false
+          },
+          "bytes": 51648
+        },
+        "danhvan": {
+          "file": "audio/test/m6_google_danhvan.mp3",
+          "params": {
+            "lang": "vi",
+            "slow": false
+          },
+          "bytes": 50304
+        }
+      }
+    }
+  ]
+}

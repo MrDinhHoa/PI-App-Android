@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nghe thử giọng cô giáo - Bé Học Vui</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@600;700;900&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Comfortaa', system-ui, sans-serif;
+      background: linear-gradient(135deg, #FFF6EA 0%, #FFEBE0 55%, #F4F7FF 100%);
+      color: #4E342E;
+      min-height: 100vh;
+      padding: 28px 20px 48px;
+    }
+    .wrap {
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+    .header {
+      background: rgba(255, 255, 255, 0.94);
+      border: 3px solid #FFE0C2;
+      border-radius: 28px;
+      padding: 22px 28px;
+      margin-bottom: 24px;
+      box-shadow: 0 10px 24px rgba(255, 123, 84, 0.12);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    h1 {
+      font-size: 24px;
+      color: #E64A19;
+      margin-bottom: 6px;
+    }
+    .subtitle {
+      font-size: 14px;
+      color: #795548;
+      line-height: 1.5;
+    }
+    .speed-box {
+      background: #FFF6EA;
+      border: 2px solid #FFB26B;
+      border-radius: 20px;
+      padding: 12px 18px;
+      min-width: 250px;
+    }
+    .speed-top {
+      display: flex;
+      justify-content: space-between;
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 6px;
+      color: #D84315;
+    }
+    input[type="range"] {
+      width: 100%;
+      accent-color: #FF7B54;
+      cursor: pointer;
+    }
+
+    /* Section Styling */
+    .section-title {
+      font-size: 20px;
+      font-weight: 900;
+      color: #BF360C;
+      margin: 28px 0 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .badge-star {
+      background: linear-gradient(135deg, #FF6B6B, #FF8E53);
+      color: white;
+      font-size: 12px;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-weight: 700;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 18px;
+    }
+    .card {
+      background: #FFFFFF;
+      border-radius: 24px;
+      padding: 20px;
+      border: 3px solid #FFF;
+      box-shadow: 0 10px 22px rgba(0, 0, 0, 0.06);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .card.gemini-card {
+      border: 3px solid #FFCCBC;
+      background: linear-gradient(180deg, #FFFFFF 0%, #FFFDF9 100%);
+    }
+    .card.is-playing {
+      border-color: #FF7B54 !important;
+      transform: translateY(-2px);
+      box-shadow: 0 14px 28px rgba(255, 123, 84, 0.25);
+    }
+    .card-title {
+      font-size: 16px;
+      font-weight: 900;
+      color: #3E2723;
+    }
+    .card-desc {
+      font-size: 13px;
+      color: #6D4C41;
+      line-height: 1.45;
+    }
+    .card-meta {
+      font-family: Consolas, monospace;
+      font-size: 12px;
+      background: #FFF8F0;
+      color: #8D6E63;
+      padding: 8px 10px;
+      border-radius: 12px;
+      word-break: break-word;
+    }
+    .card-quote {
+      font-size: 13.5px;
+      background: #F5F7FA;
+      border-left: 4px solid #FF7B54;
+      padding: 10px 12px;
+      border-radius: 0 12px 12px 0;
+      color: #37474F;
+      font-style: italic;
+    }
+    .btn-row {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: auto;
+    }
+    .play-btn {
+      border: none;
+      border-radius: 16px;
+      padding: 12px 16px;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      background: #FFF1E6;
+      color: #5D4037;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: all 0.15s;
+    }
+    .play-btn:hover {
+      background: #FFE0C2;
+      color: #D84315;
+    }
+    .play-btn.active {
+      background: #FF7B54;
+      color: #FFFFFF;
+    }
+    .play-btn.gemini-btn {
+      background: #FFE8E0;
+      color: #BF360C;
+    }
+    .play-btn.gemini-btn:hover {
+      background: #FFCCBC;
+    }
+    .play-btn.gemini-btn.active {
+      background: #E64A19;
+      color: #FFF;
+    }
+    .status-badge {
+      font-size: 12px;
+      opacity: 0.9;
+    }
+    .footer-tip {
+      margin-top: 32px;
+      text-align: center;
+      font-size: 15px;
+      color: #4E342E;
+      background: rgba(255,255,255,0.92);
+      padding: 18px 24px;
+      border-radius: 20px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+      border: 2px solid #FFE0C2;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="header">
+      <div>
+        <h1>🎙️ So sánh giọng đọc cô giáo - Bé Học Vui</h1>
+        <p class="subtitle">Bấm từng nút để nghe trực tiếp chất giọng siêu truyền cảm của Google Gemini 3.8 và các giọng Edge TTS.</p>
+      </div>
+      <div class="speed-box">
+        <div class="speed-top">
+          <span>Tốc độ phát thử</span>
+          <span id="speedLabel">1.00x</span>
+        </div>
+        <input id="speedRange" type="range" min="0.85" max="1.15" step="0.05" value="1.00">
+      </div>
+    </div>
+
+    <!-- PHẦN 1: GOOGLE GEMINI 3.8 TTS MỚI SINH -->
+    <div class="section-title">
+      <span>🌟 Hướng 1: Google Gemini 3.8 Flash TTS (Cô giáo mầm non siêu truyền cảm)</span>
+      <span class="badge-star">MỚI TẠO</span>
+    </div>
+
+    <div class="grid" id="geminiGrid">
+      <!-- Mẫu 1: Aoede Khen ngợi -->
+      <div class="card gemini-card">
+        <div class="card-title">🌸 Mẫu 1: Khen ngợi (Giọng Aoede)</div>
+        <div class="card-desc">Chất giọng nữ ấm áp, dịu dàng, vừa nói vừa cười nhẹ khen ngợi bé yêu 5 tuổi.</div>
+        <div class="card-quote">“Bé giỏi quá! Hoan hô bé yêu của cô nào!”</div>
+        <div class="card-meta">Model: gemini-3.8-flash-tts | Voice: Aoede</div>
+        <div class="btn-row">
+          <button class="play-btn gemini-btn" onclick="playCustom('audio/test_gemini/1_aoede_khen_ngoi.wav', this)">
+            <span>▶ Nghe thử Mẫu 1</span>
+            <span class="status-badge">WAV 24kHz</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Mẫu 2: Kore Khen ngợi -->
+      <div class="card gemini-card">
+        <div class="card-title">✨ Mẫu 2: Khen ngợi (Giọng Kore)</div>
+        <div class="card-desc">Chất giọng trong trẻo, vui tươi, phấn khởi và tràn đầy năng lượng khích lệ bé.</div>
+        <div class="card-quote">“Bé giỏi quá! Hoan hô bé yêu của cô nào!”</div>
+        <div class="card-meta">Model: gemini-3.8-flash-tts | Voice: Kore</div>
+        <div class="btn-row">
+          <button class="play-btn gemini-btn" onclick="playCustom('audio/test_gemini/2_kore_khen_ngoi.wav', this)">
+            <span>▶ Nghe thử Mẫu 2</span>
+            <span class="status-badge">WAV 24kHz</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Mẫu 3: Aoede Dạy chữ cái -->
+      <div class="card gemini-card">
+        <div class="card-title">🍎 Mẫu 3: Dạy chữ cái (Giọng Aoede)</div>
+        <div class="card-desc">Phát âm tròn vành rõ chữ, nhịp điệu hào hứng, ấm áp như cô giáo mầm non đang chỉ bảng.</div>
+        <div class="card-quote">“Chữ A. A... quả táo thơm ngon ngọt lịm!”</div>
+        <div class="card-meta">Model: gemini-3.8-flash-tts | Voice: Aoede</div>
+        <div class="btn-row">
+          <button class="play-btn gemini-btn" onclick="playCustom('audio/test_gemini/3_aoede_hoc_chu.wav', this)">
+            <span>▶ Nghe thử Mẫu 3</span>
+            <span class="status-badge">WAV 24kHz</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Mẫu 4: Kore Dạy chữ cái -->
+      <div class="card gemini-card">
+        <div class="card-title">🍓 Mẫu 4: Dạy chữ cái (Giọng Kore)</div>
+        <div class="card-desc">Phát âm tươi tắn, thanh thoát, cuốn hút sự chú ý của trẻ nhỏ.</div>
+        <div class="card-quote">“Chữ A. A... quả táo thơm ngon ngọt lịm!”</div>
+        <div class="card-meta">Model: gemini-3.8-flash-tts | Voice: Kore</div>
+        <div class="btn-row">
+          <button class="play-btn gemini-btn" onclick="playCustom('audio/test_gemini/4_kore_hoc_chu.wav', this)">
+            <span>▶ Nghe thử Mẫu 4</span>
+            <span class="status-badge">WAV 24kHz</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Mẫu 5: Aoede Dỗ dành động viên -->
+      <div class="card gemini-card">
+        <div class="card-title">💖 Mẫu 5: Dỗ dành & Động viên (Giọng Aoede)</div>
+        <div class="card-desc">Giọng dỗ dành âu yếm, kiên nhẫn khi bé chọn chưa đúng, truyền sự tự tin cho con.</div>
+        <div class="card-quote">“Không sao đâu con yêu, chúng mình cùng thử lại nhé. Con làm được mà!”</div>
+        <div class="card-meta">Model: gemini-3.8-flash-tts | Voice: Aoede</div>
+        <div class="btn-row">
+          <button class="play-btn gemini-btn" onclick="playCustom('audio/test_gemini/5_aoede_dong_vien.wav', this)">
+            <span>▶ Nghe thử Mẫu 5</span>
+            <span class="status-badge">WAV 24kHz</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- PHẦN 2: CÁC MẪU EDGE TTS CŨ ĐỂ SO SÁNH -->
+    <div class="section-title" style="margin-top: 40px; color: #5D4037;">
+      <span>🔊 Hướng 2: Microsoft Edge TTS (Các mẫu tinh chỉnh trước đây)</span>
+    </div>
+
+    <div class="grid" id="cardsGrid"></div>
+
+    <div class="footer-tip">
+      👉 Sau khi nghe thử, bạn thích chất giọng nào nhất (ví dụ: <strong>Giọng Aoede của Gemini</strong> hay <strong>Giọng Kore của Gemini</strong>)?<br>
+      Chỉ cần nhắn cho tôi biết, tôi sẽ tiến hành chạy chuyển đổi đồng loạt toàn bộ ~600 file âm thanh cho ứng dụng!
+    </div>
+  </div>
+
+  <script>
+    const cardsGrid = document.getElementById('cardsGrid');
+    const speedRange = document.getElementById('speedRange');
+    const speedLabel = document.getElementById('speedLabel');
+
+    let currentAudio = null;
+    let currentBtn = null;
+    let currentCard = null;
+
+    speedRange.addEventListener('input', () => {
+      const rate = parseFloat(speedRange.value);
+      speedLabel.textContent = rate.toFixed(2) + 'x';
+      if (currentAudio) currentAudio.playbackRate = rate;
+    });
+
+    function stopPlaying() {
+      if (currentAudio) {
+        currentAudio.pause();
+        currentAudio = null;
+      }
+      if (currentBtn) {
+        currentBtn.classList.remove('active');
+        const badge = currentBtn.querySelector('.status-badge');
+        if (badge) badge.textContent = currentBtn.dataset.origText || '▶ Nghe thử';
+        currentBtn = null;
+      }
+      if (currentCard) {
+        currentCard.classList.remove('is-playing');
+        currentCard = null;
+      }
+    }
+
+    function playCustom(url, btn) {
+      const card = btn.closest('.card');
+      const wasSame = currentBtn === btn;
+      stopPlaying();
+      if (wasSame) return;
+
+      const badge = btn.querySelector('.status-badge');
+      if (!btn.dataset.origText && badge) btn.dataset.origText = badge.textContent;
+
+      const audio = new Audio(url);
+      audio.playbackRate = parseFloat(speedRange.value);
+      currentAudio = audio;
+      currentBtn = btn;
+      currentCard = card;
+
+      btn.classList.add('active');
+      if (badge) badge.textContent = '🔊 Đang phát...';
+      if (card) card.classList.add('is-playing');
+
+      audio.onended = stopPlaying;
+      audio.onerror = () => {
+        if (badge) badge.textContent = '❌ Lỗi tải file';
+      };
+      audio.play().catch(() => {
+        if (badge) badge.textContent = '❌ Không phát được';
+      });
+    }
+
+    const LABELS = {
+      chao: '👋 Chào & dẫn bài',
+      khen: '🌟 Khen ngợi',
+      danhvan: '🔤 Đánh vần'
+    };
+
+    fetch('audio/test/samples.json')
+      .then(r => r.json())
+      .then(data => {
+        data.profiles.forEach(prof => {
+          const card = document.createElement('div');
+          card.className = 'card';
+
+          const firstParams = Object.values(prof.clips)[0]?.params || {};
+          const paramStr = Object.entries(firstParams).map(([k, v]) => `${k}=${v}`).join(', ') || 'mặc định';
+
+          card.innerHTML = `
+            <div class="card-title">${prof.title}</div>
+            <div class="card-desc">${prof.desc}</div>
+            <div class="card-meta">voice: ${prof.voice} | ${paramStr}</div>
+            <div class="btn-row"></div>
+          `;
+
+          const btnRow = card.querySelector('.btn-row');
+          data.sentences.forEach(s => {
+            const clip = prof.clips[s.key];
+            if (!clip) return;
+            const btn = document.createElement('button');
+            btn.className = 'play-btn';
+            btn.innerHTML = `<span>${LABELS[s.key] || s.key}</span><span class="status-badge">▶ Nghe thử</span>`;
+            btn.addEventListener('click', () => playCustom(clip.file, btn));
+            btnRow.appendChild(btn);
+          });
+
+          cardsGrid.appendChild(card);
+        });
+      })
+      .catch(() => {});
+  </script>
+</body>
+</html>

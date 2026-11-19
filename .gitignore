@@ -8,6 +8,9 @@ desktop.ini
 # Python
 __pycache__/
 *.py[cod]
+.env
+.env.*
+audio/test_gemini/
 
 # Temporary test & debug files
 _test*.html
