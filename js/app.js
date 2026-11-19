@@ -70,16 +70,16 @@ document.addEventListener('DOMContentLoaded', () => {
       } else if (btn.dataset.tab === 'games') {
         window.minigame.enter();
       } else if (btn.dataset.tab === 'alphabet') {
-        window.kidsAudio.speak('Bảng chữ cái! Bé chạm vào chữ để nghe âm nhé!');
+        window.kidsAudio.speak('Bảng chữ cái! Con chạm vào chữ để nghe cô đọc nhé!');
         window.phonics.enterAlphabet();
       } else if (btn.dataset.tab === 'blend') {
-        window.kidsAudio.speak('Cỗ máy ghép vần! Bé kéo chữ vào máy nhé!');
+        window.kidsAudio.speak('Cỗ máy ghép vần! Con kéo chữ vào máy cùng cô nhé!');
         window.phonics.enterBlend();
       } else if (btn.dataset.tab === 'spelling') {
-        window.kidsAudio.speak('Bé cùng tập đánh vần nhé!');
+        window.kidsAudio.speak('Con cùng cô tập đánh vần nhé!');
         loadSpellingWord();
       } else if (btn.dataset.tab === 'math') {
-        window.kidsAudio.speak('Bé làm toán vui nhé!');
+        window.kidsAudio.speak('Con cùng cô làm toán vui nhé!');
         newMathQuestion();
       }
     });
@@ -161,7 +161,13 @@ document.addEventListener('DOMContentLoaded', () => {
     if (emptyIdx === -1) return; // All slots filled
 
     window.kidsAudio.playPop();
-    window.kidsAudio.speak(char);
+    const lower = char.toLowerCase();
+    const letterItem = window.phonicsUtil && window.phonicsUtil.findLetter(lower);
+    if (letterItem) {
+      window.kidsAudio.speakSequence([window.phonicsUtil.phonemePart(letterItem, false)], { rate: 0.85 });
+    } else {
+      window.kidsAudio.speakSequence([lower], { rate: 0.85 });
+    }
 
     userLetters[emptyIdx] = { char, bubbleEl };
     bubbleEl.classList.add('used');
@@ -211,7 +217,7 @@ document.addEventListener('DOMContentLoaded', () => {
       window.kidsAudio.playBoing();
       spellingStatusEl.textContent = 'Chưa đúng rồi! Bé chạm vào ô chữ để thử lại nhé!';
       setTimeout(() => {
-        window.kidsAudio.speak('Chưa đúng rồi, bé thử lại nhé!');
+        window.kidsAudio.speak('Chưa đúng rồi, con thử lại cùng cô nhé!');
       }, 200);
     }
   }
@@ -219,10 +225,13 @@ document.addEventListener('DOMContentLoaded', () => {
   btnSpellingAudio.addEventListener('click', () => {
     window.kidsAudio.playPop();
     const item = spellingData[currentSpellingIdx];
-    window.kidsAudio.speak(`Bé hãy ghép chữ ${item.word}! ${item.name}!`);
+    window.kidsAudio.speakSequence(['Con hãy ghép chữ', item.word.toLowerCase(), item.name], { gap: 200, rate: 0.85 });
   });
 
   // ==================== 3. MATH MODULE (BÉ LÀM TOÁN) ====================
+  const MATH_NUM_WORDS = ['không', 'một', 'hai', 'ba', 'bốn', 'năm', 'sáu', 'bảy', 'tám', 'chín', 'mười'];
+  const mathNumWord = n => MATH_NUM_WORDS[n] || String(n);
+
   const mathEmojis = [
     { emoji: '🍎', name: 'quả táo' },
     { emoji: '🍓', name: 'quả dâu' },
@@ -240,7 +249,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnMathAudio = document.getElementById('btnMathAudio');
 
   let currentAnswer = 0;
-  let currentMathQuestionVoice = '';
+  let currentMathQuestionParts = [];
 
   function newMathQuestion() {
     mathTargetEl.textContent = '?';
@@ -256,14 +265,14 @@ document.addEventListener('DOMContentLoaded', () => {
       num2 = Math.floor(Math.random() * 4) + 1; // 1 to 4
       currentAnswer = num1 + num2;
       mathOpEl.textContent = '+';
-      currentMathQuestionVoice = `${num1} ${item.name} cộng ${num2} ${item.name} bằng mấy ${item.name}?`;
+      currentMathQuestionParts = [mathNumWord(num1), item.name, 'cộng', mathNumWord(num2), item.name, 'bằng mấy', item.name];
       mathPromptTextEl.textContent = `Bé hãy tính: ${num1} ${item.name} + ${num2} ${item.name} = ?`;
     } else {
       num1 = Math.floor(Math.random() * 4) + 2; // 2 to 5
       num2 = Math.floor(Math.random() * (num1 - 1)) + 1; // 1 to num1-1
       currentAnswer = num1 - num2;
       mathOpEl.textContent = '−';
-      currentMathQuestionVoice = `${num1} ${item.name} bớt ${num2} ${item.name} còn mấy ${item.name}?`;
+      currentMathQuestionParts = [mathNumWord(num1), item.name, 'bớt', mathNumWord(num2), item.name, 'còn mấy', item.name];
       mathPromptTextEl.textContent = `Bé hãy tính: ${num1} ${item.name} − ${num2} ${item.name} = ?`;
     }
 
@@ -275,7 +284,7 @@ document.addEventListener('DOMContentLoaded', () => {
       span.textContent = item.emoji;
       span.addEventListener('click', () => {
         window.kidsAudio.playPop();
-        window.kidsAudio.speak(`${i + 1}`);
+        window.kidsAudio.speak(mathNumWord(i + 1));
       });
       mathGroup1El.appendChild(span);
     }
@@ -288,7 +297,7 @@ document.addEventListener('DOMContentLoaded', () => {
       span.textContent = item.emoji;
       span.addEventListener('click', () => {
         window.kidsAudio.playPop();
-        window.kidsAudio.speak(`${i + 1}`);
+        window.kidsAudio.speak(mathNumWord(i + 1));
       });
       mathGroup2El.appendChild(span);
     }
@@ -316,10 +325,9 @@ document.addEventListener('DOMContentLoaded', () => {
           window.kidsAudio.playCelebration();
           addStar(2);
 
-          const praise = `Chính xác! Kết quả là ${val}! Bé giỏi quá!`;
           mathPromptTextEl.textContent = `🎉 Hoan hô! Kết quả là ${val}!`;
           setTimeout(() => {
-            window.kidsAudio.speak(praise);
+            window.kidsAudio.speakSequence(['Cô khen con, đúng rồi! Kết quả là', mathNumWord(val)], { gap: 180, rate: 0.88 });
             setTimeout(newMathQuestion, 2800);
           }, 300);
         } else {
@@ -327,7 +335,7 @@ document.addEventListener('DOMContentLoaded', () => {
           window.kidsAudio.playBoing();
           btn.style.transform = 'scale(0.85)';
           setTimeout(() => btn.style.transform = '', 200);
-          window.kidsAudio.speak(`Chưa đúng rồi. Bé hãy đếm lại nhé!`);
+          window.kidsAudio.speak('Chưa đúng rồi, con đếm lại cùng cô nhé!');
         }
       });
       mathChoicesEl.appendChild(btn);
@@ -336,7 +344,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   btnMathAudio.addEventListener('click', () => {
     window.kidsAudio.playPop();
-    window.kidsAudio.speak(currentMathQuestionVoice);
+    window.kidsAudio.speakSequence(currentMathQuestionParts, { gap: 150, rate: 0.88 });
   });
 
   // ==================== CONFETTI EFFECT ====================

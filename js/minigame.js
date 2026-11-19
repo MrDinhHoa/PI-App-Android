@@ -73,7 +73,7 @@
       cardBalloon.classList.remove('anim-shake');
       void cardBalloon.offsetWidth;
       cardBalloon.classList.add('anim-shake');
-      audio().speak('Bé chưa có chìa khóa. Bé học xong một bài để nhận chìa khóa nhé!');
+      audio().speak('Con chưa có chìa khóa. Con học xong một bài để nhận chìa khóa nhé!');
       return;
     }
     audio().playPop();
@@ -100,7 +100,7 @@
   };
 
   function targetVoice(t) {
-    return t.kind === 'letter' ? ['Tìm chữ', P.phonemePart(t.item, false)] : [`Tìm số ${numWord(t.value)}`];
+    return t.kind === 'letter' ? ['Con tìm chữ', P.phonemePart(t.item, false)] : ['Con tìm số', numWord(t.value)];
   }
   function valueVoice(kind, value) {
     return kind === 'letter' ? P.phonemePart(P.findLetter(value), false) : numWord(value);
@@ -249,7 +249,7 @@
         audio().playCelebration();
         if (window.spawnConfetti) window.spawnConfetti();
         const token = g.token;
-        audio().speakSequence(['Giỏi quá!'], { rate: 0.95 }).then(() => {
+        audio().speakSequence(['Con giỏi quá!'], { rate: 0.95 }).then(() => {
           if (g.running && token === g.token) nextTarget();
         });
       } else {
@@ -379,10 +379,12 @@
     audio().playCelebration();
     if (window.spawnConfetti) window.spawnConfetti();
     audio().speakSequence([
-      `Hết giờ rồi! Bé bắn được ${g.score} quả bóng!`,
-      isRecord ? 'Kỷ lục mới! Giỏi quá!' : 'Giỏi quá!',
-      'Mắt bé cần nghỉ một chút. Bé học bài tiếp để nhận chìa khóa nhé!'
-    ], { gap: 400, rate: 0.9 });
+      'Hết giờ rồi! Con bắn được',
+      numWord(g.score),
+      'quả bóng!',
+      isRecord ? 'Kỷ lục mới! Con giỏi quá!' : 'Con giỏi quá!',
+      'Mắt con cần nghỉ một chút. Con học bài tiếp để nhận chìa khóa nhé!'
+    ], { gap: 220, rate: 0.9 });
   }
 
   function sectionActive() {
@@ -431,8 +433,8 @@
     if (!resultEl.classList.contains('is-hidden')) return;
     showView('lobby');
     audio().speak(window.wallet.keys > 0
-      ? 'Khu trò chơi! Bé chạm vào trò bắn bóng để chơi nhé!'
-      : 'Khu trò chơi! Bé học xong một bài để nhận chìa khóa nhé!');
+      ? 'Khu trò chơi! Con chạm vào trò bắn bóng để chơi nhé!'
+      : 'Khu trò chơi! Con học xong một bài để nhận chìa khóa nhé!');
   }
 
   window.minigame = { enter, pause, _state: g };

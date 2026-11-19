@@ -135,7 +135,7 @@
   btnAbcReplay.addEventListener('click', () => {
     audio().playPop();
     if (abc.current) playLetter(abc.current);
-    else audio().speak('Bé chạm vào một chữ cái nhé!');
+    else audio().speak('Con chạm vào một chữ cái cùng cô nhé!');
   });
 
   function enterAlphabet() {
@@ -397,7 +397,7 @@
   async function chooseTone(tone, btn) {
     if (!blend.ready) {
       audio().playBoing();
-      audio().speak('Bé ghép tiếng trước, rồi mới chọn dấu nhé!');
+      audio().speak('Con ghép tiếng trước, rồi mới chọn dấu nhé!');
       setStatus('Bé ghép phụ âm với nguyên âm trước, rồi mới chọn dấu nhé!');
       return;
     }
@@ -452,13 +452,13 @@
     audio().playPop();
     if (blend.ready) spellCurrent();
     else if (blend.c && blend.v) tryBlend();
-    else audio().speak('Bé kéo phụ âm và nguyên âm vào cỗ máy nhé!');
+    else audio().speak('Con kéo phụ âm và nguyên âm vào cỗ máy nhé!');
   });
 
   btnBlendReset.addEventListener('click', () => {
     audio().playBoing();
     resetBlend();
-    audio().speak('Ghép tiếng mới nào!');
+    audio().speak('Ghép tiếng mới cùng cô nào!');
   });
 
   slotC.addEventListener('click', () => {

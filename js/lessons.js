@@ -191,7 +191,7 @@
     if (!isUnlocked(lesson)) {
       audio().playBoing();
       bounce(node, 'anim-shake');
-      audio().speak('Bé học xong bài trước để mở bài này nhé!');
+      audio().speak('Con học xong bài trước để mở bài này nhé!');
       return;
     }
     audio().playPop();
@@ -254,7 +254,7 @@
       await sleep(250);
     }
     if (p.play) p.play();
-    else audio().speakSequence(p.voice, { gap: 250, rate: 0.85 });
+    else audio().speakSequence(p.voice, { gap: 180, rate: 0.85 });
   }
 
   // text: banner text; voice: parts; play: optional custom player (replaces voice)
@@ -285,7 +285,7 @@
     const dot = dotsEl.children[player.idx];
     if (dot) dot.classList.add('done');
 
-    await audio().speakSequence([praise, ...extraParts], { gap: 350, rate: 0.85 });
+    await audio().speakSequence([praise, ...extraParts], { gap: 220, rate: 0.85 });
     await sleep(600);
     if (token !== player.token) return;
     player.idx++;
@@ -298,7 +298,7 @@
     player.mistakes++;
     audio().playBoing();
     if (target) bounce(target, 'anim-shake');
-    audio().speakSequence(hintParts || ['Chưa đúng rồi, bé thử lại nhé!'], { gap: 250, rate: 0.85 });
+    audio().speakSequence(hintParts || ['Chưa đúng rồi, con thử lại cùng cô nhé!'], { gap: 180, rate: 0.85 });
   }
 
   function finishLesson() {
@@ -344,13 +344,18 @@
     setTimeout(() => window.awardKey(), 900);
     audio().playCelebration();
     setTimeout(() => window.spawnConfetti && window.spawnConfetti(), 400);
+    const starSentence = stars === 3
+      ? 'Hoàn thành bài học rồi! Cô tặng con ba ngôi sao và một chìa khóa!'
+      : stars === 2
+        ? 'Hoàn thành bài học rồi! Cô tặng con hai ngôi sao và một chìa khóa!'
+        : 'Hoàn thành bài học rồi! Cô tặng con một ngôi sao và một chìa khóa!';
     audio().speakSequence([
-      `Hoàn thành bài học! Bé được ${numWord(stars)} ngôi sao và một chìa khóa!`,
-      'Bé có thể chơi trò bắn bóng rồi!'
-    ], { gap: 400, rate: 0.9 });
+      starSentence,
+      'Con có thể chơi trò bắn bóng rồi đấy!'
+    ], { gap: 260, rate: 0.9 });
   }
 
-  btnHome.addEventListener('click', () => { audio().playPop(); exitLesson(); audio().speak('Bé chọn bài học nhé!'); });
+  btnHome.addEventListener('click', () => { audio().playPop(); exitLesson(); audio().speak('Chào con! Con chọn bài học cùng cô nhé!'); });
   btnReplay.addEventListener('click', () => { audio().playPop(); playPrompt(); });
 
   // ==================== EXERCISE RENDERERS ====================
@@ -406,11 +411,11 @@
         const c = el('button', `ls-card ls-letter grp-${ex.group}`, item.letter);
         c.addEventListener('click', () => {
           if (item === ex.target) correct(c, [P.phonemePart(item, false)]);
-          else wrong(c, ['Đây là', P.phonemePart(item, false), 'Bé tìm', P.phonemePart(ex.target, false)]);
+          else wrong(c, ['Đây là', P.phonemePart(item, false), 'Con tìm chữ', P.phonemePart(ex.target, false)]);
         });
         return c;
       }));
-      setPrompt('Bé nghe và chạm vào chữ đúng nhé!', ['Bé tìm chữ', P.phonemePart(ex.target, false)]);
+      setPrompt('Bé nghe và chạm vào chữ đúng nhé!', ['Con tìm chữ', P.phonemePart(ex.target, false)]);
     },
 
     // Nghe âm đầu -> chọn hình
@@ -418,7 +423,7 @@
       area.appendChild(bigSpeaker());
       area.appendChild(choiceRow(ex.options, item => pictureCard(item.emoji, c => {
         if (item === ex.target) correct(c, [item.word, ...P.spellParts(item.word)]);
-        else wrong(c, [`Đây là ${item.word}. Bé tìm hình có âm`, P.phonemePart(ex.target, false)]);
+        else wrong(c, ['Đây là', item.word, 'Con tìm hình có âm', P.phonemePart(ex.target, false)]);
       })));
       setPrompt('Hình nào có âm đầu bé vừa nghe?', ['Hình nào có âm đầu là', P.phonemePart(ex.target, false)]);
     },
@@ -430,11 +435,11 @@
         const c = el('button', 'ls-card ls-word', text);
         c.addEventListener('click', () => {
           if (text === ex.target) correct(c, P.spellParts(text));
-          else wrong(c, [`Đây là tiếng ${text}.`, `Bé tìm tiếng ${ex.target} nhé!`]);
+          else wrong(c, ['Đây là tiếng', text, 'Con tìm tiếng', ex.target]);
         });
         return c;
       }));
-      setPrompt('Bé nghe kỹ dấu thanh rồi chọn tiếng đúng nhé!', ['Bé tìm tiếng', ex.target]);
+      setPrompt('Bé nghe kỹ dấu thanh rồi chọn tiếng đúng nhé!', ['Con tìm tiếng', ex.target]);
     },
 
     // Nhìn hình -> chọn chữ
@@ -444,11 +449,11 @@
         const c = el('button', 'ls-card ls-word', w.text);
         c.addEventListener('click', () => {
           if (w === ex.target) correct(c, [...P.spellParts(w.text), w.say]);
-          else wrong(c, [`Đây là chữ ${w.text}. Bé thử lại nhé!`]);
+          else wrong(c, ['Đây là chữ', w.text, 'Con thử lại cùng cô nhé!']);
         });
         return c;
       }));
-      setPrompt('Đây là hình gì? Bé chọn chữ đúng nhé!', ['Đây là hình gì? Bé chọn chữ đúng nhé!']);
+      setPrompt('Đây là hình gì? Bé chọn chữ đúng nhé!', ['Đây là hình gì? Con chọn chữ đúng nhé!']);
     },
 
     // Đọc từ 2 tiếng (chạm từng tiếng để nghe đánh vần) -> chọn hình
@@ -469,10 +474,10 @@
       area.appendChild(wordRow);
       area.appendChild(choiceRow(ex.options, w => pictureCard(w.emoji, c => {
         if (w === ex.target) correct(c, [w.text, w.sound]);
-        else wrong(c, ['Chưa đúng rồi. Bé chạm vào chữ để nghe đánh vần nhé!']);
+        else wrong(c, ['Chưa đúng rồi, con chạm vào chữ để nghe cô đánh vần nhé!']);
       })));
       setPrompt('Bé đọc từ này rồi chọn hình đúng nhé! (Chạm vào chữ để nghe đánh vần)',
-        ['Bé đọc từ này, rồi chọn hình đúng nhé!']);
+        ['Con đọc từ này rồi chọn hình đúng nhé!']);
     },
 
     // Đọc câu: karaoke -> bé chạm từng chữ trái sang phải -> chọn hình
@@ -510,7 +515,7 @@
         phase = 'tap';
         markNext();
         bannerEl.textContent = 'Giờ bé chạm từng chữ, từ trái sang phải nhé! 👉';
-        audio().speakSequence(['Giờ bé chạm từng chữ, từ trái sang phải nhé!'], { rate: 0.9 });
+        audio().speakSequence(['Giờ con chạm từng chữ từ trái sang phải nhé!'], { rate: 0.9 });
       }
 
       function onWordTap(i, span) {
@@ -522,7 +527,7 @@
         if (i !== expected) {
           audio().playBoing();
           bounce(spans[expected], 'anim-jump', 500);
-          audio().speakSequence(['Bé đọc lần lượt từ bên trái sang nhé!'], { rate: 0.9 });
+          audio().speakSequence(['Con đọc lần lượt từ bên trái sang nhé!'], { rate: 0.9 });
           return;
         }
         audio().playPop();
@@ -538,11 +543,11 @@
         markNext();
         ex.options.forEach(s => picRow.appendChild(pictureCard(s.emoji, c => {
           if (s === ex.target) correct(c, [ex.target.text]);
-          else wrong(c, ['Chưa đúng rồi. Bé đọc lại câu và chọn hình nhé!']);
+          else wrong(c, ['Chưa đúng rồi, con đọc lại câu và chọn hình nhé!']);
         })));
         picRow.classList.remove('ls-hidden-row');
         bannerEl.textContent = 'Câu này nói về hình nào? Bé chọn nhé!';
-        audio().speakSequence([words[i].toLowerCase(), 'Câu này nói về hình nào? Bé chọn nhé!'], { gap: 500, rate: 0.85 });
+        audio().speakSequence([words[i].toLowerCase(), 'Câu này nói về hình nào? Con chọn nhé!'], { gap: 220, rate: 0.85 });
       }
 
       setPrompt('Bé nghe cô đọc câu nhé! 👂', [], () => karaoke());
@@ -575,9 +580,10 @@
           } else {
             choiceWrap.classList.remove('ls-hidden-row');
             const text = `Có tất cả mấy ${item.name}? Bé chọn số nhé!`;
-            player.prompt = { text, voice: [text] };
+            const voiceParts = ['Có tất cả mấy', item.name, 'Con chọn số nhé!'];
+            player.prompt = { text, voice: voiceParts };
             bannerEl.textContent = text;
-            audio().speakSequence([numWord(counted), text], { gap: 500, rate: 0.85 });
+            audio().speakSequence([numWord(counted), ...voiceParts], { gap: 180, rate: 0.85 });
           }
         });
         grid.appendChild(it);
@@ -586,15 +592,15 @@
       numberOptions(n, 3, ex.lo, ex.hi).forEach(v => {
         const c = el('button', 'ls-card ls-num', String(v));
         c.addEventListener('click', () => {
-          if (v === n) correct(c, [`Có ${numWord(n)} ${item.name}!`]);
-          else wrong(c, ['Chưa đúng rồi. Bé đếm lại nhé!']);
+          if (v === n) correct(c, ['Có tất cả', numWord(n), item.name]);
+          else wrong(c, ['Chưa đúng rồi, con đếm lại cùng cô nhé!']);
         });
         choiceWrap.appendChild(c);
       });
 
       area.append(grid, choiceWrap);
       const text = `Bé chạm vào từng ${item.name} để đếm nhé!`;
-      setPrompt(text, [text]);
+      setPrompt(text, ['Con chạm vào từng', item.name, 'để đếm cùng cô nhé!']);
     },
 
     // Nghe số -> chọn thẻ số
@@ -603,12 +609,12 @@
       area.appendChild(choiceRow(ex.options, v => {
         const c = el('button', 'ls-card ls-num', String(v));
         c.addEventListener('click', () => {
-          if (v === ex.n) correct(c, [`Số ${numWord(v)}!`]);
-          else wrong(c, [`Đây là số ${numWord(v)}.`, `Bé tìm số ${numWord(ex.n)} nhé!`]);
+          if (v === ex.n) correct(c, ['Số', numWord(v)]);
+          else wrong(c, ['Đây là số', numWord(v), 'Con tìm số', numWord(ex.n)]);
         });
         return c;
       }));
-      setPrompt('Bé nghe và tìm đúng số nhé!', [`Bé tìm số ${numWord(ex.n)}`]);
+      setPrompt('Bé nghe và tìm đúng số nhé!', ['Con tìm số', numWord(ex.n)]);
     },
 
     // Nghe số -> chọn nhóm có đúng số lượng
@@ -616,13 +622,12 @@
       area.appendChild(choiceRow(ex.options, v => {
         const g = groupBox(v, ex.item.emoji, 'ls-group-btn');
         g.addEventListener('click', () => {
-          if (v === ex.n) correct(g, [`Nhóm này có ${numWord(v)} ${ex.item.name}!`]);
-          else wrong(g, [`Nhóm này có ${numWord(v)} ${ex.item.name}. Bé đếm lại nhé!`]);
+          if (v === ex.n) correct(g, ['Nhóm này có', numWord(v), ex.item.name]);
+          else wrong(g, ['Nhóm này có', numWord(v), ex.item.name, 'Con đếm lại cùng cô nhé!']);
         });
         return g;
       }));
-      const text = `Bé tìm nhóm có ${numWord(ex.n)} ${ex.item.name} nhé!`;
-      setPrompt(`Bé tìm nhóm có ${ex.n} ${ex.item.name} nhé!`, [text]);
+      setPrompt(`Bé tìm nhóm có ${ex.n} ${ex.item.name} nhé!`, ['Con tìm nhóm có', numWord(ex.n), ex.item.name]);
     },
 
     // Bên nào nhiều hơn / ít hơn / bằng nhau
@@ -635,9 +640,9 @@
       const right = groupBox(b, item.emoji, 'ls-group-btn side');
       const tap = (side, node) => {
         if (side === answer) {
-          correct(node, [side === 'equal' ? 'Hai bên bằng nhau!' : `Bên này ${ask} hơn!`]);
+          correct(node, [side === 'equal' ? 'Hai bên bằng nhau!' : (ask === 'nhiều' ? 'Bên này nhiều hơn!' : 'Bên này ít hơn!')]);
         } else {
-          wrong(node, ['Chưa đúng rồi. Bé đếm hai bên nhé!']);
+          wrong(node, ['Chưa đúng rồi, con đếm hai bên cùng cô nhé!']);
         }
       };
       left.addEventListener('click', () => tap('left', left));
@@ -645,8 +650,10 @@
       mid.addEventListener('click', () => tap('equal', mid));
       row.append(left, mid, right);
       area.appendChild(row);
-      const text = `Bên nào ${ask} hơn? Nếu bằng nhau, bé chọn nút Bằng nhau.`;
-      setPrompt(`Bên nào ${ask.toUpperCase()} hơn? 🤔`, [text]);
+      const voiceText = ask === 'nhiều'
+        ? 'Bên nào nhiều hơn? Nếu bằng nhau con chọn nút Bằng nhau nhé!'
+        : 'Bên nào ít hơn? Nếu bằng nhau con chọn nút Bằng nhau nhé!';
+      setPrompt(`Bên nào ${ask.toUpperCase()} hơn? 🤔`, [voiceText]);
     },
 
     // Chọn dấu >, <, = (cá sấu há miệng về phía nhiều hơn)
@@ -672,15 +679,15 @@
             slot.appendChild(el('span', 'ls-sign-char', s));
             if (s !== '=') slot.appendChild(crocSvg(`big ${s === '<' ? 'flip' : ''}`));
             slot.classList.add('solved');
-            correct(c, [`${numWord(a)} ${rel[s]} ${numWord(b)}!`]);
+            correct(c, [numWord(a), rel[s], numWord(b)]);
           } else {
-            wrong(c, ['Chưa đúng rồi. Cá sấu luôn há miệng về phía nhiều hơn nhé!']);
+            wrong(c, ['Chưa đúng rồi, chú cá sấu luôn há miệng về phía nhiều hơn nhé!']);
           }
         });
         return c;
       }));
       setPrompt('Bé chọn dấu đúng nhé! 🐊 Cá sấu há miệng về phía nhiều hơn.',
-        ['Bé chọn dấu đúng nhé! Cá sấu há miệng về phía nhiều hơn.']);
+        ['Con chọn dấu đúng nhé! Cá sấu há miệng về phía nhiều hơn.']);
     }
   };
 
@@ -691,7 +698,7 @@
       return;
     }
     renderMap();
-    audio().speak('Bé chọn bài học nhé!');
+    audio().speak('Chào con! Con chọn bài học cùng cô nhé!');
   }
 
   renderMap();

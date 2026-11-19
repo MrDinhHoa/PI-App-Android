@@ -40,19 +40,19 @@ window.LESSONS_DATA = {
 
   numberWords: ['không', 'một', 'hai', 'ba', 'bốn', 'năm', 'sáu', 'bảy', 'tám', 'chín', 'mười'],
 
-  praises: ['Đúng rồi!', 'Giỏi quá!', 'Tuyệt vời!', 'Bé giỏi lắm!', 'Hoan hô!'],
+  praises: ['Cô khen con, đúng rồi!', 'Con giỏi quá!', 'Tuyệt vời lắm con ơi!', 'Hoan hô con yêu!', 'Giỏi lắm, đúng rồi!'],
 
   // Danh sách bài học: track "tv" (Tiếng Việt) và "toan" (Toán). Mở khóa lần lượt trong từng track.
   lessons: [
-    { id: 'tv1', track: 'tv', icon: '🅰️', title: 'Nguyên âm', intro: 'Bài một. Nguyên âm. Bé nghe và tìm đúng chữ nhé!' },
-    { id: 'tv2', track: 'tv', icon: '🐄', title: 'Phụ âm', intro: 'Bài hai. Phụ âm. Bé nghe âm và tìm chữ, tìm hình nhé!' },
-    { id: 'tv3', track: 'tv', icon: '⚙️', title: 'Ghép vần & dấu', intro: 'Bài ba. Ghép vần và dấu thanh. Bé nghe kỹ nhé!' },
-    { id: 'tv4', track: 'tv', icon: '📖', title: 'Đọc từ', intro: 'Bài bốn. Đọc từ. Bé chạm vào chữ để nghe đánh vần nhé!' },
-    { id: 'tv5', track: 'tv', icon: '🗣️', title: 'Đọc câu', intro: 'Bài năm. Đọc câu. Bé đọc cùng cô nhé!' },
-    { id: 'toan1', track: 'toan', icon: '🍎', title: 'Đếm 1 đến 5', intro: 'Bài một. Đếm từ một đến năm. Bé chạm vào từng hình để đếm nhé!' },
-    { id: 'toan2', track: 'toan', icon: '🦆', title: 'Đếm 6 đến 10', intro: 'Bài hai. Đếm từ sáu đến mười. Bé đếm thật cẩn thận nhé!' },
-    { id: 'toan3', track: 'toan', icon: '🔢', title: 'Nhận biết số', intro: 'Bài ba. Nhận biết số. Bé nghe và tìm đúng số nhé!' },
-    { id: 'toan4', track: 'toan', icon: '⚖️', title: 'Nhiều hơn, ít hơn', intro: 'Bài bốn. Nhiều hơn, ít hơn. Bé so sánh hai bên nhé!' },
+    { id: 'tv1', track: 'tv', icon: '🅰️', title: 'Nguyên âm', intro: 'Bài một. Nguyên âm. Con nghe cô đọc và tìm đúng chữ nhé!' },
+    { id: 'tv2', track: 'tv', icon: '🐄', title: 'Phụ âm', intro: 'Bài hai. Phụ âm. Con nghe âm và tìm chữ, tìm hình cùng cô nhé!' },
+    { id: 'tv3', track: 'tv', icon: '⚙️', title: 'Ghép vần & dấu', intro: 'Bài ba. Ghép vần và dấu thanh. Con nghe kỹ cùng cô nhé!' },
+    { id: 'tv4', track: 'tv', icon: '📖', title: 'Đọc từ', intro: 'Bài bốn. Đọc từ. Con chạm vào chữ để nghe cô đánh vần nhé!' },
+    { id: 'tv5', track: 'tv', icon: '🗣️', title: 'Đọc câu', intro: 'Bài năm. Đọc câu. Con đọc cùng cô nhé!' },
+    { id: 'toan1', track: 'toan', icon: '🍎', title: 'Đếm 1 đến 5', intro: 'Bài một. Đếm từ một đến năm. Con chạm vào từng hình để đếm cùng cô nhé!' },
+    { id: 'toan2', track: 'toan', icon: '🦆', title: 'Đếm 6 đến 10', intro: 'Bài hai. Đếm từ sáu đến mười. Con đếm thật cẩn thận cùng cô nhé!' },
+    { id: 'toan3', track: 'toan', icon: '🔢', title: 'Nhận biết số', intro: 'Bài ba. Nhận biết số. Con nghe cô đọc và tìm đúng số nhé!' },
+    { id: 'toan4', track: 'toan', icon: '⚖️', title: 'Nhiều hơn, ít hơn', intro: 'Bài bốn. Nhiều hơn, ít hơn. Con so sánh hai bên cùng cô nhé!' },
     { id: 'toan5', track: 'toan', icon: '🐊', title: 'Dấu lớn, bé, bằng', intro: 'Bài năm. Chú cá sấu tham ăn luôn há miệng về phía có nhiều đồ ăn hơn!' }
   ]
 };
