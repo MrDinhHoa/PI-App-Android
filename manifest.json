@@ -1,0 +1,17 @@
+{
+  "name": "Bé Học Vui - Vừa Học Vừa Chơi",
+  "short_name": "Bé Học Vui",
+  "description": "Ứng dụng tương tác vừa học vừa chơi cho bé 5 tuổi trên tablet",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "orientation": "landscape",
+  "background_color": "#FFF6EA",
+  "theme_color": "#FF7B54",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎈</text></svg>",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml"
+    }
+  ]
+}

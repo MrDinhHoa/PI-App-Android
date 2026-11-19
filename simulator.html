@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Giả Lập Android Tablet 10.9 inch - Antigravity IDE</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background: #1e1e24;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #ECEFF1;
+      overflow: auto;
+      padding: 16px;
+    }
+    /* Toolbar at top */
+    .sim-toolbar {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 16px;
+      background: #2b2b36;
+      padding: 10px 24px;
+      border-radius: 50px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+      z-index: 100;
+    }
+    .sim-badge {
+      font-weight: 700;
+      font-size: 14px;
+      background: #FF7B54;
+      color: white;
+      padding: 4px 12px;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .sim-btn {
+      background: #3c3c4a;
+      border: 1px solid #525266;
+      color: #ECEFF1;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 6px 14px;
+      border-radius: 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+    .sim-btn:hover {
+      background: #4e4e61;
+      border-color: #FF7B54;
+    }
+    .sim-btn.active {
+      background: #FF7B54;
+      border-color: #FF7B54;
+      color: white;
+    }
+
+    /* Tablet 10.9" Frame */
+    .tablet-wrapper {
+      position: relative;
+      transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+      transform-origin: center top;
+    }
+    .tablet-bezel {
+      background: #111116;
+      border-radius: 40px;
+      padding: 24px;
+      box-shadow: 
+        0 0 0 4px #33333d,
+        0 25px 60px rgba(0, 0, 0, 0.7),
+        0 0 100px rgba(255, 123, 84, 0.15);
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Tablet Camera Dot */
+    .tablet-camera {
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 8px;
+      height: 8px;
+      background: #252530;
+      border-radius: 50%;
+      box-shadow: inset 0 0 2px #000;
+    }
+
+    /* Screen iframe container */
+    .tablet-screen {
+      width: 1024px;
+      height: 640px;
+      background: #FFF;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+      position: relative;
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+    }
+
+    /* Responsive scaling options */
+    .scale-80 .tablet-wrapper { transform: scale(0.8); }
+    .scale-70 .tablet-wrapper { transform: scale(0.7); }
+    .scale-60 .tablet-wrapper { transform: scale(0.6); }
+
+    /* Fullscreen mode */
+    body.is-fullscreen {
+      padding: 0;
+      overflow: hidden;
+    }
+    body.is-fullscreen .sim-toolbar {
+      position: fixed;
+      top: 10px;
+      opacity: 0.2;
+      transition: opacity 0.2s;
+    }
+    body.is-fullscreen .sim-toolbar:hover {
+      opacity: 1;
+    }
+    body.is-fullscreen .tablet-bezel {
+      border-radius: 0;
+      padding: 0;
+      box-shadow: none;
+    }
+    body.is-fullscreen .tablet-camera { display: none; }
+    body.is-fullscreen .tablet-screen {
+      width: 100vw;
+      height: 100vh;
+      border-radius: 0;
+    }
+  </style>
+</head>
+<body class="scale-80">
+
+  <!-- Control Bar -->
+  <div class="sim-toolbar">
+    <div class="sim-badge">📱 Tablet 10.9" (16:10)</div>
+
+    <button class="sim-btn" id="btnReload" title="Tải lại trang">🔄 Tải lại</button>
+
+    <div style="display: flex; gap: 4px;">
+      <button class="sim-btn" data-scale="scale-60">60%</button>
+      <button class="sim-btn" data-scale="scale-70">70%</button>
+      <button class="sim-btn active" data-scale="scale-80">80%</button>
+      <button class="sim-btn" data-scale="">100%</button>
+    </div>
+
+    <button class="sim-btn" id="btnFullscreen">⛶ Toàn màn hình</button>
+    <a href="index.html" target="_blank" class="sim-btn" style="text-decoration: none;">🚀 Mở tab riêng</a>
+  </div>
+
+  <!-- Tablet Frame -->
+  <div class="tablet-wrapper">
+    <div class="tablet-bezel">
+      <div class="tablet-camera"></div>
+      <div class="tablet-screen">
+        <iframe src="index.html" id="appIframe"></iframe>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Scale buttons
+    const scaleBtns = document.querySelectorAll('[data-scale]');
+    scaleBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        scaleBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        document.body.className = btn.dataset.scale;
+      });
+    });
+
+    // Reload iframe
+    document.getElementById('btnReload').addEventListener('click', () => {
+      const iframe = document.getElementById('appIframe');
+      iframe.src = iframe.src;
+    });
+
+    // Toggle Fullscreen view
+    const btnFullscreen = document.getElementById('btnFullscreen');
+    btnFullscreen.addEventListener('click', () => {
+      document.body.classList.toggle('is-fullscreen');
+      btnFullscreen.textContent = document.body.classList.contains('is-fullscreen') 
+        ? '🗗 Thu nhỏ' 
+        : '⛶ Toàn màn hình';
+    });
+  </script>
+</body>
+</html>

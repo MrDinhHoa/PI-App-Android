@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#FFD93D">
+  <meta name="description" content="Ứng dụng học tập và giải trí cho bé 5 tuổi">
+  <title>Bé Học Vui - Thế Giới Sắc Màu</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@600;700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Header / Navigation Bar -->
+  <header class="app-header">
+    <div class="logo-area">
+      <span class="logo-icon">🎈</span>
+      <h1 class="logo-text">Bé Học Vui</h1>
+    </div>
+
+    <!-- Navigation Tabs (Buttons to switch modes) -->
+    <nav class="nav-tabs">
+      <button class="tab-btn active" data-tab="lessons">
+        <span class="tab-icon">📚</span>
+        <span class="tab-label">Bài Học</span>
+      </button>
+      <button class="tab-btn" data-tab="games">
+        <span class="tab-icon">🎮</span>
+        <span class="tab-label">Trò Chơi</span>
+      </button>
+      <button class="tab-btn" data-tab="alphabet">
+        <span class="tab-icon">🅰️</span>
+        <span class="tab-label">Chữ Cái</span>
+      </button>
+      <button class="tab-btn" data-tab="blend">
+        <span class="tab-icon">⚙️</span>
+        <span class="tab-label">Ghép Vần</span>
+      </button>
+      <button class="tab-btn" data-tab="spelling">
+        <span class="tab-icon">🔤</span>
+        <span class="tab-label">Đánh Vần</span>
+      </button>
+      <button class="tab-btn" data-tab="math">
+        <span class="tab-icon">➕</span>
+        <span class="tab-label">Làm Toán</span>
+      </button>
+    </nav>
+
+    <!-- Star Reward Counter -->
+    <div class="wallet-box">
+      <div class="reward-box" id="rewardBox" title="Ngôi sao của bé">
+        <span class="star-icon">⭐</span>
+        <span class="star-count" id="starCount">0</span>
+      </div>
+      <div class="reward-box key-box" id="keyBox" title="Chìa khóa mở trò chơi">
+        <span class="star-icon">🔑</span>
+        <span class="star-count" id="keyCount">0</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Game Stage -->
+  <main class="game-container">
+    
+    <!-- PHASE 2: LESSONS (BÀI HỌC) - lesson map + lesson player -->
+    <section class="game-section active" id="sec-lessons">
+      <div class="ls-map" id="lsMap">
+        <div class="section-title">
+          <h2>Bé chọn bài học nhé! 📚</h2>
+        </div>
+        <div class="ls-tracks" id="lsTracks"></div>
+      </div>
+
+      <div class="ls-player is-hidden" id="lsPlayer">
+        <div class="ls-topbar">
+          <button class="ls-home" id="lsHome" title="Về bản đồ bài học">🏠</button>
+          <div class="ls-title" id="lsTitle"></div>
+          <div class="ls-dots" id="lsDots"></div>
+          <button class="ls-home ls-replay" id="lsReplay" title="Nghe lại câu hỏi">🔊</button>
+        </div>
+        <div class="ls-area" id="lsArea"></div>
+        <div class="game-hint-banner ls-banner" id="lsBanner"></div>
+      </div>
+    </section>
+
+    <!-- PHASE 3: GAME ZONE (KHU TRÒ CHƠI) + BALLOON MINI-GAME -->
+    <section class="game-section" id="sec-games">
+      <div class="mg-lobby" id="mgLobby">
+        <div class="section-title">
+          <h2>Khu trò chơi 🎮</h2>
+        </div>
+        <div class="mg-keys-banner">
+          <span>Bé có <b id="mgKeyCount">0</b> 🔑 · Mỗi lượt chơi cần 1 chìa khóa, chơi 2 phút</span>
+          <button class="action-btn is-hidden" id="mgNoKey">📚 Học bài để nhận chìa khóa</button>
+        </div>
+        <div class="mg-cards">
+          <button class="mg-card ready" id="mgCardBalloon">
+            <span class="mg-card-icon">🎈</span>
+            <span class="mg-card-title">Bắn Bóng Chữ &amp; Số</span>
+            <span class="mg-card-cost">🔑 x1 · ⏱️ 2 phút</span>
+          </button>
+          <div class="mg-card soon">
+            <span class="mg-card-icon">🐻</span>
+            <span class="mg-card-title">Giải Cứu Thú Cưng</span>
+            <span class="mg-card-cost">Sắp có</span>
+          </div>
+          <div class="mg-card soon">
+            <span class="mg-card-icon">🛒</span>
+            <span class="mg-card-title">Siêu Thị Của Bé</span>
+            <span class="mg-card-cost">Sắp có</span>
+          </div>
+          <div class="mg-card soon">
+            <span class="mg-card-icon">🖍️</span>
+            <span class="mg-card-title">Tô Màu Kỳ Diệu</span>
+            <span class="mg-card-cost">Sắp có</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="mg-play is-hidden" id="mgPlay">
+        <div class="mg-topbar">
+          <button class="ls-home" id="mgStop" title="Dừng chơi">🏠</button>
+          <div class="mg-target">
+            <span class="mg-target-kind" id="mgTargetKind"></span>
+            <span class="mg-target-text" id="mgTargetText">?</span>
+            <span class="mg-target-hits" id="mgTargetHits"></span>
+          </div>
+          <button class="ls-home ls-replay" id="mgReplay" title="Nghe lại">🔊</button>
+          <div class="mg-timer"><div class="mg-timer-fill" id="mgTimerFill"></div><span class="mg-timer-icon">⏱️</span></div>
+          <div class="mg-score">🎯 <span id="mgScore">0</span></div>
+        </div>
+        <div class="mg-field" id="mgField">
+          <div class="mg-countdown is-hidden" id="mgCountdown">3</div>
+        </div>
+      </div>
+
+      <div class="mg-result is-hidden" id="mgResult">
+        <div class="mg-result-icon">⏰</div>
+        <div class="mg-result-title">Hết giờ chơi rồi!</div>
+        <div class="mg-result-score">🎈 x <span id="mgResultScore">0</span></div>
+        <div class="mg-result-best" id="mgResultBest"></div>
+        <div class="mg-result-note">Mắt bé cần nghỉ một chút 😊 Học bài tiếp để nhận chìa khóa nhé!</div>
+        <div class="ls-finish-actions">
+          <button class="action-btn big" id="mgResultLearn">📚 Học bài tiếp</button>
+          <button class="action-btn big secondary" id="mgResultLobby">🎮 Khu trò chơi</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- PHASE 1 - LEVEL 1: ALPHABET & PHONEMES (BẢNG CHỮ CÁI) -->
+    <section class="game-section" id="sec-alphabet">
+      <div class="section-title">
+        <h2>Bé chạm vào chữ cái để nghe âm nhé! 🔤</h2>
+      </div>
+      <div class="abc-layout">
+        <div class="abc-left">
+          <div class="abc-groups">
+            <button class="abc-group-btn grp-vowel active" data-group="vowel">
+              <span class="abc-group-sample">a</span><span>Nguyên âm</span>
+            </button>
+            <button class="abc-group-btn grp-consonant" data-group="consonant">
+              <span class="abc-group-sample">b</span><span>Phụ âm</span>
+            </button>
+            <button class="abc-group-btn grp-digraph" data-group="digraph">
+              <span class="abc-group-sample">ch</span><span>Âm ghép</span>
+            </button>
+          </div>
+          <div class="abc-grid grp-vowel" id="abcGrid"></div>
+        </div>
+        <div class="abc-detail" id="abcDetail">
+          <div class="abc-big" id="abcBig">👆</div>
+          <div class="abc-pic" id="abcPic">🐰</div>
+          <div class="abc-word" id="abcWord">Chạm vào một chữ nhé!</div>
+          <div class="abc-note" id="abcNote"></div>
+          <button class="action-btn" id="btnAbcReplay">🔊 Nghe lại</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- PHASE 1 - LEVEL 2: BLENDING MACHINE & TONES (CỖ MÁY GHÉP VẦN) -->
+    <section class="game-section" id="sec-blend">
+      <div class="section-title">
+        <h2>Cỗ máy ghép vần: kéo chữ vào máy nhé! ⚙️</h2>
+      </div>
+      <div class="blend-layout">
+        <div class="blend-tray tray-consonant" id="blendConsonants"></div>
+
+        <div class="blend-center">
+          <div class="blend-machine" id="blendMachine">
+            <div class="blend-slot slot-c" id="slotC"></div>
+            <div class="blend-plus">+</div>
+            <div class="blend-slot slot-v" id="slotV"></div>
+            <div class="blend-arrow">➜</div>
+            <div class="blend-result" id="blendResult">?</div>
+          </div>
+          <div class="blend-picture" id="blendPicture"></div>
+          <div class="tone-bar disabled" id="toneBar"></div>
+          <div class="blend-actions">
+            <button class="action-btn" id="btnBlendReplay">🔊 Đánh vần lại</button>
+            <button class="action-btn secondary" id="btnBlendReset">🔄 Ghép tiếng mới</button>
+          </div>
+          <div class="game-hint-banner blend-status" id="blendStatus"></div>
+        </div>
+
+        <div class="blend-tray tray-vowel" id="blendVowels"></div>
+      </div>
+    </section>
+
+    <!-- SECTION 2: SPELLING / PHONICS (TẬP ĐÁNH VẦN) -->
+    <section class="game-section" id="sec-spelling">
+      <div class="section-title">
+        <h2>Bé hãy chọn chữ cái ghép thành tên đúng nhé! 🔤</h2>
+      </div>
+      <div class="spelling-game-box">
+        <div class="spelling-card-container">
+          <div class="spelling-pic" id="spellingPic">🐟</div>
+          <button class="action-btn" id="btnSpellingAudio">🔊 Nghe đọc mẫu</button>
+        </div>
+
+        <div class="spelling-slots-wrapper">
+          <div class="spelling-slots" id="spellingSlots">
+            <!-- Filled by JS -->
+          </div>
+        </div>
+
+        <div class="spelling-pool-wrapper">
+          <div class="spelling-letters-pool" id="spellingLettersPool">
+            <!-- Clickable letters -->
+          </div>
+        </div>
+
+        <div class="game-hint-banner" id="spellingStatus">Bé hãy chạm vào từng chữ cái để ghép từ nhé!</div>
+      </div>
+    </section>
+
+    <!-- SECTION 3: MATH (BÉ LÀM TOÁN TRỰC QUAN) -->
+    <section class="game-section" id="sec-math">
+      <div class="section-title">
+        <h2>Cùng làm toán với các bạn hoa quả đáng yêu nào! ➕ ➖</h2>
+      </div>
+      <div class="math-game-box">
+        <!-- Visual Equation Row -->
+        <div class="math-equation-row">
+          <div class="math-items-box" id="mathGroup1"></div>
+          <div class="math-symbol" id="mathOp">+</div>
+          <div class="math-items-box" id="mathGroup2"></div>
+          <div class="math-symbol">=</div>
+          <div class="math-target-box" id="mathTarget">?</div>
+        </div>
+
+        <!-- Prompt Text & Sound -->
+        <div class="math-prompt-container">
+          <button class="action-btn" id="btnMathAudio">🔊 Nghe câu hỏi</button>
+          <span class="math-prompt-text" id="mathPromptText">Bé hãy tính xem có tất cả bao nhiêu quả nhé!</span>
+        </div>
+
+        <!-- Choices -->
+        <div class="math-choices-row" id="mathChoices">
+          <!-- Choice buttons -->
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Confetti Canvas overlay for celebrations -->
+  <canvas id="confettiCanvas"></canvas>
+
+  <script src="js/audio.js"></script>
+  <script src="js/wallet.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/phonics-data.js"></script>
+  <script src="js/phonics.js"></script>
+  <script src="js/lessons-data.js"></script>
+  <script src="js/lessons.js"></script>
+  <script src="js/minigame.js"></script>
+</body>
+</html>
