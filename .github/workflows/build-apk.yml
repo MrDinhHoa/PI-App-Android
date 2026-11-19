@@ -1,0 +1,161 @@
+name: Build Android APK (TWA)
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+    paths:
+      - 'android/twa-manifest.json'
+      - '.github/workflows/build-apk.yml'
+
+jobs:
+  build-apk:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install Bubblewrap CLI
+        run: npm install -g @bubblewrap/cli
+
+      - name: Configure Android SDK & Bubblewrap
+        shell: bash
+        run: |
+          SDK_DIR="${ANDROID_HOME:-$ANDROID_SDK_ROOT}"
+          if [ ! -d "$SDK_DIR/bin" ] && [ ! -d "$SDK_DIR/tools" ]; then
+            CMDBIN=$(find "$SDK_DIR/cmdline-tools" -maxdepth 2 -type d -name bin | head -n 1)
+            if [ -n "$CMDBIN" ]; then
+              ln -s "$CMDBIN" "$SDK_DIR/bin"
+            fi
+          fi
+
+          NPM_ROOT=$(npm root -g)
+          SDK_TOOLS_JS=$(find "$NPM_ROOT/@bubblewrap" -name "AndroidSdkTools.js" | head -n 1)
+          BT_VER=""
+          if [ -n "$SDK_TOOLS_JS" ]; then
+            BT_VER=$(grep -oE "BUILD_TOOLS_VERSION\s*=\s*['\"][^'\"]+['\"]" "$SDK_TOOLS_JS" | head -n 1 | grep -oE "[0-9]+\.[0-9]+\.[0-9]+")
+          fi
+          BT_VER="${BT_VER:-36.1.0}"
+
+          BUILD_GRADLE_TPL=$(find "$NPM_ROOT/@bubblewrap" -path "*/template_project/app/build.gradle" | head -n 1)
+          COMPILE_SDK=""
+          if [ -n "$BUILD_GRADLE_TPL" ]; then
+            COMPILE_SDK=$(grep -oE "compileSdkVersion\s+[0-9]+" "$BUILD_GRADLE_TPL" | head -n 1 | grep -oE "[0-9]+")
+          fi
+          COMPILE_SDK="${COMPILE_SDK:-36}"
+
+          echo "Using build-tools;$BT_VER and platforms;android-$COMPILE_SDK"
+          yes | sdkmanager --licenses >/dev/null 2>&1 || true
+          sdkmanager --install "build-tools;${BT_VER}" "platforms;android-${COMPILE_SDK}" "platform-tools"
+
+          mkdir -p ~/.bubblewrap
+          SDK_DIR="$SDK_DIR" node -e '
+            const fs = require("fs");
+            const path = require("path");
+            fs.writeFileSync(
+              path.join(process.env.HOME, ".bubblewrap", "config.json"),
+              JSON.stringify({ jdkPath: process.env.JAVA_HOME, androidSdkPath: process.env.SDK_DIR }, null, 2) + "\n"
+            );
+          '
+
+      - name: Prepare Signing Keystore
+        shell: bash
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+        run: |
+          if [ -n "$ANDROID_KEYSTORE_BASE64" ]; then
+            echo "Using signing keystore from GitHub Secrets"
+            echo "$ANDROID_KEYSTORE_BASE64" | base64 -d > android/android.keystore
+            KS_PASS="$ANDROID_KEYSTORE_PASSWORD"
+            KEY_PASS="${ANDROID_KEY_PASSWORD:-$KS_PASS}"
+            ALIAS="${ANDROID_KEY_ALIAS:-behocvui}"
+          else
+            echo "Generating ephemeral signing keystore for this build"
+            KS_PASS=$(openssl rand -hex 16)
+            KEY_PASS="$KS_PASS"
+            ALIAS="behocvui"
+            echo "::add-mask::$KS_PASS"
+            keytool -genkeypair -v \
+              -keystore android/android.keystore \
+              -storetype PKCS12 \
+              -alias "$ALIAS" \
+              -keyalg RSA \
+              -keysize 2048 \
+              -validity 10000 \
+              -storepass "$KS_PASS" \
+              -keypass "$KEY_PASS" \
+              -dname "CN=Be Hoc Vui, OU=Family, O=MrDinhHoa, L=VN, S=VN, C=VN"
+          fi
+
+          {
+            echo "BUBBLEWRAP_KEYSTORE_PASSWORD=$KS_PASS"
+            echo "BUBBLEWRAP_KEY_PASSWORD=$KEY_PASS"
+            echo "KEY_ALIAS=$ALIAS"
+          } >> "$GITHUB_ENV"
+
+      - name: Generate Gradle Project & Build Signed APK
+        working-directory: android
+        shell: bash
+        run: |
+          bubblewrap update --skipVersionUpgrade
+          bubblewrap build --signingKeyAlias="$KEY_ALIAS"
+          test -f app-release-signed.apk
+
+      - name: Generate assetlinks.json & Build Summary
+        shell: bash
+        run: |
+          SHA256=$(keytool -exportcert -alias "$KEY_ALIAS" -keystore android/android.keystore -storepass "$BUBBLEWRAP_KEYSTORE_PASSWORD" | openssl x509 -inform DER -noout -fingerprint -sha256 | cut -d= -f2)
+          SHA256="$SHA256" node -e '
+            const fs = require("fs");
+            const data = [
+              {
+                relation: ["delegate_permission/common.handle_all_urls"],
+                target: {
+                  namespace: "android_app",
+                  package_name: "io.github.mrdinhhoa.behocvui",
+                  sha256_cert_fingerprints: [process.env.SHA256]
+                }
+              }
+            ];
+            fs.writeFileSync("android/assetlinks.json", JSON.stringify(data, null, 2) + "\n");
+          '
+
+          {
+            echo "## Bé Học Vui - Android APK (TWA)"
+            echo ""
+            echo "1. Tải artifact **\`be-hoc-vui-android-apk\`** ở bên dưới và giải nén."
+            echo "2. Chép file \`app-release-signed.apk\` sang máy tính bảng Android và bấm **Cài đặt**."
+            echo "3. *(Tùy chọn - ẩn thanh địa chỉ Chrome)* Đặt file \`assetlinks.json\` vào repo \`MrDinhHoa.github.io/.well-known/assetlinks.json\`."
+            echo ""
+            echo "### Nội dung \`assetlinks.json\`"
+            echo '```json'
+            cat android/assetlinks.json
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload APK & assetlinks Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: be-hoc-vui-android-apk
+          retention-days: 30
+          path: |
+            android/app-release-signed.apk
+            android/assetlinks.json

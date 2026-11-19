@@ -1,0 +1,43 @@
+{
+  "packageId": "io.github.mrdinhhoa.behocvui",
+  "host": "mrdinhhoa.github.io",
+  "name": "Bé Học Vui - Vương Quốc Chữ & Số",
+  "launcherName": "Bé Học Vui",
+  "display": "standalone",
+  "themeColor": "#FF7B54",
+  "themeColorDark": "#FF7B54",
+  "navigationColor": "#FFF6EA",
+  "navigationColorDark": "#FFF6EA",
+  "navigationDividerColor": "#FFE0C2",
+  "navigationDividerColorDark": "#FFE0C2",
+  "backgroundColor": "#FFF6EA",
+  "enableNotifications": false,
+  "startUrl": "/PI-App-Android/index.html",
+  "iconUrl": "https://mrdinhhoa.github.io/PI-App-Android/icons/icon-512.png",
+  "maskableIconUrl": "https://mrdinhhoa.github.io/PI-App-Android/icons/icon-maskable-512.png",
+  "splashScreenFadeOutDuration": 300,
+  "signingKey": {
+    "path": "./android.keystore",
+    "alias": "behocvui"
+  },
+  "appVersionName": "1.0.0",
+  "appVersionCode": 1,
+  "shortcuts": [],
+  "generatorApp": "bubblewrap-cli",
+  "webManifestUrl": "https://mrdinhhoa.github.io/PI-App-Android/manifest.json",
+  "fallbackType": "customtabs",
+  "features": {},
+  "alphaDependencies": {
+    "enabled": false
+  },
+  "enableSiteSettingsShortcut": true,
+  "isChromeOSOnly": false,
+  "isMetaQuest": false,
+  "fullScopeUrl": "https://mrdinhhoa.github.io/PI-App-Android/",
+  "minSdkVersion": 21,
+  "orientation": "landscape",
+  "fingerprints": [],
+  "additionalTrustedOrigins": [],
+  "retainedBundles": [],
+  "appVersion": "1.0.0"
+}

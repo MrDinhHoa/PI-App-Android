@@ -18,3 +18,17 @@ _test*.html
 *.keystore
 *.jks
 signing-key-info.txt
+
+# Bubblewrap / Android build outputs
+android/app/
+android/gradle/
+android/build/
+android/*.apk
+android/*.aab
+android/manifest-checksum.txt
+android/assetlinks.json
+android/build.gradle
+android/settings.gradle
+android/gradle.properties
+android/gradlew
+android/gradlew.bat
