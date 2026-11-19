@@ -13,3 +13,8 @@ __pycache__/
 _test*.html
 *.tmp
 *.log
+
+# Android signing keys (NEVER commit)
+*.keystore
+*.jks
+signing-key-info.txt

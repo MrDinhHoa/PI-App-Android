@@ -1,17 +1,44 @@
 {
-  "name": "Bé Học Vui - Vừa Học Vừa Chơi",
+  "id": "./",
+  "name": "Bé Học Vui - Vương Quốc Chữ & Số",
   "short_name": "Bé Học Vui",
-  "description": "Ứng dụng tương tác vừa học vừa chơi cho bé 5 tuổi trên tablet",
+  "description": "Ứng dụng học chữ, ghép vần và toán tư duy cho bé 5 tuổi trên máy tính bảng",
+  "lang": "vi",
+  "dir": "ltr",
   "start_url": "./index.html",
+  "scope": "./",
   "display": "standalone",
   "orientation": "landscape",
   "background_color": "#FFF6EA",
   "theme_color": "#FF7B54",
+  "categories": ["education", "kids"],
   "icons": [
     {
-      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎈</text></svg>",
-      "sizes": "192x192 512x512",
-      "type": "image/svg+xml"
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "icons/screenshot-wide.png",
+      "sizes": "1024x640",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Màn hình bản đồ 10 bài học Tiếng Việt và Toán cho bé 5 tuổi"
     }
   ]
 }
