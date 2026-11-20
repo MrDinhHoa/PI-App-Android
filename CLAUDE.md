@@ -38,10 +38,25 @@ PI App Android/
 ---
 
 ## 3. Các Module Tính Năng Hiện Có
-### Giai đoạn MVP (theo `tientieuhoc.md`)
-1. **📚 Bài Học (tab mặc định):** Bản đồ 2 track × 5 bài, mở khóa lần lượt trong từng track; tiến độ lưu localStorage (`beHocVui.lessons.v1`).
-   * Tiếng Việt: (1) Nguyên âm – nghe âm chọn chữ, có trộn chữ dễ nhầm; (2) Phụ âm – nghe âm chọn chữ / chọn hình theo âm đầu; (3) Ghép vần & dấu – nghe tiếng chọn đúng dấu, nhìn hình chọn chữ; (4) Đọc từ – chạm từng tiếng để nghe đánh vần ("Mờ – eo – meo – huyền – mèo"), chọn hình; (5) Đọc câu – karaoke highlight, bé chạm từng chữ trái → phải, chọn hình.
-   * Toán: (1) Đếm 1–5 và (2) Đếm 6–10 – chạm đếm từng hình, đếm xong mới hiện thẻ số; (3) Nhận biết số / chọn nhóm đúng số lượng; (4) Nhiều hơn – ít hơn – bằng nhau; (5) Dấu > < = với cá sấu (vẽ SVG, há miệng về phía nhiều hơn).
+### Lộ trình 16 Bài Học Tiền Tiểu Học (theo `tientieuhoc.md`)
+1. **📚 Bài Học (tab mặc định):** Bản đồ 2 track × 8 bài (tổng 16 bài), mở khóa lần lượt trong từng track; tiến độ lưu localStorage (`beHocVui.lessons.v1`).
+   * **Tiếng Việt (8 bài):**
+     * (1) Nguyên âm – nghe âm chọn chữ, có trộn chữ dễ nhầm;
+     * (2) Phụ âm – nghe âm chọn chữ / chọn hình theo âm đầu;
+     * (3) Ghép vần & dấu – nghe tiếng chọn đúng dấu, nhìn hình chọn chữ;
+     * (4) Đọc từ – chạm từng tiếng để nghe đánh vần ("Mờ – eo – meo – huyền – mèo"), chọn hình;
+     * (5) Đọc câu – karaoke highlight, bé chạm từng chữ trái → phải, chọn hình;
+     * (6) Phụ âm ghép – nghe và nhận biết 11 phụ âm ghép (ch, th, ph, nh, kh, tr, ng, ngh, gi, qu);
+     * (7) Luật chính tả – quy tắc cốt lõi: k, gh, ngh đi với e, ê, i; c, g, ng đi với các âm còn lại;
+     * (8) Ghép từ – nhìn hình điền tiếng còn thiếu để tạo thành từ có nghĩa.
+   * **Toán tư duy (8 bài):**
+     * (1) Đếm 1–5 và (2) Đếm 6–10 – chạm đếm từng hình, đếm xong mới hiện thẻ số;
+     * (3) Nhận biết số / chọn nhóm đúng số lượng;
+     * (4) Nhiều hơn – ít hơn – bằng nhau;
+     * (5) Dấu > < = với cá sấu (vẽ SVG, há miệng về phía nhiều hơn);
+     * (6) Tách - Gộp số – trực quan hóa bản chất phép tính;
+     * (7) Phép cộng & trừ trong phạm vi 10 – công thức trực quan kết hợp hình vẽ;
+     * (8) Hình học & Quy luật – nhận biết 5 hình khối cơ bản và giải chuỗi logic ABAB / AAB.
    * Chấm sao cuối bài: sai ≤1 lần → 3⭐, ≤3 lần → 2⭐, còn lại 1⭐. Mỗi lần học xong bài (kể cả học lại) → +1 🔑.
 2. **🎮 Trò Chơi:** Sảnh trò chơi; game **Bắn Bóng Chữ & Số** (tốn 1 🔑, 120 giây, đếm ngược 3-2-1, bóng mang chữ/số bay lên, loa đọc "Tìm chữ…/Tìm số…", trúng 3 bóng thì đổi mục tiêu xen kẽ chữ/số, tạm dừng khi rời tab, lưu kỷ lục `beHocVui.balloonBest.v1`). 3 game còn lại hiển thị "Sắp có". Chơi game không cộng sao.
 3. **🅰️ Chữ Cái:** Bảng chữ cái 3 nhóm màu (nguyên âm đỏ 12, phụ âm xanh dương 17, phụ âm ghép xanh lá 11); chạm là phát âm theo cách đánh vần mới ("bờ", "cờ") rồi đọc từ minh họa; O/Ô/Ơ có hiệu ứng lăn; chữ nghe lần đầu +1⭐.

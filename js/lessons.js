@@ -58,7 +58,11 @@
   }
 
   // ==================== EXERCISE BUILDERS ====================
-  const CONFUSABLE = [['a', 'ă', 'â'], ['o', 'ô', 'ơ'], ['u', 'ư'], ['e', 'ê'], ['b', 'd', 'đ', 'p'], ['m', 'n'], ['t', 'th'], ['l', 'n']];
+  const CONFUSABLE = [
+    ['a', 'ă', 'â'], ['o', 'ô', 'ơ'], ['u', 'ư'], ['e', 'ê'],
+    ['b', 'd', 'đ', 'p'], ['m', 'n'], ['t', 'th'], ['l', 'n'],
+    ['ch', 'tr', 'th'], ['ng', 'ngh', 'nh'], ['c', 'k'], ['g', 'gh'], ['ph', 'th']
+  ];
 
   function letterOptions(target, pool, n = 3) {
     const group = CONFUSABLE.find(g => g.includes(target.letter)) || [];
@@ -71,6 +75,7 @@
 
   const vowels = PD.alphabet.vowel.filter(x => x.letter !== 'y'); // y sounds like i
   const consonants = PD.alphabet.consonant.filter(x => x.letter !== 'q'); // q needs u
+  const digraphs = PD.alphabet.digraph;
 
   const dictEntries = Object.entries(PD.words).map(([text, w]) => ({ text, ...w }));
   const uniquePictures = dictEntries.filter(w => dictEntries.filter(x => x.emoji === w.emoji).length === 1);
@@ -108,6 +113,29 @@
       options: shuffle([s, ...sample(L.sentences.filter(x => x !== s), 2)])
     })),
 
+    tv6: () => [
+      ...sample(digraphs, 3).map(t => ({
+        type: 'pickLetter', group: 'digraph', target: t,
+        options: letterOptions(t, digraphs)
+      })),
+      ...sample(digraphs, 2).map(t => ({
+        type: 'pickInitial', target: t,
+        options: shuffle([t, ...sample(digraphs.filter(x => x !== t), 2)])
+      }))
+    ],
+
+    tv7: () => sample(L.spellingQuiz, 5).map(q => ({
+      type: 'spellingRule',
+      quiz: q,
+      options: q.options
+    })),
+
+    tv8: () => sample(L.wordPuzzles, 5).map(p => ({
+      type: 'fillWord',
+      puzzle: p,
+      options: shuffle(p.choices)
+    })),
+
     toan1: () => shuffle([1, 2, 3, 4, 5]).map(n => ({ type: 'countTap', n, item: pick(L.counters), lo: 1, hi: 6 })),
 
     toan2: () => shuffle([6, 7, 8, 9, 10]).map(n => ({ type: 'countTap', n, item: pick(L.counters), lo: 5, hi: 10 })),
@@ -131,7 +159,64 @@
       while (sign !== '=' && a === b) b = randInt(1, 8);
       if ((sign === '>' && a < b) || (sign === '<' && a > b)) [a, b] = [b, a];
       return { type: 'compareSign', a, b, sign, item: pick(L.counters) };
-    })
+    }),
+
+    toan6: () => [
+      ...sample([
+        { a: 1, b: 2 }, { a: 2, b: 2 }, { a: 2, b: 3 }, { a: 3, b: 2 },
+        { a: 3, b: 3 }, { a: 4, b: 1 }, { a: 2, b: 4 }, { a: 3, b: 4 }
+      ], 3).map(pair => ({
+        type: 'mergeNumbers',
+        a: pair.a,
+        b: pair.b,
+        sum: pair.a + pair.b,
+        item: pick(L.counters)
+      })),
+      ...sample([
+        { total: 4, part: 2 }, { total: 5, part: 2 }, { total: 5, part: 3 },
+        { total: 6, part: 2 }, { total: 6, part: 4 }, { total: 7, part: 3 }
+      ], 2).map(sp => ({
+        type: 'splitNumbers',
+        total: sp.total,
+        part: sp.part,
+        remain: sp.total - sp.part,
+        item: pick(L.counters)
+      }))
+    ],
+
+    toan7: () => [
+      ...sample([
+        { a: 2, b: 3, op: '+' }, { a: 3, b: 4, op: '+' }, { a: 4, b: 2, op: '+' },
+        { a: 5, b: 2, op: '+' }, { a: 3, b: 5, op: '+' }, { a: 1, b: 6, op: '+' }
+      ], 3).map(m => ({
+        type: 'mathOperation',
+        a: m.a, b: m.b, op: '+',
+        result: m.a + m.b,
+        item: pick(L.counters)
+      })),
+      ...sample([
+        { a: 5, b: 2, op: '-' }, { a: 6, b: 3, op: '-' }, { a: 7, b: 2, op: '-' },
+        { a: 8, b: 4, op: '-' }, { a: 6, b: 2, op: '-' }, { a: 5, b: 3, op: '-' }
+      ], 2).map(m => ({
+        type: 'mathOperation',
+        a: m.a, b: m.b, op: '-',
+        result: m.a - m.b,
+        item: pick(L.counters)
+      }))
+    ],
+
+    toan8: () => [
+      ...sample(L.shapes, 2).map(s => ({
+        type: 'pickShape',
+        target: s,
+        options: shuffle([s, ...sample(L.shapes.filter(x => x !== s), 3)])
+      })),
+      ...sample(L.patterns, 3).map(p => ({
+        type: 'patternNext',
+        target: p,
+        options: shuffle(p.choices)
+      }))
+    ]
   };
 
   // ==================== DOM ====================
@@ -688,6 +773,238 @@
       }));
       setPrompt('Bé chọn dấu đúng nhé! 🐊 Cá sấu há miệng về phía nhiều hơn.',
         ['Con chọn dấu đúng nhé! Cá sấu há miệng về phía nhiều hơn.']);
+    },
+
+    // Quy tắc chính tả c/k, g/gh, ng/ngh
+    spellingRule(ex, area) {
+      const q = ex.quiz;
+      const hero = el('div', 'ls-spell-hero');
+      hero.appendChild(el('div', 'ls-hero-pic', q.emoji));
+
+      const wordRow = el('div', 'ls-spell-word');
+      const slot = el('span', 'ls-spell-slot', '?');
+      const tail = el('span', 'ls-spell-tail', q.vowel);
+      wordRow.append(slot, tail);
+      hero.appendChild(wordRow);
+      area.appendChild(hero);
+
+      area.appendChild(choiceRow(ex.options, opt => {
+        const c = el('button', 'ls-card ls-letter grp-consonant', opt);
+        c.addEventListener('click', () => {
+          if (opt === q.prefix) {
+            slot.textContent = opt;
+            slot.classList.add('filled');
+            correct(c, [q.full, q.hint]);
+          } else {
+            wrong(c, ['Chưa đúng rồi! ' + q.hint]);
+          }
+        });
+        return c;
+      }));
+
+      const text = `Bé chọn chữ đúng để điền vào từ "${q.full}" nhé! ✨`;
+      setPrompt(text, ['Con chọn chữ đúng để điền vào từ', q.full, 'nhé!']);
+    },
+
+    // Ghép từ có nghĩa
+    fillWord(ex, area) {
+      const p = ex.puzzle;
+      area.appendChild(el('div', 'ls-hero-pic', p.emoji));
+
+      const wordRow = el('div', 'ls-fill-row');
+      const first = el('span', 'ls-fill-fixed', p.first);
+      const slot = el('span', 'ls-fill-slot', '?');
+      wordRow.append(first, slot);
+      area.appendChild(wordRow);
+
+      area.appendChild(choiceRow(ex.options, w => {
+        const c = el('button', 'ls-card ls-word', w);
+        c.addEventListener('click', () => {
+          if (w === p.second) {
+            slot.textContent = w;
+            slot.classList.add('filled');
+            correct(c, [p.full]);
+          } else {
+            wrong(c, ['Chưa đúng rồi, con chọn lại cùng cô nhé!']);
+          }
+        });
+        return c;
+      }));
+
+      const text = `Bé nhìn hình và chọn tiếng đúng để ghép thành "${p.full}" nhé! 🧩`;
+      setPrompt(text, ['Con nhìn hình và chọn tiếng đúng để ghép thành từ', p.full, 'nhé!']);
+    },
+
+    // Gộp số
+    mergeNumbers(ex, area) {
+      const { a, b, sum, item } = ex;
+      const row = el('div', 'ls-calc-row');
+
+      const grpA = groupBox(a, item.emoji, 'side');
+      grpA.appendChild(el('div', 'ls-group-num', String(a)));
+
+      const plus = el('div', 'ls-calc-sym', '+');
+
+      const grpB = groupBox(b, item.emoji, 'side');
+      grpB.appendChild(el('div', 'ls-group-num', String(b)));
+
+      const eq = el('div', 'ls-calc-sym', '=');
+      const slot = el('div', 'ls-calc-slot', '?');
+
+      row.append(grpA, plus, grpB, eq, slot);
+      area.appendChild(row);
+
+      const opts = numberOptions(sum, 3, 1, 10);
+      area.appendChild(choiceRow(opts, v => {
+        const c = el('button', 'ls-card ls-num', String(v));
+        c.addEventListener('click', () => {
+          if (v === sum) {
+            slot.textContent = String(sum);
+            slot.classList.add('solved');
+            correct(c, ['Gộp lại có tất cả', numWord(sum), item.name]);
+          } else {
+            wrong(c, ['Chưa đúng rồi, con đếm hai bên gộp lại cùng cô nhé!']);
+          }
+        });
+        return c;
+      }));
+
+      const text = `Gộp ${a} ${item.name} và ${b} ${item.name} được mấy? Bé chọn số nhé! 🤲`;
+      setPrompt(text, ['Gộp', numWord(a), item.name, 'và', numWord(b), item.name, 'được mấy? Con chọn số nhé!']);
+    },
+
+    // Tách số
+    splitNumbers(ex, area) {
+      const { total, part, remain, item } = ex;
+      const wrap = el('div', 'ls-split-wrap');
+
+      const topGrp = groupBox(total, item.emoji, 'side');
+      topGrp.appendChild(el('div', 'ls-group-num', `Có tất cả ${total}`));
+      wrap.appendChild(topGrp);
+
+      const branchRow = el('div', 'ls-split-branches');
+      const b1 = groupBox(part, item.emoji, 'side');
+      b1.appendChild(el('div', 'ls-group-num', `Bớt ${part}`));
+
+      const arrow = el('div', 'ls-calc-sym', '➡️');
+
+      const b2 = el('div', 'ls-split-slot-grp');
+      const slot = el('div', 'ls-calc-slot', '?');
+      b2.append(slot, el('div', 'ls-group-num', 'Còn lại'));
+
+      branchRow.append(b1, arrow, b2);
+      wrap.appendChild(branchRow);
+      area.appendChild(wrap);
+
+      const opts = numberOptions(remain, 3, 1, 10);
+      area.appendChild(choiceRow(opts, v => {
+        const c = el('button', 'ls-card ls-num', String(v));
+        c.addEventListener('click', () => {
+          if (v === remain) {
+            slot.textContent = String(remain);
+            slot.classList.add('solved');
+            correct(c, ['Còn lại', numWord(remain), item.name]);
+          } else {
+            wrong(c, ['Chưa đúng rồi, con đếm lại số còn lại cùng cô nhé!']);
+          }
+        });
+        return c;
+      }));
+
+      const text = `Có ${total} ${item.name}, bớt đi ${part} thì còn mấy? Bé chọn số nhé! 🔢`;
+      setPrompt(text, ['Có tất cả', numWord(total), item.name, 'bớt đi', numWord(part), 'thì còn lại mấy? Con chọn số nhé!']);
+    },
+
+    // Phép tính cộng & trừ trực quan
+    mathOperation(ex, area) {
+      const { a, b, op, result, item } = ex;
+      const row = el('div', 'ls-calc-row');
+
+      const cardA = el('div', 'ls-calc-card');
+      cardA.appendChild(el('div', 'ls-calc-big-num', String(a)));
+      cardA.appendChild(el('div', 'ls-calc-mini-items', item.emoji.repeat(Math.min(a, 6))));
+
+      const opSym = el('div', 'ls-calc-sym', op);
+
+      const cardB = el('div', 'ls-calc-card');
+      cardB.appendChild(el('div', 'ls-calc-big-num', String(b)));
+      cardB.appendChild(el('div', 'ls-calc-mini-items', item.emoji.repeat(Math.min(b, 6))));
+
+      const eqSym = el('div', 'ls-calc-sym', '=');
+      const slot = el('div', 'ls-calc-slot', '?');
+
+      row.append(cardA, opSym, cardB, eqSym, slot);
+      area.appendChild(row);
+
+      const opts = numberOptions(result, 4, 1, 10);
+      area.appendChild(choiceRow(opts, v => {
+        const c = el('button', 'ls-card ls-num', String(v));
+        c.addEventListener('click', () => {
+          if (v === result) {
+            slot.textContent = String(result);
+            slot.classList.add('solved');
+            correct(c, [numWord(a), op === '+' ? 'cộng' : 'trừ', numWord(b), 'bằng', numWord(result)]);
+          } else {
+            wrong(c, ['Chưa đúng rồi, con tính lại cùng cô nhé!']);
+          }
+        });
+        return c;
+      }));
+
+      const opText = op === '+' ? 'cộng' : 'trừ';
+      const text = `${a} ${opText} ${b} bằng mấy? Bé chọn kết quả nhé! ➕`;
+      setPrompt(text, [numWord(a), opText, numWord(b), 'bằng mấy? Con chọn số nhé!']);
+    },
+
+    // Nhận biết hình khối
+    pickShape(ex, area) {
+      area.appendChild(bigSpeaker());
+      area.appendChild(choiceRow(ex.options, s => {
+        const c = el('button', 'ls-card ls-shape-card');
+        c.appendChild(el('span', 'ls-shape-icon', s.icon));
+        c.appendChild(el('span', 'ls-shape-title', s.name));
+        c.addEventListener('click', () => {
+          if (s.id === ex.target.id) {
+            correct(c, [s.name]);
+          } else {
+            wrong(c, ['Đây là', s.name, 'Con tìm', ex.target.name, 'nhé!']);
+          }
+        });
+        return c;
+      }));
+
+      const text = `Bé hãy tìm "${ex.target.name}" nhé! 🔷`;
+      setPrompt(text, ['Con hãy tìm', ex.target.name, 'nhé!']);
+    },
+
+    // Dãy quy luật tư duy logic
+    patternNext(ex, area) {
+      const p = ex.target;
+      const row = el('div', 'ls-pattern-row');
+      p.seq.forEach(ch => {
+        const it = el('div', 'ls-pattern-item', ch);
+        row.appendChild(it);
+      });
+      const slot = el('div', 'ls-pattern-slot', '❓');
+      row.appendChild(slot);
+      area.appendChild(row);
+
+      area.appendChild(choiceRow(ex.options, opt => {
+        const c = el('button', 'ls-card ls-pattern-btn', opt);
+        c.addEventListener('click', () => {
+          if (opt === p.next) {
+            slot.textContent = opt;
+            slot.classList.add('solved');
+            correct(c, ['Đúng rồi!', 'Tiếp theo là', p.name || opt]);
+          } else {
+            wrong(c, ['Chưa đúng rồi, con quan sát quy luật thật kỹ nhé!']);
+          }
+        });
+        return c;
+      }));
+
+      const text = 'Bé nhìn quy luật và tìm hình tiếp theo nhé! 🤔';
+      setPrompt(text, ['Bé nhìn quy luật và tìm hình tiếp theo vào dấu hỏi chấm nhé!']);
     }
   };
 
