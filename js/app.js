@@ -73,8 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
         window.kidsAudio.speak('Bảng chữ cái! Con chạm vào chữ để nghe cô đọc nhé!');
         window.phonics.enterAlphabet();
       } else if (btn.dataset.tab === 'blend') {
-        window.kidsAudio.speak('Cỗ máy ghép vần! Con kéo chữ vào máy cùng cô nhé!');
-        window.phonics.enterBlend();
+        window.blendLab.enter();
       } else if (btn.dataset.tab === 'spelling') {
         window.spellLab.enter();
       } else if (btn.dataset.tab === 'math') {

@@ -248,13 +248,13 @@
 
     <!-- PHASE 1 - LEVEL 2: BLENDING MACHINE & TONES (CỖ MÁY GHÉP VẦN) -->
     <section class="game-section" id="sec-blend">
-      <div class="section-title">
-        <h2>Cỗ máy ghép vần: kéo chữ vào máy nhé! ⚙️</h2>
-      </div>
+      <div class="mt-modes" id="blModes"></div>
+      <div class="bl-view" id="blMachineView">
       <div class="blend-layout">
         <div class="blend-tray tray-consonant" id="blendConsonants"></div>
 
         <div class="blend-center">
+          <div class="bl-challenge is-hidden" id="blChallenge"></div>
           <div class="blend-machine" id="blendMachine">
             <div class="blend-slot slot-c" id="slotC"></div>
             <div class="blend-plus">+</div>
@@ -272,6 +272,18 @@
         </div>
 
         <div class="blend-tray tray-vowel" id="blendVowels"></div>
+      </div>
+      </div>
+
+      <div class="bl-view is-hidden" id="blTableView">
+        <div class="bl-pages" id="blPages"></div>
+        <div class="bl-table" id="blTable"></div>
+        <div class="game-hint-banner" id="blTableStatus"></div>
+      </div>
+
+      <div class="bl-view is-hidden" id="blBookView">
+        <div class="bl-book-head" id="blBookHead"></div>
+        <div class="bl-book" id="blBook"></div>
       </div>
     </section>
 
@@ -311,6 +323,7 @@
   <script src="js/minigame-more.js"></script>
   <script src="js/math-lab.js"></script>
   <script src="js/spell-lab.js"></script>
+  <script src="js/blend-lab.js"></script>
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {

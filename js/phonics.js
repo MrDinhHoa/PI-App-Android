@@ -153,8 +153,27 @@
     tone: null,      // tone object currently applied
     ready: false,    // blended successfully -> tones enabled
     rewarded: new Set(),
-    rendered: false
+    rendered: false,
+    vMode: 'vowel'   // khay bên phải: 'vowel' (nguyên âm) hoặc 'rhyme' (vần)
   };
+
+  // Tiếng có nghĩa: tra trong từ điển gộp của blend-lab.js (nếu đã nạp), không thì PHONICS_DATA.words
+  const lookupWord = s => (window.blendLab && window.blendLab.lookup(s)) || D.words[s] || null;
+
+  // Sổ sưu tập: các tiếng có nghĩa bé đã ghép được (lưu lại giữa các lần mở app)
+  const FOUND_KEY = 'beHocVui.blendFound.v1';
+  let found = new Set();
+  try { found = new Set(JSON.parse(localStorage.getItem(FOUND_KEY)) || []); } catch (e) { found = new Set(); }
+  function markFound(s) {
+    if (found.has(s)) return;
+    found.add(s);
+    try { localStorage.setItem(FOUND_KEY, JSON.stringify([...found])); } catch (e) { /* ignore */ }
+  }
+
+  // Phần đọc của ô bên phải: nguyên âm (âm vị) hoặc vần (file van-<vần>.mp3)
+  const vPart = v => (v.isRhyme ? { text: v.letter, clip: `van-${slug(v.letter)}` } : phonemePart(v, true));
+  const rhymeItem = r => ({ letter: r, sound: r, isRhyme: true });
+  const toneVowel = () => (blend.v ? blend.v.letter : (blend.vMode === 'rhyme' ? 'eo' : 'a'));
 
   const trayC = document.getElementById('blendConsonants');
   const trayV = document.getElementById('blendVowels');
@@ -236,28 +255,57 @@
       trayC.appendChild(tile);
     });
 
+    renderVowelTray();
+  }
+
+  function renderVowelTray() {
     trayV.innerHTML = '';
-    D.blendVowels.forEach(l => {
-      const item = findLetter(l);
+    trayV.classList.toggle('rhymes', blend.vMode === 'rhyme');
+    const toggle = document.createElement('div');
+    toggle.className = 'tray-toggle';
+    [['vowel', 'Âm'], ['rhyme', 'Vần']].forEach(([mode, label]) => {
+      const b = document.createElement('button');
+      b.className = `tray-toggle-btn${blend.vMode === mode ? ' active' : ''}`;
+      b.textContent = label;
+      b.addEventListener('click', () => {
+        if (blend.vMode === mode) return;
+        audio().playPop();
+        setVowelMode(mode);
+        audio().speak(mode === 'rhyme' ? 'Khay vần!' : 'Khay nguyên âm!');
+      });
+      toggle.appendChild(b);
+    });
+    trayV.appendChild(toggle);
+
+    const list = blend.vMode === 'rhyme'
+      ? ((window.LESSONS_DATA && window.LESSONS_DATA.rhymes) || []).map(r => rhymeItem(r.rhyme))
+      : D.blendVowels.map(l => findLetter(l));
+    list.forEach(item => {
       const tile = document.createElement('div');
-      tile.className = 'blend-tile tile-vowel';
-      tile.textContent = l;
-      tile.dataset.letter = l;
+      tile.className = `blend-tile tile-vowel${item.isRhyme ? ' tile-rhyme' : ''}`;
+      tile.textContent = item.letter;
+      tile.dataset.letter = item.letter;
       makeDraggable(tile, { onTap: () => place('v', item), onDrop: () => place('v', item) });
       trayV.appendChild(tile);
     });
   }
 
+  function setVowelMode(mode) {
+    if (blend.vMode === mode && trayV.childElementCount) return;
+    blend.vMode = mode;
+    renderVowelTray();
+  }
+
   function renderToneBar() {
     toneBar.innerHTML = '';
-    const vowel = blend.v ? blend.v.letter : 'a';
+    const vowel = toneVowel();
     D.tones.forEach(tone => {
       const btn = document.createElement('button');
       btn.className = 'tone-btn';
       btn.dataset.tone = tone.key;
       if (blend.tone === tone) btn.classList.add('active');
       btn.innerHTML = `<span class="tone-char"></span><span class="tone-name"></span>`;
-      btn.querySelector('.tone-char').textContent = applyTone(vowel, tone.mark);
+      btn.querySelector('.tone-char').textContent = placeTone(vowel, tone.mark);
       btn.querySelector('.tone-name').textContent = tone.name;
       btn.addEventListener('click', () => chooseTone(tone, btn));
       toneBar.appendChild(btn);
@@ -301,15 +349,15 @@
     if (blend.c && blend.v) {
       tryBlend();
     } else {
-      audio().speakSequence([phonemePart(item, true)], { rate: 0.8 });
+      audio().speakSequence([type === 'v' ? vPart(item) : phonemePart(item, true)], { rate: 0.8 });
       setStatus(type === 'c'
-        ? 'Giỏi lắm! Giờ bé kéo một nguyên âm màu đỏ vào cỗ máy nhé!'
+        ? `Giỏi lắm! Giờ bé kéo một ${blend.vMode === 'rhyme' ? 'vần' : 'nguyên âm'} màu đỏ vào cỗ máy nhé!`
         : 'Giỏi lắm! Giờ bé kéo một phụ âm màu xanh vào cỗ máy nhé!');
     }
   }
 
   function spellingProblem(c, v) {
-    const isFront = D.frontVowels.includes(v.letter);
+    const isFront = D.frontVowels.includes((v.letter || '')[0]);
     return D.spellingRules.find(r => r.consonant === c.letter && r.front === isFront) || null;
   }
 
@@ -342,7 +390,7 @@
     setStatus(`${capitalize(c.blend || c.sound)}... ${v.sound}... ${base}!`);
 
     const finished = await audio().speakSequence(
-      [phonemePart(c, true), phonemePart(v, true), base],
+      [phonemePart(c, true), vPart(v), base],
       {
         gap: 500,
         rate: 0.75,
@@ -370,14 +418,21 @@
       star(1);
     }
 
-    const word = D.words[base];
+    const word = lookupWord(base);
     if (word) {
       showPicture(base, word);
+      markFound(base);
       await audio().speakSequence([word.say], { rate: 0.9 });
     }
     if (blend.base === base && blend.tone === D.tones[0]) {
       setStatus(`🎉 ${capitalize(base)}! Bé chạm vào một dấu thanh bên dưới nhé!`);
+      notify(base, base, 'base');
     }
+  }
+
+  // Báo cho chế độ Thử thách (blend-lab.js) biết bé vừa ghép xong tiếng nào
+  function notify(base, toned, stage) {
+    if (window.phonics.onResult) window.phonics.onResult({ base, toned, stage });
   }
 
   function showPicture(syllable, word) {
@@ -410,7 +465,7 @@
   async function spellCurrent() {
     const { c, v, base, tone } = blend;
     if (!base) return;
-    const toned = applyTone(base, tone ? tone.mark : '');
+    const toned = placeTone(base, tone ? tone.mark : '');
     const hasMark = tone && tone.mark;
     resultEl.textContent = toned;
     bounceClass(resultEl, 'anim-pop', 600);
@@ -420,7 +475,7 @@
       : `${capitalize(c.blend || c.sound)} - ${v.sound} - ${base}`);
 
     const toneBtn = toneBar.querySelector(`[data-tone="${tone ? tone.key : 'ngang'}"]`);
-    const parts = [phonemePart(c, true), phonemePart(v, true), base];
+    const parts = [phonemePart(c, true), vPart(v), base];
     if (hasMark) parts.push(tonePart(tone), toned);
 
     const finished = await audio().speakSequence(parts, {
@@ -436,16 +491,18 @@
     });
     if (!finished || blend.base !== base || blend.tone !== tone) return;
 
-    const word = D.words[toned];
+    const word = lookupWord(toned);
     if (word) {
       showPicture(toned, word);
       audio().playCelebration();
+      markFound(toned);
       if (!blend.rewarded.has(toned)) {
         blend.rewarded.add(toned);
         star(1);
       }
       await audio().speakSequence([word.say], { rate: 0.9 });
     }
+    if (blend.base === base && blend.tone === tone) notify(base, toned, 'tone');
   }
 
   btnBlendReplay.addEventListener('click', () => {
@@ -482,7 +539,9 @@
     renderSlots();
     resetResult();
     clearHighlights();
-    setStatus('Bé kéo một phụ âm màu xanh và một nguyên âm màu đỏ vào cỗ máy nhé!');
+    setStatus(blend.vMode === 'rhyme'
+      ? 'Bé kéo một phụ âm màu xanh và một vần màu đỏ vào cỗ máy nhé!'
+      : 'Bé kéo một phụ âm màu xanh và một nguyên âm màu đỏ vào cỗ máy nhé!');
   }
 
   function enterBlend() {
@@ -515,6 +574,26 @@
     return single ? phonemePart(single, true) : { text: rhyme, clip: `van-${slug(rhyme)}` };
   }
 
+  // Đặt dấu thanh đúng vị trí (kiểu cũ, như SGK hiện dùng: hòa, thủy):
+  // - có ă â ê ô ơ ư: đặt vào chữ đó (ươ -> ơ);  - vần có âm cuối: nguyên âm cuối (bóng, hoàn);
+  // - vần mở 2 nguyên âm: nguyên âm đầu (mèo, tài, hòa);  3 nguyên âm: nguyên âm giữa (ngoài).
+  function placeTone(base, mark) {
+    if (!mark) return base;
+    const chars = [...base.normalize('NFC')];
+    const start = analyzeSyllable(chars.join('')).onset.length;
+    const vIdx = [];
+    for (let i = start; i < chars.length; i++) if (VOWEL_CHARS.includes(chars[i])) vIdx.push(i);
+    if (!vIdx.length) return base;
+    const special = vIdx.filter(i => 'ăâêôơư'.includes(chars[i]));
+    let t;
+    if (special.length) t = special[special.length - 1];
+    else if (vIdx[vIdx.length - 1] < chars.length - 1) t = vIdx[vIdx.length - 1];
+    else if (vIdx.length >= 3) t = vIdx[1];
+    else t = vIdx[0];
+    chars[t] = (chars[t] + mark).normalize('NFC');
+    return chars.join('');
+  }
+
   // Parts for speakSequence: "Mờ - eo - meo - huyền - mèo"
   function spellParts(syllable) {
     const a = analyzeSyllable(syllable);
@@ -528,9 +607,12 @@
     return parts;
   }
 
-  window.phonics = { enterAlphabet, enterBlend };
+  window.phonics = {
+    enterAlphabet, enterBlend, setVowelMode, resetBlend,
+    found: () => found, markFound, onResult: null
+  };
   window.phonicsUtil = {
     stripTones, applyTone, slug, capitalize, findLetter,
-    phonemePart, tonePart, analyzeSyllable, spellParts
+    phonemePart, tonePart, analyzeSyllable, spellParts, placeTone
   };
 })();

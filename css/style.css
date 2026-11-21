@@ -2121,3 +2121,116 @@ body {
 .sp-word-onset.hl { color: var(--consonant); background: var(--consonant-soft); box-shadow: 0 0 0 4px var(--consonant); }
 .sp-word-rest.hl { color: var(--vowel); background: var(--vowel-soft); box-shadow: 0 0 0 4px var(--vowel); }
 .sp-word-rest.hl-tone { color: #8854D0; background: #F3F0FF; box-shadow: 0 0 0 4px #B197FC; }
+
+/* ==================== GHÉP VẦN: 4 CHẾ ĐỘ (blend-lab.js) ==================== */
+#sec-blend .mt-modes { margin-bottom: 8px; }
+.bl-view { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+
+/* Khay Âm / Vần */
+.tray-toggle {
+  grid-column: 1 / -1;
+  display: flex;
+  background: #FFF;
+  border-radius: 16px;
+  padding: 3px;
+  gap: 3px;
+}
+.tray-toggle-btn {
+  flex: 1;
+  border: none;
+  border-radius: 13px;
+  background: transparent;
+  font-family: var(--font-family);
+  font-size: 15px;
+  font-weight: 900;
+  color: var(--vowel);
+  padding: 5px 0;
+  cursor: pointer;
+}
+.tray-toggle-btn.active { background: var(--vowel); color: #FFF; }
+.tray-vowel.rhymes { grid-template-columns: repeat(3, 54px); gap: 6px; }
+.tile-rhyme { height: 52px; font-size: 22px; }
+
+/* Thẻ thử thách */
+.bl-challenge {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 6px 16px;
+  background: #FFF;
+  border: 4px solid #FFD43B;
+  border-radius: 24px;
+  box-shadow: var(--card-shadow);
+}
+.bl-challenge.solved { border-color: #2ECC71; background: #E8F8F5; }
+.bl-ch-pic { font-size: 60px; line-height: 1; animation: float 3s ease-in-out infinite; }
+.bl-ch-text { display: flex; flex-direction: column; font-size: 15px; color: #795548; }
+.bl-ch-text b { font-size: 19px; color: #E64A19; }
+.bl-ch-btn { min-height: 42px; padding: 6px 14px; font-size: 16px; }
+#blMachineView .blend-picture { height: 56px; }
+
+/* Bảng ghép */
+.bl-pages { display: flex; justify-content: center; gap: 8px; margin-bottom: 8px; }
+.bl-page {
+  border: 3px solid #A9CCF5; background: #FFF; color: var(--consonant);
+  border-radius: 16px; padding: 4px 16px;
+  font-family: var(--font-family); font-size: 16px; font-weight: 900; cursor: pointer;
+}
+.bl-page.active { background: var(--consonant); border-color: var(--consonant); color: #FFF; }
+.bl-table {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 64px repeat(var(--cols), 1fr);
+  grid-auto-rows: 1fr;
+  gap: 5px;
+  max-width: 900px;
+  width: 100%;
+  align-self: center;
+}
+.bl-cell {
+  border: none;
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-family); font-weight: 900; font-size: 22px;
+  min-height: 0;
+}
+.bl-corner { background: transparent; color: #FF7B54; }
+.bl-head-v { background: var(--vowel-soft); color: var(--vowel); font-size: 26px; }
+.bl-head-c { background: var(--consonant-soft); color: var(--consonant); font-size: 24px; cursor: pointer; }
+.bl-syl { position: relative; background: #FFF; color: #5D4037; cursor: pointer; box-shadow: 0 3px 8px rgba(0,0,0,0.06); }
+.bl-syl:active { transform: scale(0.92); }
+.bl-syl.bad { background: #F1F3F5; color: #CED4DA; font-size: 18px; }
+.bl-syl.speaking { background: #FFF3C4; color: #E64A19; box-shadow: 0 0 0 3px #FFD43B; }
+.bl-syl-pic { position: absolute; right: 2px; top: 0; font-size: 13px; }
+#blTableView .game-hint-banner { margin-top: 8px; }
+
+/* Sổ sưu tập */
+.bl-book-head { display: flex; align-items: center; justify-content: center; gap: 16px; margin-bottom: 10px; }
+.bl-book-title { font-size: 20px; font-weight: 900; color: #5D4037; }
+.bl-book-bar { width: 260px; height: 16px; border-radius: 8px; background: #FFE0C2; overflow: hidden; }
+.bl-book-fill { height: 100%; background: linear-gradient(90deg, #FFD43B, #FF922B); border-radius: 8px; transition: width 0.6s; }
+.bl-book {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(92px, 1fr));
+  gap: 10px;
+  padding: 4px 6px 10px;
+  align-content: start;
+}
+.bl-sticker {
+  height: 96px;
+  border-radius: 20px;
+  border: 3px dashed #E9ECEF;
+  background: #FFF;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
+  font-family: var(--font-family);
+  cursor: pointer;
+}
+.bl-sticker-pic { font-size: 44px; line-height: 1; filter: brightness(0); opacity: 0.18; }
+.bl-sticker-word { font-size: 17px; font-weight: 900; color: #ADB5BD; }
+.bl-sticker.got { border: 3px solid #FFD43B; background: linear-gradient(160deg, #FFF, #FFF9DB); box-shadow: var(--card-shadow); }
+.bl-sticker.got .bl-sticker-pic { filter: none; opacity: 1; }
+.bl-sticker.got .bl-sticker-word { color: #E64A19; }
