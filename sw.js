@@ -1,4 +1,4 @@
-const CACHE_NAME = 'behocvui-v9';
+const CACHE_NAME = 'behocvui-v10';
 
 const CORE_ASSETS = [
   './',

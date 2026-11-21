@@ -463,5 +463,5 @@
     playPrompt();
   }
 
-  window.mathLab = { enter, selectMode, st, MODES, vnNum, progress };
+  window.mathLab = { enter, selectMode, st, MODES, vnNum, progress, clockSvg };
 })();

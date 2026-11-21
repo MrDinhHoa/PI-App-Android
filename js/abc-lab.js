@@ -119,12 +119,9 @@
   const PASS_COVER = 0.7;
   const MAX_OUTSIDE = 0.35;
 
-  function traceLetter(area) {
-    // lần lượt theo thứ tự bảng chữ cái, nhớ chữ đang tập
-    const idx = (progress.traceIdx || 0) % ALPHA.length;
-    const letter = ALPHA[idx];
-    const token = st.token;
-
+  // Khối tô chữ dùng chung (tab Chữ Cái và bài học Tập viết trong lessons.js).
+  // opts: isLocked() -> true khi không cho tô nữa; onPass(stage); onFail(stage, lời nhắc); extraButtons: [nút]
+  function createTracer(letter, opts) {
     const wrap = el('div', 'ab-trace');
     const stage = el('div', 'ab-trace-stage');
     const guide = document.createElement('canvas');
@@ -139,10 +136,8 @@
     side.append(el('div', 'ab-trace-pic', item ? item.emoji : '✏️'), el('div', 'ab-trace-word', item ? item.word : ''));
     const btnDone = el('button', 'action-btn play', '✅ Xong');
     const btnClear = el('button', 'action-btn secondary', '🧽 Xóa');
-    const btnNext = el('button', 'action-btn', '⏭️ Chữ khác');
-    side.append(btnDone, btnClear, btnNext);
+    side.append(btnDone, btnClear, ...(opts.extraButtons || []));
     wrap.append(stage, side);
-    area.appendChild(wrap);
 
     // --- vẽ chữ mẫu: mặt nạ (để chấm) + hình hiển thị (nét mờ + viền chấm) ---
     const mask = document.createElement('canvas');
@@ -158,6 +153,7 @@
       // kẻ ô li như vở tập viết
       g.strokeStyle = '#FFE3D3';
       g.lineWidth = 2;
+      g.setLineDash([]);
       for (let y = 40; y < TRACE_H; y += 50) { g.beginPath(); g.moveTo(0, y); g.lineTo(TRACE_W, y); g.stroke(); }
       [mask.getContext('2d'), near.getContext('2d'), g].forEach(c => {
         c.font = TRACE_FONT(size);
@@ -189,7 +185,7 @@
       nearData = n.getImageData(0, 0, TRACE_W, TRACE_H).data;
     }
     const fontReady = document.fonts && document.fonts.load ? document.fonts.load(TRACE_FONT(280), letter).catch(() => {}) : Promise.resolve();
-    fontReady.then(() => { if (token === st.token) drawGuide(); });
+    fontReady.then(() => { if (wrap.isConnected) drawGuide(); });
     drawGuide();
 
     // --- tô bằng ngón tay ---
@@ -200,12 +196,14 @@
     ctx.strokeStyle = '#FF7B54';
     let drawing = false;
     let last = null;
+    let passed = false;
+    const locked = () => passed || (opts.isLocked && opts.isLocked());
     const pos = e => {
       const r = ink.getBoundingClientRect();
       return { x: (e.clientX - r.left) * (TRACE_W / r.width), y: (e.clientY - r.top) * (TRACE_H / r.height) };
     };
     ink.addEventListener('pointerdown', e => {
-      if (st.solved) return;
+      if (locked()) return;
       e.preventDefault();
       try { ink.setPointerCapture(e.pointerId); } catch (err) { /* ignore */ }
       drawing = true;
@@ -248,15 +246,14 @@
     }
 
     function check(manual) {
-      if (st.solved) return;
+      if (locked()) return;
       const s = score();
       if (s.cover >= PASS_COVER && s.outside <= MAX_OUTSIDE) {
+        passed = true;
         stage.classList.add('done');
-        progress.traceIdx = idx + 1;
-        saveProgress();
-        correct(null, ['Con tô chữ', say(letter), 'đẹp quá!']);
+        opts.onPass(stage);
       } else if (manual) {
-        wrong(stage, [s.outside > MAX_OUTSIDE ? 'Con tô hơi ra ngoài rồi. Con xóa đi và tô lại theo nét chấm nhé!' : 'Con tô kín cả chữ nhé!']);
+        opts.onFail(stage, s.outside > MAX_OUTSIDE ? 'Con tô hơi ra ngoài rồi. Con xóa đi và tô lại theo nét chấm nhé!' : 'Con tô kín cả chữ nhé!');
       } else if (s.outside > 0.5) {
         audio().speakSequence(['Con tô theo nét chấm nhé!'], { rate: 0.9 });
       }
@@ -270,13 +267,30 @@
       audio().playPop();
       ctx.clearRect(0, 0, TRACE_W, TRACE_H);
     });
+    return wrap;
+  }
+
+  function traceLetter(area) {
+    // lần lượt theo thứ tự bảng chữ cái, nhớ chữ đang tập
+    const idx = (progress.traceIdx || 0) % ALPHA.length;
+    const letter = ALPHA[idx];
+    const btnNext = el('button', 'action-btn', '⏭️ Chữ khác');
     btnNext.addEventListener('click', () => {
       audio().playPop();
       progress.traceIdx = idx + 1;
       saveProgress();
       nextQuestion();
     });
-
+    area.appendChild(createTracer(letter, {
+      isLocked: () => st.solved,
+      onPass: () => {
+        progress.traceIdx = idx + 1;
+        saveProgress();
+        correct(null, ['Con tô chữ', say(letter), 'đẹp quá!']);
+      },
+      onFail: (stage, msg) => wrong(stage, [msg]),
+      extraButtons: [btnNext]
+    }));
     setPrompt(`Bé dùng ngón tay tô theo chữ "${letter}" nhé! ✍️`, ['Con dùng ngón tay tô theo chữ', say(letter), 'nhé!']);
   }
 
@@ -427,5 +441,5 @@
     if (st.mode !== 'board') playPrompt();
   }
 
-  window.abcLab = { enter, selectMode, st, MODES, ALPHA, progress };
+  window.abcLab = { enter, selectMode, st, MODES, ALPHA, progress, createTracer };
 })();

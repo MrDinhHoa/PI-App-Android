@@ -2304,3 +2304,54 @@ body {
 .ab-trace-pic { font-size: 74px; line-height: 1; }
 .ab-trace-word { font-size: 22px; font-weight: 900; color: #795548; margin-bottom: 6px; }
 .ab-trace-side .action-btn { min-width: 150px; }
+
+/* ==================== BÀI HỌC: BÀI MỚI + ÔN TẬP ==================== */
+.ls-track-stars { font-size: 13px; font-weight: 900; color: #F59F00; }
+.ls-review-btn {
+  margin-top: 4px;
+  border: 3px solid #FFF;
+  border-radius: 14px;
+  padding: 3px 8px;
+  background: linear-gradient(135deg, #63E6BE, #20C997);
+  color: #FFF;
+  font-family: var(--font-family);
+  font-size: 13px;
+  font-weight: 900;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(32, 201, 151, 0.35);
+}
+.ls-review-btn:active { transform: scale(0.92); }
+
+/* Đọc hiểu */
+.ls-story { display: flex; align-items: center; gap: 22px; }
+.ls-story-scene { font-size: 96px; line-height: 1; animation: float 3s ease-in-out infinite; }
+.ls-story-lines {
+  display: flex; flex-direction: column; gap: 6px;
+  background: #FFF; border-radius: 24px; padding: 12px 20px;
+  box-shadow: var(--card-shadow); border: 4px solid #FFE0C2;
+}
+.ls-story-title { font-size: 18px; font-weight: 900; color: #E64A19; text-align: center; }
+.ls-story-line {
+  border: none; background: transparent; text-align: left;
+  font-family: var(--font-family); font-size: 28px; font-weight: 800; color: #5D4037;
+  padding: 2px 10px; border-radius: 12px; cursor: pointer; transition: all 0.2s;
+}
+.ls-story-line.karaoke-on { background: #FFF3C4; color: #E64A19; box-shadow: 0 0 0 3px #FFD43B; }
+.ls-story-ask { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.ls-story-q { font-size: 24px; font-weight: 900; color: #2E86DE; }
+.ls-story-opt { flex-direction: column; gap: 2px; min-width: 150px; height: 120px; }
+.ls-story-opt-pic { font-size: 52px; line-height: 1; font-weight: 900; color: #E64A19; }
+.ls-story-opt-text { font-size: 18px; font-weight: 800; color: #5D4037; }
+
+/* Khung 10 ô */
+.ls-tenframes { display: flex; gap: 28px; }
+.ls-tenframe {
+  display: grid; grid-template-columns: repeat(5, 58px); grid-auto-rows: 58px; gap: 6px;
+  padding: 10px; background: #FFF; border-radius: 20px; border: 4px solid #74B9FF;
+  box-shadow: var(--card-shadow);
+}
+.ls-tf-cell { border-radius: 12px; border: 3px dashed #D0EBFF; }
+.ls-tf-cell.on { border: none; background: radial-gradient(circle at 35% 30%, #FFA8A8, #F03E3E); border-radius: 50%; margin: 4px; }
+
+/* Đồng hồ trong bài học */
+.ls-clock-card { height: auto; padding: 10px; }

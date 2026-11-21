@@ -1,4 +1,4 @@
-// Bản đồ bài học (Tiếng Việt 9 bài + Toán 8 bài) + trình chạy bài
+// Bản đồ bài học (Tiếng Việt 11 bài + Toán 10 bài, nút Ôn tập) + trình chạy bài
 (function () {
   const L = window.LESSONS_DATA;
   const PD = window.PHONICS_DATA;
@@ -18,7 +18,10 @@
   };
   const sample = (a, n) => shuffle(a).slice(0, n);
   const randInt = (lo, hi) => lo + Math.floor(Math.random() * (hi - lo + 1));
-  const numWord = n => L.numberWords[n];
+  // Đọc số 0–20: 15 -> "mười lăm", 20 -> "hai mươi"
+  const numWord = n => (n <= 10 ? L.numberWords[n]
+    : n < 20 ? `mười ${n === 15 ? 'lăm' : L.numberWords[n - 10]}` : n === 20 ? 'hai mươi' : String(n));
+  const range = (lo, hi) => Array.from({ length: hi - lo + 1 }, (_, i) => lo + i);
   function el(tag, cls, text) {
     const e = document.createElement(tag);
     if (cls) e.className = cls;
@@ -155,6 +158,10 @@
       ];
     },
 
+    tv10: () => pick(L.traceGroups).map(letter => ({ type: 'traceLetter', letter })),
+
+    tv11: () => sample(L.stories, 2).map(story => ({ type: 'story', story })),
+
     toan1: () => shuffle([1, 2, 3, 4, 5]).map(n => ({ type: 'countTap', n, item: pick(L.counters), lo: 1, hi: 6 })),
 
     toan2: () => shuffle([6, 7, 8, 9, 10]).map(n => ({ type: 'countTap', n, item: pick(L.counters), lo: 5, hi: 10 })),
@@ -238,6 +245,31 @@
     ]
   };
 
+  Object.assign(BUILD, {
+    toan9: () => [
+      ...sample(range(11, 20), 3).map(n => ({ type: 'tenFrame', n })),
+      ...sample(range(11, 20), 2).map(n => ({ type: 'pickNumber', n, options: numberOptions(n, 4, 11, 20) }))
+    ],
+    toan10: () => {
+      const hours = sample(range(1, 12), 5);
+      return [
+        ...hours.slice(0, 3).map(h => ({ type: 'clockRead', h, options: numberOptions(h, 3, 1, 12) })),
+        ...hours.slice(3).map(h => ({ type: 'clockFind', h, options: numberOptions(h, 3, 1, 12) }))
+      ];
+    }
+  });
+
+  // Ôn tập: trộn 5 câu từ các bài đã học xong trong một track
+  const REVIEW_SIZE = 5;
+  function reviewLesson(trackKey) {
+    const id = `review-${trackKey}`;
+    BUILD[id] = () => {
+      const done = trackLessons(trackKey).filter(l => progress[l.id] && BUILD[l.id]);
+      return Array.from({ length: REVIEW_SIZE }, () => pick(BUILD[pick(done).id]()));
+    };
+    return { id, track: trackKey, icon: '🔁', title: 'Ôn tập', intro: 'Ôn tập! Mình cùng ôn lại các bài con đã học nhé!' };
+  }
+
   // ==================== DOM ====================
   const section = document.getElementById('sec-lessons');
   const mapEl = document.getElementById('lsMap');
@@ -266,12 +298,20 @@
     tracksEl.innerHTML = '';
     TRACKS.forEach(track => {
       const row = el('div', `ls-track ls-track-${track.key}`);
+      const list = trackLessons(track.key);
       const label = el('div', 'ls-track-label');
       label.append(el('span', 'ls-track-icon', track.icon), el('span', '', track.label));
+      const starSum = list.reduce((sum, l) => sum + (progress[l.id] ? progress[l.id].stars : 0), 0);
+      label.appendChild(el('span', 'ls-track-stars', `⭐ ${starSum}/${list.length * 3}`));
+      const doneCount = list.filter(l => progress[l.id]).length;
+      if (doneCount >= 2) {
+        const review = el('button', 'ls-review-btn', '🔁 Ôn tập');
+        review.addEventListener('click', () => { audio().playPop(); startLesson(reviewLesson(track.key)); });
+        label.appendChild(review);
+      }
       row.appendChild(label);
 
       const path = el('div', 'ls-path');
-      const list = trackLessons(track.key);
       const nextLesson = list.find(l => isUnlocked(l) && !progress[l.id]);
       list.forEach((lesson, i) => {
         const unlocked = isUnlocked(lesson);
@@ -288,6 +328,14 @@
       });
       row.appendChild(path);
       tracksEl.appendChild(row);
+      // tự cuộn tới bài tiếp theo (bản đồ dài hơn màn hình)
+      const focus = path.querySelector('.ls-node.next') || path.querySelector('.ls-node:not(.locked):last-of-type');
+      if (focus) {
+        requestAnimationFrame(() => {
+          const wrap = focus.parentElement;
+          path.scrollLeft = Math.max(0, wrap.offsetLeft - path.clientWidth / 2 + wrap.offsetWidth / 2);
+        });
+      }
     });
   }
 
@@ -906,6 +954,109 @@
         return c;
       }));
       setPrompt(`Bé chọn vần đúng để ghép thành "${t.word}" nhé! 🧩`, ['Con chọn vần đúng để ghép thành tiếng', t.word]);
+    },
+
+    // Tập viết: tô chữ bằng ngón tay (khối tô chữ của abc-lab.js)
+    traceLetter(ex, area) {
+      const part = P.phonemePart(P.findLetter(ex.letter), false);
+      area.appendChild(window.abcLab.createTracer(ex.letter, {
+        isLocked: () => player.solved,
+        onPass: () => correct(null, ['Con tô chữ', part, 'đẹp quá!']),
+        onFail: (stage, msg) => wrong(stage, [msg])
+      }));
+      setPrompt(`Bé dùng ngón tay tô theo chữ "${ex.letter}" nhé! ✍️`, ['Con tô theo chữ', part, 'nhé!']);
+    },
+
+    // Đọc hiểu: cô đọc truyện (tô sáng từng câu) -> hỏi 1 câu -> chọn hình
+    story(ex, area) {
+      const s = ex.story;
+      const token = player.token;
+      const box = el('div', 'ls-story');
+      box.appendChild(el('div', 'ls-story-scene', s.scene));
+      const lines = el('div', 'ls-story-lines');
+      lines.appendChild(el('div', 'ls-story-title', s.title));
+      const spans = s.sentences.map(t => {
+        const b = el('button', 'ls-story-line', t);
+        b.addEventListener('click', () => { audio().playPop(); audio().speakSequence([t], { rate: 0.8 }); });
+        lines.appendChild(b);
+        return b;
+      });
+      box.appendChild(lines);
+      area.appendChild(box);
+
+      const ask = el('div', 'ls-story-ask ls-hidden-row');
+      ask.appendChild(el('div', 'ls-story-q', `❓ ${s.question}`));
+      ask.appendChild(choiceRow(shuffle(s.options), o => {
+        const c = el('button', 'ls-card ls-story-opt');
+        c.append(el('span', 'ls-story-opt-pic', o.emoji), el('span', 'ls-story-opt-text', o.text));
+        c.addEventListener('click', () => {
+          if (o === s.options[0]) correct(c, [o.text]);
+          else wrong(c, ['Chưa đúng rồi! Con nghe lại câu chuyện cùng cô nhé!']);
+        });
+        return c;
+      }));
+      area.appendChild(ask);
+
+      async function read() {
+        await audio().speakSequence([...s.sentences, s.question], {
+          gap: 500, rate: 0.82,
+          onStep: i => spans.forEach((x, j) => x.classList.toggle('karaoke-on', j === i))
+        });
+        spans.forEach(x => x.classList.remove('karaoke-on'));
+        if (token !== player.token) return;
+        ask.classList.remove('ls-hidden-row');
+        bannerEl.textContent = `${s.question} Bé chọn hình nhé!`;
+      }
+      setPrompt(`Bé nghe cô đọc truyện "${s.title}" nhé! 📚`, [], () => read());
+    },
+
+    // Số đến 20 bằng khung 10 ô: 1 khung đầy (1 chục) + khung còn lại
+    tenFrame(ex, area) {
+      const { n } = ex;
+      const row = el('div', 'ls-tenframes');
+      [10, n - 10].forEach(k => {
+        const f = el('div', 'ls-tenframe');
+        for (let i = 0; i < 10; i++) f.appendChild(el('span', `ls-tf-cell${i < k ? ' on' : ''}`));
+        row.appendChild(f);
+      });
+      area.appendChild(row);
+      area.appendChild(choiceRow(numberOptions(n, 3, 11, 20), v => {
+        const c = el('button', 'ls-card ls-num', String(v));
+        c.addEventListener('click', () => {
+          if (v === n) correct(c, ['Mười', 'và', numWord(n - 10), 'là', numWord(n)]);
+          else wrong(c, ['Chưa đúng rồi! Khung đầy là mười chấm, con đếm thêm khung bên phải nhé!']);
+        });
+        return c;
+      }));
+      setPrompt('Có tất cả bao nhiêu chấm tròn? Khung đầy là 10 chấm nhé! 🔟', ['Có tất cả bao nhiêu chấm tròn? Khung đầy là mười chấm nhé!']);
+    },
+
+    // Xem đồng hồ: nhìn đồng hồ -> chọn giờ
+    clockRead(ex, area) {
+      area.appendChild(window.mathLab.clockSvg(ex.h, 'big'));
+      area.appendChild(choiceRow(ex.options, v => {
+        const c = el('button', 'ls-card ls-word', `${v} giờ`);
+        c.addEventListener('click', () => {
+          if (v === ex.h) correct(c, [`${numWord(ex.h)} giờ`]);
+          else wrong(c, ['Con nhìn kim ngắn chỉ vào số mấy nhé!']);
+        });
+        return c;
+      }));
+      setPrompt('Đồng hồ chỉ mấy giờ? 🕐', ['Đồng hồ chỉ mấy giờ?']);
+    },
+
+    // Xem đồng hồ: nghe giờ -> chọn đồng hồ
+    clockFind(ex, area) {
+      area.appendChild(choiceRow(ex.options, v => {
+        const c = el('button', 'ls-card ls-clock-card');
+        c.appendChild(window.mathLab.clockSvg(v, 'small'));
+        c.addEventListener('click', () => {
+          if (v === ex.h) correct(c, [`${numWord(ex.h)} giờ`]);
+          else wrong(c, [`Đồng hồ này chỉ ${numWord(v)} giờ. Con tìm đồng hồ chỉ ${numWord(ex.h)} giờ nhé!`]);
+        });
+        return c;
+      }));
+      setPrompt(`Đồng hồ nào chỉ ${ex.h} giờ? 🕐`, [`Đồng hồ nào chỉ ${numWord(ex.h)} giờ?`]);
     },
 
     // Gộp số

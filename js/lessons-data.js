@@ -1,4 +1,4 @@
-// Nội dung các bài học (Tiếng Việt 9 bài, Toán 8 bài). Sửa / thêm nội dung ở đây.
+// Nội dung các bài học (Tiếng Việt 11 bài, Toán 10 bài). Sửa / thêm nội dung ở đây.
 window.LESSONS_DATA = {
   // Bài 4 - Đọc từ: từ 2 tiếng (tránh vần có âm cuối p, t, c, ch để đánh vần đơn giản)
   words: [
@@ -144,6 +144,29 @@ window.LESSONS_DATA = {
     { rhyme: 'ua', word: 'cua', emoji: '🦀' },
     { rhyme: 'ưa', word: 'dưa', emoji: '🍉' }
   ],
+  // Bài 11 Tiếng Việt - Đọc hiểu: truyện 3 câu + 1 câu hỏi, đáp án là hình (đáp án đúng đứng đầu)
+  stories: [
+    { title: 'Mèo con', scene: '🐱', sentences: ['Nhà bé có mèo con.', 'Mèo con thích bắt chuột.', 'Bé rất yêu mèo con.'],
+      question: 'Mèo con thích làm gì?', options: [{ emoji: '🐭', text: 'bắt chuột' }, { emoji: '🍌', text: 'ăn chuối' }, { emoji: '⚽', text: 'đá bóng' }] },
+    { title: 'Đi chợ', scene: '🧺', sentences: ['Mẹ đi chợ.', 'Mẹ mua cam và cá.', 'Bé giúp mẹ xách giỏ.'],
+      question: 'Mẹ mua gì?', options: [{ emoji: '🍊🐟', text: 'cam và cá' }, { emoji: '🍎🥕', text: 'táo và cà rốt' }, { emoji: '🍌🥚', text: 'chuối và trứng' }] },
+    { title: 'Trời mưa', scene: '🌧️', sentences: ['Trời mưa to.', 'Bé cầm ô đi học.', 'Ếch kêu ộp ộp.'],
+      question: 'Trời mưa, bé cầm gì đi học?', options: [{ emoji: '☂️', text: 'cái ô' }, { emoji: '🎈', text: 'quả bóng' }, { emoji: '🧸', text: 'gấu bông' }] },
+    { title: 'Gà mẹ', scene: '🐔', sentences: ['Gà mẹ có năm gà con.', 'Gà con kêu chiếp chiếp.', 'Gà mẹ dẫn con đi kiếm mồi.'],
+      question: 'Gà mẹ có mấy gà con?', options: [{ emoji: '5', text: 'năm con' }, { emoji: '3', text: 'ba con' }, { emoji: '2', text: 'hai con' }] },
+    { title: 'Sinh nhật', scene: '🎉', sentences: ['Hôm nay là sinh nhật bé.', 'Bố mua bánh kem.', 'Bé thổi nến.'],
+      question: 'Bố mua gì cho bé?', options: [{ emoji: '🎂', text: 'bánh kem' }, { emoji: '🧸', text: 'gấu bông' }, { emoji: '🚲', text: 'xe đạp' }] },
+    { title: 'Vườn rau', scene: '🥬', sentences: ['Ông trồng rau trong vườn.', 'Bé tưới nước cho rau.', 'Rau lớn nhanh quá.'],
+      question: 'Ai trồng rau trong vườn?', options: [{ emoji: '👴', text: 'ông' }, { emoji: '👩', text: 'mẹ' }, { emoji: '👧', text: 'chị' }] },
+    { title: 'Bạn thỏ', scene: '🐰', sentences: ['Thỏ con có đôi tai dài.', 'Thỏ thích ăn cà rốt.', 'Thỏ nhảy rất nhanh.'],
+      question: 'Thỏ thích ăn gì?', options: [{ emoji: '🥕', text: 'cà rốt' }, { emoji: '🐟', text: 'con cá' }, { emoji: '🍖', text: 'thịt' }] },
+    { title: 'Đi biển', scene: '🏖️', sentences: ['Hè này cả nhà đi biển.', 'Bé xây lâu đài cát.', 'Bố dạy bé bơi.'],
+      question: 'Ai dạy bé bơi?', options: [{ emoji: '👨', text: 'bố' }, { emoji: '👵', text: 'bà' }, { emoji: '👩', text: 'mẹ' }] }
+  ],
+
+  // Bài 10 Tiếng Việt - Tập viết: các nhóm chữ hay viết nhầm
+  traceGroups: [['b', 'd', 'đ'], ['o', 'ô', 'ơ'], ['a', 'ă', 'â'], ['m', 'n', 'u'], ['e', 'ê', 'c'], ['p', 'q', 'g'], ['l', 't', 'h'], ['u', 'ư', 'i']],
+
   // Các vần dễ nhầm (dùng làm phương án nhiễu)
   rhymeConfusable: [['ai', 'ay', 'oi'], ['ao', 'eo'], ['am', 'âm', 'ăn'], ['em', 'en', 'ên'], ['im', 'in'], ['ong', 'ông'], ['ua', 'ưa', 'oa']],
 
@@ -184,6 +207,8 @@ window.LESSONS_DATA = {
     { id: 'tv7', track: 'tv', icon: '✨', title: 'Luật chính tả', intro: 'Bài bảy. Quy tắc chính tả. Con nhớ k, gh, và ngh chỉ đi với e, ê, i nhé!' },
     { id: 'tv8', track: 'tv', icon: '🧩', title: 'Ghép từ', intro: 'Bài tám. Ghép từ có nghĩa. Bé nhìn hình và tìm tiếng còn thiếu nhé!' },
     { id: 'tv9', track: 'tv', icon: '🎵', title: 'Vần cơ bản', intro: 'Bài chín. Vần. Con nghe cô đọc vần và tìm cùng cô nhé!' },
+    { id: 'tv10', track: 'tv', icon: '✍️', title: 'Tập viết', intro: 'Bài mười. Tập viết. Con dùng ngón tay tô theo chữ mẫu nhé!' },
+    { id: 'tv11', track: 'tv', icon: '📚', title: 'Đọc hiểu', intro: 'Bài mười một. Đọc hiểu. Con nghe cô đọc truyện rồi trả lời câu hỏi nhé!' },
 
     // 5 bài Toán cơ bản
     { id: 'toan1', track: 'toan', icon: '🍎', title: 'Đếm 1 đến 5', intro: 'Bài một. Đếm từ một đến năm. Con chạm vào từng hình để đếm cùng cô nhé!' },
@@ -194,6 +219,8 @@ window.LESSONS_DATA = {
     // 3 bài Toán nâng cao
     { id: 'toan6', track: 'toan', icon: '🤲', title: 'Tách & Gộp số', intro: 'Bài sáu. Tách và gộp số. Bé xem hai nhóm gộp lại có tất cả bao nhiêu nhé!' },
     { id: 'toan7', track: 'toan', icon: '➕', title: 'Phép cộng & trừ', intro: 'Bài bảy. Phép cộng và trừ trực quan. Bé cùng cô tính nhé!' },
-    { id: 'toan8', track: 'toan', icon: '🔷', title: 'Hình & Quy luật', intro: 'Bài tám. Hình học và quy luật logic. Bé tìm hình khối và hình tiếp theo nhé!' }
+    { id: 'toan8', track: 'toan', icon: '🔷', title: 'Hình & Quy luật', intro: 'Bài tám. Hình học và quy luật logic. Bé tìm hình khối và hình tiếp theo nhé!' },
+    { id: 'toan9', track: 'toan', icon: '🔟', title: 'Số đến 20', intro: 'Bài chín. Số đến hai mươi. Mười chấm tròn là một chục, con đếm thêm cùng cô nhé!' },
+    { id: 'toan10', track: 'toan', icon: '🕐', title: 'Xem đồng hồ', intro: 'Bài mười. Xem đồng hồ. Kim ngắn chỉ giờ, kim dài chỉ số mười hai là giờ đúng nhé!' }
   ]
 };

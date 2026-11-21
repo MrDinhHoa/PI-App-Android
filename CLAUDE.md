@@ -30,7 +30,7 @@ PI App Android/
     ├── app.js          # Điều hướng tab, các module cũ, confetti; xuất window.addStar / awardKey / spawnConfetti / goToTab
     ├── phonics-data.js # Dữ liệu âm vị: bảng chữ cái (sound/blend/word/emoji), luật c/k-g/gh-ng/ngh, 6 thanh, ~50 tiếng có nghĩa
     ├── phonics.js      # Bảng chữ cái + Cỗ máy ghép vần; window.phonicsUtil (analyzeSyllable, spellParts, applyTone...)
-    ├── lessons-data.js # Nội dung 17 bài học: từ 2 tiếng (36), câu đơn (20), ghép từ (20), vần (18), đồ vật đếm, danh sách bài
+    ├── lessons-data.js # Nội dung 21 bài học: từ 2 tiếng (36), câu đơn (20), ghép từ (20), vần (18), truyện (8), nhóm chữ tập viết, đồ vật đếm, danh sách bài
     ├── lessons.js      # Bản đồ bài học + trình chạy bài (~20 dạng bài tập), chấm sao, lưu tiến độ
     ├── minigame.js     # Khu trò chơi + Bắn Bóng Chữ & Số + Lật Thẻ Trí Nhớ; màn kết quả chung; window.minigame.register() cho game khác
     ├── minigame-more.js # Giải Cứu Thú Cưng, Siêu Thị Của Bé, Tô Màu Kỳ Diệu (đăng ký qua window.minigame.register)
@@ -44,8 +44,8 @@ PI App Android/
 
 ## 3. Các Module Tính Năng Hiện Có
 ### Lộ trình 16 Bài Học Tiền Tiểu Học (theo `tientieuhoc.md`)
-1. **📚 Bài Học (tab mặc định):** Bản đồ Tiếng Việt 9 bài + Toán 8 bài (tổng 17 bài), mở khóa lần lượt trong từng track; tiến độ lưu localStorage (`beHocVui.lessons.v1`).
-   * **Tiếng Việt (9 bài):**
+1. **📚 Bài Học (tab mặc định):** Bản đồ Tiếng Việt 11 bài + Toán 10 bài (tổng 21 bài), mở khóa lần lượt trong từng track; tiến độ lưu localStorage (`beHocVui.lessons.v1`). Bản đồ tự cuộn tới bài tiếp theo. Nhãn track hiện tổng sao (⭐ x/max); học xong ≥ 2 bài thì hiện nút **🔁 Ôn tập** (5 câu ngẫu nhiên lấy từ các bài đã học trong track, `reviewLesson()`, được chấm sao + 🔑 như bài thường nhưng không lưu tiến độ riêng).
+   * **Tiếng Việt (11 bài):**
      * (1) Nguyên âm – nghe âm chọn chữ, có trộn chữ dễ nhầm;
      * (2) Phụ âm – nghe âm chọn chữ / chọn hình theo âm đầu;
      * (3) Ghép vần & dấu – nghe tiếng chọn đúng dấu, nhìn hình chọn chữ;
@@ -54,15 +54,19 @@ PI App Android/
      * (6) Phụ âm ghép – nghe và nhận biết 11 phụ âm ghép (ch, th, ph, nh, kh, tr, ng, ngh, gi, qu);
      * (7) Luật chính tả – quy tắc cốt lõi: k, gh, ngh đi với e, ê, i; c, g, ng đi với các âm còn lại;
      * (8) Ghép từ – nhìn hình điền tiếng còn thiếu để tạo thành từ có nghĩa;
-     * (9) Vần cơ bản – 18 vần (ai, ay, oi, ao, eo, am, âm, ăn, em, en, ên, im, in, oa, ong, ông, ua, ưa), mỗi vần có file thu âm `van-*.mp3`: nghe vần chọn vần, nghe vần chọn hình, nhìn hình chọn vần ghép với âm đầu. Phương án nhiễu lấy từ nhóm vần dễ nhầm (`rhymeConfusable`). Đặt ở cuối track để không làm khóa lại bài đã học của bé.
-   * **Toán tư duy (8 bài):**
+     * (9) Vần cơ bản – 18 vần (ai, ay, oi, ao, eo, am, âm, ăn, em, en, ên, im, in, oa, ong, ông, ua, ưa), mỗi vần có file thu âm `van-*.mp3`: nghe vần chọn vần, nghe vần chọn hình, nhìn hình chọn vần ghép với âm đầu. Phương án nhiễu lấy từ nhóm vần dễ nhầm (`rhymeConfusable`). Đặt ở cuối track để không làm khóa lại bài đã học của bé;
+     * (10) Tập viết – 3 chữ trong 1 nhóm hay viết nhầm (`traceGroups`: b/d/đ, o/ô/ơ, m/n/u…), tô bằng ngón tay (dùng `abcLab.createTracer`);
+     * (11) Đọc hiểu – 2 truyện / bài trong 8 truyện 3 câu (`stories`), cô đọc tô sáng từng câu, xong mới hiện câu hỏi + 3 hình (đáp án đúng là phần tử đầu của `options`).
+   * **Toán tư duy (10 bài):**
      * (1) Đếm 1–5 và (2) Đếm 6–10 – chạm đếm từng hình, đếm xong mới hiện thẻ số;
      * (3) Nhận biết số / chọn nhóm đúng số lượng;
      * (4) Nhiều hơn – ít hơn – bằng nhau;
      * (5) Dấu > < = với cá sấu (vẽ SVG, há miệng về phía nhiều hơn);
      * (6) Tách - Gộp số – trực quan hóa bản chất phép tính;
      * (7) Phép cộng & trừ trong phạm vi 10 – công thức trực quan kết hợp hình vẽ;
-     * (8) Hình học & Quy luật – nhận biết 5 hình khối cơ bản và giải chuỗi logic ABAB / AAB.
+     * (8) Hình học & Quy luật – nhận biết 5 hình khối cơ bản và giải chuỗi logic ABAB / AAB;
+     * (9) Số đến 20 – 2 khung 10 ô (1 khung đầy = 1 chục) + nhận biết số 11–20 (`numWord()` đọc được 11–20);
+     * (10) Xem đồng hồ – giờ đúng, nhìn đồng hồ chọn giờ / nghe giờ chọn đồng hồ (dùng `mathLab.clockSvg`).
    * Chấm sao cuối bài: sai ≤1 lần → 3⭐, ≤3 lần → 2⭐, còn lại 1⭐. Mỗi lần học xong bài (kể cả học lại) → +1 🔑.
 2. **🎮 Trò Chơi:** Sảnh trò chơi; game **Lật Thẻ Trí Nhớ** (tốn 1 🔑, 120 giây, lượt lẻ ghép chữ ↔ hình có âm đầu đó, lượt chẵn ghép số ↔ nhóm đồ vật; lượt đầu 4 cặp, sau đó 6 cặp; không cho 2 chữ lồng nhau như c/ch cùng lượt; lưu kỷ lục `beHocVui.memoryBest.v1`); game **Bắn Bóng Chữ & Số** (tốn 1 🔑, 120 giây, đếm ngược 3-2-1, bóng mang chữ/số bay lên, loa đọc "Tìm chữ…/Tìm số…", trúng 3 bóng thì đổi mục tiêu xen kẽ chữ/số, tạm dừng khi rời tab, lưu kỷ lục `beHocVui.balloonBest.v1`); game **Giải Cứu Thú Cưng** (nhảy qua 4 cột đá, mỗi cột 3 phiến mang chữ/số, chọn đúng theo lời cô thì bé nhảy lên, sai thì đá chìm; qua sông thì cứu được 1 bạn thú; lượt xen kẽ chữ/số; kỷ lục `beHocVui.rescueBest.v1`); game **Siêu Thị Của Bé** (đơn "Mẹ nhờ mua", chạm hàng trên kệ để bỏ vào giỏ, chạm hàng trong giỏ để bỏ ra, bấm Thanh toán; cô nhắc thiếu/thừa/sai món; độ khó: 1 loại 1–5 → 1 loại 3–8 → 2 loại; kỷ lục `beHocVui.marketBest.v1`); game **Tô Màu Kỳ Diệu** (tô màu theo số, 5 bút màu đỏ/vàng/xanh lá/xanh dương/nâu, 5 tranh SVG: ngôi nhà, chú cá, bông hoa, ô tô, cây táo; tô sai số thì cô nhắc bút đúng; kỷ lục `beHocVui.paintBest.v1`). Cả 5 game đều 2 phút/lượt, tốn 1 🔑, tạm dừng khi rời tab. Chơi game không cộng sao.
 3. **🅰️ Chữ Cái:** 5 chế độ (thanh trên cùng, `abc-lab.js`; 4 dạng mới luyện tự do, đúng ngay lần đầu +1⭐, lưu `beHocVui.abcLab.v1`):
@@ -138,6 +142,7 @@ PI App Android/
 ---
 
 ## 7. Nhật Ký Thay Đổi
+- **21/11/2026:** Tab Bài Học thêm 4 bài (Tập viết, Đọc hiểu, Số đến 20, Xem đồng hồ), nút Ôn tập mỗi track, tổng sao trên nhãn track, bản đồ tự cuộn tới bài tiếp theo. Tách khối tô chữ thành `abcLab.createTracer()` dùng chung. Service Worker lên `behocvui-v10`.
 - **21/11/2026:** Tab Chữ Cái thêm 4 chế độ (`js/abc-lab.js`): Tập tô chữ bằng ngón tay (tự chấm), Hoa – thường, Thứ tự chữ, Tìm chữ trong từ. Service Worker lên `behocvui-v9`.
 - **21/11/2026:** Tab Ghép Vần thêm 4 chế độ (`js/blend-lab.js`): cỗ máy có khay Vần + đặt dấu đúng chỗ (`placeTone`), Thử thách, Bảng ghép, Sổ sưu tập (lưu tiến độ). Service Worker lên `behocvui-v8`.
 - **21/11/2026:** Tab Đánh Vần thay bằng Xưởng Đánh Vần 4 dạng (`js/spell-lab.js`), xóa module đánh vần cũ (8 từ viết hoa) trong `app.js` và CSS `.spelling-*`. Service Worker lên `behocvui-v7`.
