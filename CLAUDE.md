@@ -24,7 +24,7 @@ PI App Android/
 │   └── phonemes/       # Chỗ đặt file thu âm âm vị thật (.mp3) + index.json + README.md (quy tắc đặt tên)
 ├── css/
 │   └── style.css       # Định kiểu giao diện mầm non, nút bấm to, layout tablet
-└── js/                 # Thứ tự nạp trong index.html: audio → wallet → app → phonics-data → phonics → lessons-data → lessons → minigame
+└── js/                 # Thứ tự nạp trong index.html: audio → wallet → app → phonics-data → phonics → lessons-data → lessons → minigame → minigame-more
     ├── audio.js        # Âm thanh Web Audio + giọng đọc SpeechSynthesis; speakSequence() đọc chậm từng phần; ưu tiên file thu âm nếu có
     ├── wallet.js       # Ví sao ⭐ + chìa khóa 🔑, lưu localStorage (window.wallet)
     ├── app.js          # Điều hướng tab, các module cũ, confetti; xuất window.addStar / awardKey / spawnConfetti / goToTab
@@ -32,7 +32,8 @@ PI App Android/
     ├── phonics.js      # Bảng chữ cái + Cỗ máy ghép vần; window.phonicsUtil (analyzeSyllable, spellParts, applyTone...)
     ├── lessons-data.js # Nội dung 17 bài học: từ 2 tiếng (36), câu đơn (20), ghép từ (20), vần (18), đồ vật đếm, danh sách bài
     ├── lessons.js      # Bản đồ bài học + trình chạy bài (~20 dạng bài tập), chấm sao, lưu tiến độ
-    └── minigame.js     # Khu trò chơi: Bắn Bóng Chữ & Số + Lật Thẻ Trí Nhớ (2 phút/lượt, tốn 1 chìa khóa)
+    ├── minigame.js     # Khu trò chơi + Bắn Bóng Chữ & Số + Lật Thẻ Trí Nhớ; màn kết quả chung; window.minigame.register() cho game khác
+    └── minigame-more.js # Giải Cứu Thú Cưng, Siêu Thị Của Bé, Tô Màu Kỳ Diệu (đăng ký qua window.minigame.register)
 ```
 
 ---
@@ -59,7 +60,7 @@ PI App Android/
      * (7) Phép cộng & trừ trong phạm vi 10 – công thức trực quan kết hợp hình vẽ;
      * (8) Hình học & Quy luật – nhận biết 5 hình khối cơ bản và giải chuỗi logic ABAB / AAB.
    * Chấm sao cuối bài: sai ≤1 lần → 3⭐, ≤3 lần → 2⭐, còn lại 1⭐. Mỗi lần học xong bài (kể cả học lại) → +1 🔑.
-2. **🎮 Trò Chơi:** Sảnh trò chơi; game **Lật Thẻ Trí Nhớ** (tốn 1 🔑, 120 giây, lượt lẻ ghép chữ ↔ hình có âm đầu đó, lượt chẵn ghép số ↔ nhóm đồ vật; lượt đầu 4 cặp, sau đó 6 cặp; không cho 2 chữ lồng nhau như c/ch cùng lượt; lưu kỷ lục `beHocVui.memoryBest.v1`); game **Bắn Bóng Chữ & Số** (tốn 1 🔑, 120 giây, đếm ngược 3-2-1, bóng mang chữ/số bay lên, loa đọc "Tìm chữ…/Tìm số…", trúng 3 bóng thì đổi mục tiêu xen kẽ chữ/số, tạm dừng khi rời tab, lưu kỷ lục `beHocVui.balloonBest.v1`). 3 game còn lại hiển thị "Sắp có". Chơi game không cộng sao.
+2. **🎮 Trò Chơi:** Sảnh trò chơi; game **Lật Thẻ Trí Nhớ** (tốn 1 🔑, 120 giây, lượt lẻ ghép chữ ↔ hình có âm đầu đó, lượt chẵn ghép số ↔ nhóm đồ vật; lượt đầu 4 cặp, sau đó 6 cặp; không cho 2 chữ lồng nhau như c/ch cùng lượt; lưu kỷ lục `beHocVui.memoryBest.v1`); game **Bắn Bóng Chữ & Số** (tốn 1 🔑, 120 giây, đếm ngược 3-2-1, bóng mang chữ/số bay lên, loa đọc "Tìm chữ…/Tìm số…", trúng 3 bóng thì đổi mục tiêu xen kẽ chữ/số, tạm dừng khi rời tab, lưu kỷ lục `beHocVui.balloonBest.v1`); game **Giải Cứu Thú Cưng** (nhảy qua 4 cột đá, mỗi cột 3 phiến mang chữ/số, chọn đúng theo lời cô thì bé nhảy lên, sai thì đá chìm; qua sông thì cứu được 1 bạn thú; lượt xen kẽ chữ/số; kỷ lục `beHocVui.rescueBest.v1`); game **Siêu Thị Của Bé** (đơn "Mẹ nhờ mua", chạm hàng trên kệ để bỏ vào giỏ, chạm hàng trong giỏ để bỏ ra, bấm Thanh toán; cô nhắc thiếu/thừa/sai món; độ khó: 1 loại 1–5 → 1 loại 3–8 → 2 loại; kỷ lục `beHocVui.marketBest.v1`); game **Tô Màu Kỳ Diệu** (tô màu theo số, 5 bút màu đỏ/vàng/xanh lá/xanh dương/nâu, 5 tranh SVG: ngôi nhà, chú cá, bông hoa, ô tô, cây táo; tô sai số thì cô nhắc bút đúng; kỷ lục `beHocVui.paintBest.v1`). Cả 5 game đều 2 phút/lượt, tốn 1 🔑, tạm dừng khi rời tab. Chơi game không cộng sao.
 3. **🅰️ Chữ Cái:** Bảng chữ cái 3 nhóm màu (nguyên âm đỏ 12, phụ âm xanh dương 17, phụ âm ghép xanh lá 11); chạm là phát âm theo cách đánh vần mới ("bờ", "cờ") rồi đọc từ minh họa; O/Ô/Ơ có hiệu ứng lăn; chữ nghe lần đầu +1⭐.
 4. **⚙️ Ghép Vần:** Kéo thả (pointer events, hỗ trợ cả chạm) 24 phụ âm + 9 nguyên âm vào cỗ máy → "Bờ… a… ba!"; chọn 1 trong 6 thanh → "Bờ – a – ba – huyền – bà"; tiếng có nghĩa hiện hình + thưởng sao; dạy luật chính tả c/k, g/gh, ng/ngh (gợi ý chữ đúng).
 5. **Sao & chìa khóa:** Header hiển thị ⭐ và 🔑, lưu localStorage (`beHocVui.wallet.v1`); chìa khóa nhận được có hiệu ứng bay lên header.
@@ -73,6 +74,7 @@ PI App Android/
 ### Hằng số / quy ước quan trọng
 * **Cách đọc âm** nằm trong `phonics-data.js`: `sound` (đọc khi chạm chữ) và `blend` (đọc khi ghép vần). Một số chữ đặt theo SGK hiện hành: k = "ca", q = "cu", gi = "di", gh/ngh = "gờ kép"/"ngờ kép" (ghép vần đọc "gờ"/"ngờ"). Cần đối chiếu với bộ sách bé học.
 * **File thu âm:** `audio/phonemes/<key>.mp3` + liệt kê key trong `index.json`. Key: `am-<chữ Telex>` (đ→dd, ă→aw, â→aa, ê→ee, ô→oo, ơ→ow, ư→uw), `am-<chữ>-ghep`, `thanh-<huyen|sac|hoi|nga|nang>`, `van-<vần>`. Key chưa có file thì dùng giọng máy.
+* **Game Giải Cứu / Siêu Thị / Tô Màu:** `RS_STEPS = 4`, `RS_STONES = 3`, `MK_PRODUCTS`, `MK_BASKET_MAX = 10`, `PT_COLORS`, `PT_PICTURES` (tranh viewBox 400×300, mỗi vùng `{tag, a, n, l}`; vùng không có `n` là trang trí) ở `minigame-more.js`.
 * **Game Lật Thẻ:** `MM_SECONDS = 120`, `MM_PAIRS = [4, 6]`, `MM_LETTERS` (đầu `minigame.js`).
 * **Game Bắn Bóng:** `GAME_SECONDS = 120`, `HITS_PER_TARGET = 3`, `MAX_BALLOONS = 7`, `SPAWN_EVERY = 0.85`s, `RISE_SECONDS = [5.5, 7.5]` (đầu `minigame.js`).
 * **Bài Đọc từ** chỉ dùng từ không có vần kết thúc p/t/c/ch (cách đánh vần các vần này khác nhau giữa các bộ sách).
@@ -107,13 +109,13 @@ PI App Android/
 - [ ] Thu âm chuẩn bộ âm vị / thanh điệu / vần, đặt vào `audio/phonemes/` (xem README trong thư mục).
 - [ ] Đối chiếu cách đọc k, q, gi, gh, ngh và cách đánh vần với bộ sách bé học (Cánh Diều / Kết nối tri thức).
 - [ ] Tính năng phụ huynh: Cổng phụ huynh (phép nhân), giới hạn thời gian dùng/ngày, báo cáo âm/dạng toán bé hay nghe lại.
-- [ ] Các mini-game còn lại: Giải cứu thú cưng, Siêu thị của bé, Tô màu kỳ diệu.
 - [ ] Thêm file `sw.js` (Service Worker) để chạy offline hoàn toàn trên tablet.
 - [ ] Đưa ứng dụng lên GitHub Pages / Vercel để cài thử nghiệm qua *Add to Home Screen*.
 
 ---
 
 ## 7. Nhật Ký Thay Đổi
+- **21/11/2026:** Thêm 3 game Giải Cứu Thú Cưng, Siêu Thị Của Bé, Tô Màu Kỳ Diệu (`js/minigame-more.js`); sảnh trò chơi đủ 5 game. `minigame.js` thêm `register()` + màn kết quả chung `showResult()`; các màn hình trong tab Trò Chơi chuyển bằng `data-view`. Service Worker lên `behocvui-v5`.
 - **21/11/2026:** Thêm bài Tiếng Việt 9 "Vần cơ bản" và game Lật Thẻ Trí Nhớ; bổ sung dữ liệu (Đọc từ 10→36, Đọc câu 6→20, Ghép từ 10→20, thêm 4 đồ vật đếm); sửa lời nhắc "gấu" (ớ → â) và thay câu ghép từ "bình nước" 🍶 (nhiều đáp án đúng) bằng "quả bóng". Service Worker lên `behocvui-v4`. Các câu đọc mới chưa có file giọng HoaiMy trong `audio/voice/` nên dùng giọng máy của thiết bị.
 - **19/11/2026:** Bỏ 4 tab Động Vật, Đếm Số, Màu Sắc, Nối Hình (HTML/JS/CSS); header còn 6 tab nên phóng to lại tab và hiện lại tên "Bé Học Vui".
 - **19/11/2026:** Hoàn thành 3 giai đoạn MVP theo `tientieuhoc.md`: (1) tab Chữ Cái + Cỗ máy ghép vần & 6 thanh, hỗ trợ file thu âm; (2) tab Bài Học với 10 bài mẫu (5 Tiếng Việt, 5 Toán), chấm sao, lưu tiến độ; (3) ví sao/chìa khóa lưu localStorage, Khu trò chơi + game Bắn Bóng Chữ & Số 2 phút/lượt. Sửa lỗi layout `body` không đủ chiều cao (các tab bị dồn lên nửa trên).

@@ -89,7 +89,7 @@
 
     <!-- PHASE 3: GAME ZONE (KHU TRÒ CHƠI) + BALLOON MINI-GAME -->
     <section class="game-section" id="sec-games">
-      <div class="mg-lobby" id="mgLobby">
+      <div class="mg-lobby" id="mgLobby" data-view="lobby">
         <div class="section-title">
           <h2>Khu trò chơi 🎮</h2>
         </div>
@@ -108,25 +108,25 @@
             <span class="mg-card-title">Lật Thẻ Trí Nhớ</span>
             <span class="mg-card-cost">🔑 x1 · ⏱️ 2 phút</span>
           </button>
-          <div class="mg-card soon">
+          <button class="mg-card ready rs" id="mgCardRescue">
             <span class="mg-card-icon">🐻</span>
             <span class="mg-card-title">Giải Cứu Thú Cưng</span>
-            <span class="mg-card-cost">Sắp có</span>
-          </div>
-          <div class="mg-card soon">
+            <span class="mg-card-cost">🔑 x1 · ⏱️ 2 phút</span>
+          </button>
+          <button class="mg-card ready mk" id="mgCardMarket">
             <span class="mg-card-icon">🛒</span>
             <span class="mg-card-title">Siêu Thị Của Bé</span>
-            <span class="mg-card-cost">Sắp có</span>
-          </div>
-          <div class="mg-card soon">
+            <span class="mg-card-cost">🔑 x1 · ⏱️ 2 phút</span>
+          </button>
+          <button class="mg-card ready pt" id="mgCardPaint">
             <span class="mg-card-icon">🖍️</span>
             <span class="mg-card-title">Tô Màu Kỳ Diệu</span>
-            <span class="mg-card-cost">Sắp có</span>
-          </div>
+            <span class="mg-card-cost">🔑 x1 · ⏱️ 2 phút</span>
+          </button>
         </div>
       </div>
 
-      <div class="mg-play is-hidden" id="mgPlay">
+      <div class="mg-play is-hidden" id="mgPlay" data-view="play">
         <div class="mg-topbar">
           <button class="ls-home" id="mgStop" title="Dừng chơi">🏠</button>
           <div class="mg-target">
@@ -143,7 +143,7 @@
         </div>
       </div>
 
-      <div class="mg-play is-hidden" id="mmPlay">
+      <div class="mg-play is-hidden" id="mmPlay" data-view="memory">
         <div class="mg-topbar">
           <button class="ls-home" id="mmStop" title="Dừng chơi">🏠</button>
           <div class="mg-target mm-hint">
@@ -155,7 +155,55 @@
         <div class="mm-board" id="mmBoard"></div>
       </div>
 
-      <div class="mg-result is-hidden" id="mgResult">
+      <!-- Giải Cứu Thú Cưng -->
+      <div class="mg-play is-hidden" id="rsPlay" data-view="rescue">
+        <div class="mg-topbar">
+          <button class="ls-home" id="rsStop" title="Dừng chơi">🏠</button>
+          <div class="mg-target">
+            <span class="mg-target-kind" id="rsKind"></span>
+            <span class="mg-target-text" id="rsTarget">?</span>
+          </div>
+          <button class="ls-home ls-replay" id="rsReplay" title="Nghe lại">🔊</button>
+          <div class="mg-timer"><div class="mg-timer-fill" id="rsTimerFill"></div><span class="mg-timer-icon">⏱️</span></div>
+          <div class="mg-score">🐾 <span id="rsScore">0</span></div>
+        </div>
+        <div class="rs-field" id="rsField"></div>
+      </div>
+
+      <!-- Siêu Thị Của Bé -->
+      <div class="mg-play is-hidden" id="mkPlay" data-view="market">
+        <div class="mg-topbar">
+          <button class="ls-home" id="mkStop" title="Dừng chơi">🏠</button>
+          <div class="mg-target mm-hint"><span class="mg-target-kind">Chạm vào hàng để bỏ vào giỏ 🛒</span></div>
+          <button class="ls-home ls-replay" id="mkReplay" title="Nghe lại">🔊</button>
+          <div class="mg-timer"><div class="mg-timer-fill" id="mkTimerFill"></div><span class="mg-timer-icon">⏱️</span></div>
+          <div class="mg-score">🛒 <span id="mkScore">0</span></div>
+        </div>
+        <div class="mk-field">
+          <div class="mk-order" id="mkOrder"></div>
+          <div class="mk-shelf" id="mkShelf"></div>
+          <div class="mk-cart">
+            <div class="mk-basket" id="mkBasket"></div>
+            <button class="action-btn big play" id="mkPay">✅ Thanh toán</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tô Màu Kỳ Diệu -->
+      <div class="mg-play is-hidden" id="ptPlay" data-view="paint">
+        <div class="mg-topbar">
+          <button class="ls-home" id="ptStop" title="Dừng chơi">🏠</button>
+          <div class="mg-target mm-hint"><span class="mg-target-kind" id="ptHint"></span></div>
+          <div class="mg-timer"><div class="mg-timer-fill" id="ptTimerFill"></div><span class="mg-timer-icon">⏱️</span></div>
+          <div class="mg-score">🖼️ <span id="ptScore">0</span></div>
+        </div>
+        <div class="pt-field">
+          <div class="pt-canvas" id="ptCanvas"></div>
+          <div class="pt-palette" id="ptPalette"></div>
+        </div>
+      </div>
+
+      <div class="mg-result is-hidden" id="mgResult" data-view="result">
         <div class="mg-result-icon">⏰</div>
         <div class="mg-result-title">Hết giờ chơi rồi!</div>
         <div class="mg-result-score"><span id="mgResultIcon">🎈</span> x <span id="mgResultScore">0</span></div>
@@ -295,6 +343,7 @@
   <script src="js/lessons-data.js"></script>
   <script src="js/lessons.js"></script>
   <script src="js/minigame.js"></script>
+  <script src="js/minigame-more.js"></script>
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {

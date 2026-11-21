@@ -1354,7 +1354,6 @@ body {
 .mg-card.ready .mg-card-title { font-size: 22px; }
 .mg-card.ready .mg-card-cost { font-size: 16px; color: #6C5CE7; }
 .mg-card.ready.no-key { animation: none; filter: grayscale(0.6); opacity: 0.8; }
-.mg-card.soon { filter: grayscale(1); opacity: 0.5; }
 
 /* ---- Play ---- */
 .mg-topbar {
@@ -1791,14 +1790,16 @@ body {
 .ls-spell-word .ls-spell-tail + .ls-spell-slot { margin: 0 0 0 6px; }
 
 /* ==================== LẬT THẺ TRÍ NHỚ ==================== */
-/* Sảnh có 2 trò chơi được: thu nhỏ thẻ để vừa 1 hàng trên tablet ngang */
-.mg-cards { gap: 14px; }
-.mg-card.ready { width: 220px; height: 270px; }
-.mg-card.ready .mg-card-icon { font-size: 84px; }
+/* Sảnh 5 trò chơi: 5 thẻ trên 1 hàng ở tablet ngang */
+.mg-cards { gap: 12px; padding: 0 8px; }
+.mg-card.ready { width: 178px; height: 250px; padding: 10px; animation: none; }
+.mg-card.ready .mg-card-icon { font-size: 76px; }
+.mg-card.ready .mg-card-title { font-size: 19px; line-height: 1.2; }
+.mg-card.ready .mg-card-cost { font-size: 14px; }
 .mg-card.ready.mm { background: linear-gradient(160deg, #F3E5FF, #FFE3EC); border-color: #A55EEA; }
-.mg-card.soon { width: 150px; height: 200px; }
-.mg-card.soon .mg-card-icon { font-size: 54px; }
-.mg-card.soon .mg-card-title { font-size: 15px; }
+.mg-card.ready.rs { background: linear-gradient(160deg, #E3F8FF, #D3F9D8); border-color: #20C997; }
+.mg-card.ready.mk { background: linear-gradient(160deg, #FFF4E6, #FFE8CC); border-color: #FF922B; }
+.mg-card.ready.pt { background: linear-gradient(160deg, #FFF0F6, #FFF9DB); border-color: #F06595; }
 .mm-hint .mg-target-kind { font-size: 20px; }
 
 .mm-board {
@@ -1854,3 +1855,220 @@ body {
 .mm-dots.many { grid-template-columns: repeat(4, auto); font-size: 28px; }
 .mm-board.big .mm-letter, .mm-board.big .mm-num { font-size: 54px; }
 .mm-board.big .mm-pic { font-size: 50px; }
+
+/* ==================== GIẢI CỨU THÚ CƯNG ==================== */
+.rs-field {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  border-radius: 28px;
+  overflow: hidden;
+  box-shadow: var(--card-shadow);
+}
+.rs-bank {
+  width: 130px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(180deg, #B2F2BB, #69DB7C);
+}
+.rs-start { font-size: 64px; }
+.rs-river {
+  flex: 1;
+  display: flex;
+  justify-content: space-around;
+  align-items: stretch;
+  padding: 14px 6px;
+  background:
+    repeating-linear-gradient(170deg, rgba(255,255,255,0.18) 0 14px, transparent 14px 44px),
+    linear-gradient(180deg, #74C0FC, #339AF0);
+}
+.rs-col {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  opacity: 0.45;
+  transition: opacity 0.3s;
+}
+.rs-col.active, .rs-col.done { opacity: 1; }
+.rs-stone {
+  width: 104px;
+  height: 84px;
+  border-radius: 50% 46% 50% 44%;
+  border: 4px solid #868E96;
+  background: radial-gradient(circle at 35% 30%, #F1F3F5, #ADB5BD);
+  font-family: var(--font-family);
+  font-size: 44px;
+  font-weight: 900;
+  color: #343A40;
+  cursor: pointer;
+  box-shadow: 0 6px 0 rgba(0,0,0,0.18);
+}
+.rs-col.active .rs-stone { border-color: #FFD43B; animation: pulse 1.6s infinite; }
+.rs-col.done .rs-stone:not(.ok) { visibility: hidden; }
+.rs-stone.ok { border-color: #2ECC71; background: radial-gradient(circle at 35% 30%, #EBFBEE, #8CE99A); animation: none; }
+.rs-stone.sink { animation: rsSink 0.7s ease; }
+@keyframes rsSink {
+  0% { transform: translateY(0); }
+  40% { transform: translateY(14px) scale(0.9); opacity: 0.4; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+.rs-pet { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.rs-pet-emoji { font-size: 68px; line-height: 1; animation: shake 1.2s ease infinite; }
+.rs-pet-cry {
+  font-size: 14px; font-weight: 800; color: #E64A19; background: #FFF;
+  padding: 3px 8px; border-radius: 12px; text-align: center;
+}
+.rs-pet.saved .rs-pet-emoji { animation: bounce 0.8s ease infinite; }
+.rs-pet.saved .rs-pet-cry { color: #2B8A3E; }
+.rs-hero {
+  position: absolute;
+  left: 0;
+  top: 0;
+  font-size: 58px;
+  line-height: 1;
+  pointer-events: none;
+  transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+  filter: drop-shadow(0 4px 2px rgba(0,0,0,0.25));
+}
+
+/* ==================== SIÊU THỊ CỦA BÉ ==================== */
+.mk-field {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 200px 1fr 250px;
+  gap: 14px;
+}
+.mk-order {
+  background: #FFF;
+  border: 4px dashed #FF922B;
+  border-radius: 24px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 12px;
+  box-shadow: var(--card-shadow);
+}
+.mk-order-title { font-size: 20px; font-weight: 900; color: #5D4037; text-align: center; }
+.mk-order-line { display: grid; grid-template-columns: auto auto; justify-content: center; align-items: center; column-gap: 8px; }
+.mk-order-num { font-size: 56px; font-weight: 900; color: #E64A19; line-height: 1; }
+.mk-order-emoji { font-size: 54px; line-height: 1; }
+.mk-order-name { grid-column: 1 / 3; text-align: center; font-size: 17px; font-weight: 800; color: #795548; }
+.mk-shelf {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  padding: 12px;
+  border-radius: 24px;
+  background: linear-gradient(180deg, #FFE8CC 0 48%, #D9480F 48% 50%, #FFE8CC 50% 98%, #D9480F 98%);
+}
+.mk-item {
+  border: 4px solid #FFF;
+  border-radius: 22px;
+  background: #FFF;
+  font-family: var(--font-family);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  cursor: pointer;
+  box-shadow: var(--card-shadow);
+}
+.mk-item:active { transform: scale(0.92); }
+.mk-item-emoji { font-size: 66px; line-height: 1; }
+.mk-item-name { font-size: 17px; font-weight: 800; color: #5D4037; }
+.mk-cart { display: flex; flex-direction: column; gap: 10px; min-height: 0; }
+.mk-basket {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  justify-content: center;
+  gap: 4px;
+  padding: 14px 10px;
+  border: 5px solid #E8590C;
+  border-top-width: 10px;
+  border-radius: 10px 10px 40px 40px;
+  background: repeating-linear-gradient(45deg, #FFF4E6 0 10px, #FFE8CC 10px 20px);
+}
+.mk-basket-item {
+  border: none;
+  background: transparent;
+  font-size: 40px;
+  line-height: 1.1;
+  padding: 2px;
+  cursor: pointer;
+}
+.mk-basket-empty { font-size: 16px; font-weight: 700; color: #A0522D; align-self: center; margin-top: 30px; }
+#mkPay { animation: none; }
+
+/* ==================== TÔ MÀU KỲ DIỆU ==================== */
+.pt-field {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  gap: 14px;
+}
+.pt-canvas {
+  flex: 1;
+  min-width: 0;
+  background: #FFF;
+  border-radius: 26px;
+  box-shadow: var(--card-shadow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+}
+.pt-svg { width: 100%; height: 100%; }
+.pt-region, .pt-decor { stroke: #5D4037; stroke-width: 3; stroke-linejoin: round; }
+.pt-region { cursor: pointer; transition: fill 0.3s; }
+.pt-region.filled { cursor: default; }
+.pt-label {
+  font-family: var(--font-family);
+  font-size: 22px;
+  font-weight: 900;
+  fill: #5D4037;
+  text-anchor: middle;
+  dominant-baseline: central;
+  pointer-events: none;
+  paint-order: stroke;
+  stroke: #FFF;
+  stroke-width: 4px;
+}
+.pt-label.hide { display: none; }
+.pt-label.pt-blink { animation: pulse 0.3s 3; fill: #E03131; }
+.pt-palette {
+  width: 120px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  gap: 8px;
+}
+.pt-crayon {
+  position: relative;
+  flex: 1;
+  max-height: 84px;
+  border: 4px solid #FFF;
+  border-radius: 18px 40px 40px 18px;
+  background: var(--c);
+  cursor: pointer;
+  box-shadow: var(--card-shadow);
+  transition: transform 0.2s;
+}
+.pt-crayon-tip {
+  position: absolute; right: -14px; top: 50%; transform: translateY(-50%);
+  border-left: 18px solid var(--c); border-top: 14px solid transparent; border-bottom: 14px solid transparent;
+}
+.pt-crayon-num {
+  font-family: var(--font-family);
+  font-size: 34px; font-weight: 900; color: #FFF;
+  text-shadow: 0 2px 0 rgba(0,0,0,0.35);
+}
+.pt-crayon.selected { transform: translateX(-14px) scale(1.08); border-color: #343A40; }

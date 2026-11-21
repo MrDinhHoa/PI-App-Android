@@ -59,14 +59,11 @@
 
   // ==================== DOM ====================
   const section = document.getElementById('sec-games');
-  const lobbyEl = document.getElementById('mgLobby');
-  const playEl = document.getElementById('mgPlay');
   const resultEl = document.getElementById('mgResult');
   const lobbyKeysEl = document.getElementById('mgKeyCount');
   const noKeyEl = document.getElementById('mgNoKey');
   const cardBalloon = document.getElementById('mgCardBalloon');
   const cardMemory = document.getElementById('mgCardMemory');
-  const mmPlayEl = document.getElementById('mmPlay');
   const mmBoardEl = document.getElementById('mmBoard');
   const mmScoreEl = document.getElementById('mmScore');
   const mmKindEl = document.getElementById('mmKind');
@@ -79,19 +76,30 @@
   const timerFillEl = document.getElementById('mgTimerFill');
   const countdownEl = document.getElementById('mgCountdown');
 
+  // Mỗi màn hình trong tab Trò Chơi có data-view (lobby, play, memory, result, rescue, market, paint)
   function showView(name) {
-    lobbyEl.classList.toggle('is-hidden', name !== 'lobby');
-    playEl.classList.toggle('is-hidden', name !== 'play');
-    mmPlayEl.classList.toggle('is-hidden', name !== 'memory');
-    resultEl.classList.toggle('is-hidden', name !== 'result');
+    section.querySelectorAll(':scope > [data-view]').forEach(v => v.classList.toggle('is-hidden', v.dataset.view !== name));
+  }
+
+  // Trò chơi viết ở file khác (minigame-more.js) đăng ký qua window.minigame.register(game):
+  // game = { card, start(), pause(), resume(), isRunning(), stop() }
+  const extras = [];
+  function register(game) {
+    extras.push(game);
+    game.card.addEventListener('click', () => {
+      if (!hasKeyOrShake(game.card)) return;
+      if (!window.wallet.useKey()) return;
+      audio().playPop();
+      game.start();
+    });
+    game.card.classList.toggle('no-key', window.wallet.keys <= 0);
   }
 
   // ==================== LOBBY ====================
   window.wallet.onChange(s => {
     lobbyKeysEl.textContent = s.keys;
     noKeyEl.classList.toggle('is-hidden', s.keys > 0);
-    cardBalloon.classList.toggle('no-key', s.keys <= 0);
-    cardMemory.classList.toggle('no-key', s.keys <= 0);
+    section.querySelectorAll('.mg-card.ready').forEach(c => c.classList.toggle('no-key', s.keys <= 0));
   });
 
   function hasKeyOrShake(card) {
@@ -114,13 +122,6 @@
     if (!hasKeyOrShake(cardMemory)) return;
     audio().playPop();
     startMemory();
-  });
-
-  document.querySelectorAll('.mg-card.soon').forEach(card => {
-    card.addEventListener('click', () => {
-      audio().playBoing();
-      audio().speak('Trò chơi này sắp có nhé!');
-    });
   });
 
   noKeyEl.addEventListener('click', () => {
@@ -594,6 +595,7 @@
 
   function pause() {
     if (m.running) m.paused = true;
+    extras.forEach(x => { if (x.isRunning()) x.pause(); });
     if (!g.running || g.paused) return;
     g.paused = true;
     cancelAnimationFrame(g.raf);
@@ -642,6 +644,11 @@
       m.lastTick = performance.now();
       return;
     }
+    const extra = extras.find(x => x.isRunning());
+    if (extra) {
+      extra.resume();
+      return;
+    }
     if (!resultEl.classList.contains('is-hidden')) return;
     showView('lobby');
     audio().speak(window.wallet.keys > 0
@@ -649,5 +656,8 @@
       : 'Khu trò chơi! Con học xong một bài để nhận chìa khóa nhé!');
   }
 
-  window.minigame = { enter, pause, _state: g, _memory: m };
+  window.minigame = {
+    enter, pause, register, showView, showResult, sectionActive,
+    _state: g, _memory: m, _extras: extras
+  };
 })();
