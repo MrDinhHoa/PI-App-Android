@@ -99,30 +99,47 @@
           <button class="action-btn is-hidden" id="mgNoKey">📚 Học bài để nhận chìa khóa</button>
         </div>
         <div class="mg-cards">
-          <button class="mg-card ready" id="mgCardBalloon">
+          <button class="mg-card ready" id="mgCardBalloon" data-best-key="beHocVui.balloonBest.v1">
             <span class="mg-card-icon">🎈</span>
             <span class="mg-card-title">Bắn Bóng Chữ &amp; Số</span>
             <span class="mg-card-cost">🔑 x1 · ⏱️ 2 phút</span>
+            <span class="mg-card-best"></span>
           </button>
-          <button class="mg-card ready mm" id="mgCardMemory">
+          <button class="mg-card ready mm" id="mgCardMemory" data-best-key="beHocVui.memoryBest.v1">
             <span class="mg-card-icon">🃏</span>
             <span class="mg-card-title">Lật Thẻ Trí Nhớ</span>
             <span class="mg-card-cost">🔑 x1 · ⏱️ 2 phút</span>
+            <span class="mg-card-best"></span>
           </button>
-          <button class="mg-card ready rs" id="mgCardRescue">
+          <button class="mg-card ready rs" id="mgCardRescue" data-best-key="beHocVui.rescueBest.v1">
             <span class="mg-card-icon">🐻</span>
             <span class="mg-card-title">Giải Cứu Thú Cưng</span>
             <span class="mg-card-cost">🔑 x1 · ⏱️ 2 phút</span>
+            <span class="mg-card-best"></span>
           </button>
-          <button class="mg-card ready mk" id="mgCardMarket">
+          <button class="mg-card ready mk" id="mgCardMarket" data-best-key="beHocVui.marketBest.v1">
             <span class="mg-card-icon">🛒</span>
             <span class="mg-card-title">Siêu Thị Của Bé</span>
             <span class="mg-card-cost">🔑 x1 · ⏱️ 2 phút</span>
+            <span class="mg-card-best"></span>
           </button>
-          <button class="mg-card ready pt" id="mgCardPaint">
+          <button class="mg-card ready pt" id="mgCardPaint" data-best-key="beHocVui.paintBest.v1">
             <span class="mg-card-icon">🖍️</span>
             <span class="mg-card-title">Tô Màu Kỳ Diệu</span>
             <span class="mg-card-cost">🔑 x1 · ⏱️ 2 phút</span>
+            <span class="mg-card-best"></span>
+          </button>
+          <button class="mg-card ready fs" id="mgCardFish" data-best-key="beHocVui.fishBest.v1">
+            <span class="mg-card-icon">🎣</span>
+            <span class="mg-card-title">Câu Cá Vần</span>
+            <span class="mg-card-cost">🔑 x1 · ⏱️ 2 phút</span>
+            <span class="mg-card-best"></span>
+          </button>
+          <button class="mg-card ready tr" id="mgCardTrain" data-best-key="beHocVui.trainBest.v1">
+            <span class="mg-card-icon">🚂</span>
+            <span class="mg-card-title">Tàu Hỏa Số</span>
+            <span class="mg-card-cost">🔑 x1 · ⏱️ 2 phút</span>
+            <span class="mg-card-best"></span>
           </button>
         </div>
       </div>
@@ -201,6 +218,37 @@
         <div class="pt-field">
           <div class="pt-canvas" id="ptCanvas"></div>
           <div class="pt-palette" id="ptPalette"></div>
+        </div>
+      </div>
+
+      <!-- Câu Cá Vần -->
+      <div class="mg-play is-hidden" id="fsPlay" data-view="fishing">
+        <div class="mg-topbar">
+          <button class="ls-home" id="fsStop" title="Dừng chơi">🏠</button>
+          <div class="mg-target">
+            <span class="mg-target-kind">Câu vần</span>
+            <span class="mg-target-text" id="fsTarget">?</span>
+            <span class="mg-target-hits" id="fsHits"></span>
+          </div>
+          <button class="ls-home ls-replay" id="fsReplay" title="Nghe lại">🔊</button>
+          <div class="mg-timer"><div class="mg-timer-fill" id="fsTimerFill"></div><span class="mg-timer-icon">⏱️</span></div>
+          <div class="mg-score">🎣 <span id="fsScore">0</span></div>
+        </div>
+        <div class="fs-pond" id="fsPond"><div class="fs-bucket" id="fsBucket">🪣</div></div>
+      </div>
+
+      <!-- Tàu Hỏa Số -->
+      <div class="mg-play is-hidden" id="trPlay" data-view="train">
+        <div class="mg-topbar">
+          <button class="ls-home" id="trStop" title="Dừng chơi">🏠</button>
+          <div class="mg-target mm-hint"><span class="mg-target-kind" id="trHint"></span></div>
+          <button class="ls-home ls-replay" id="trReplay" title="Nghe lại">🔊</button>
+          <div class="mg-timer"><div class="mg-timer-fill" id="trTimerFill"></div><span class="mg-timer-icon">⏱️</span></div>
+          <div class="mg-score">🚂 <span id="trScore">0</span></div>
+        </div>
+        <div class="tr-field">
+          <div class="tr-track"><div class="tr-train" id="trTrain"></div></div>
+          <div class="tr-station" id="trStation"></div>
         </div>
       </div>
 
@@ -360,6 +408,7 @@
   <script src="js/lessons.js"></script>
   <script src="js/minigame.js"></script>
   <script src="js/minigame-more.js"></script>
+  <script src="js/minigame-extra.js"></script>
   <script src="js/math-lab.js"></script>
   <script src="js/spell-lab.js"></script>
   <script src="js/blend-lab.js"></script>

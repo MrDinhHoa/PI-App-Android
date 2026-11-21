@@ -24,7 +24,7 @@ PI App Android/
 │   └── phonemes/       # Chỗ đặt file thu âm âm vị thật (.mp3) + index.json + README.md (quy tắc đặt tên)
 ├── css/
 │   └── style.css       # Định kiểu giao diện mầm non, nút bấm to, layout tablet
-└── js/                 # Thứ tự nạp trong index.html: audio → wallet → parent → app → phonics-data → phonics → lessons-data → lessons → minigame → minigame-more → math-lab → spell-lab → blend-lab → abc-lab
+└── js/                 # Thứ tự nạp trong index.html: audio → wallet → parent → app → phonics-data → phonics → lessons-data → lessons → minigame → minigame-more → minigame-extra → math-lab → spell-lab → blend-lab → abc-lab
     ├── audio.js        # Âm thanh Web Audio + giọng đọc SpeechSynthesis; speakSequence() đọc chậm từng phần; ưu tiên file thu âm nếu có
     ├── wallet.js       # Ví sao ⭐ + chìa khóa 🔑, lưu localStorage (window.wallet)
     ├── parent.js       # Khu phụ huynh: cổng phép nhân, giới hạn giờ/ngày, quy tắc chìa khóa, báo cáo (window.parentLog)
@@ -34,7 +34,8 @@ PI App Android/
     ├── lessons-data.js # Nội dung 21 bài học: từ 2 tiếng (36), câu đơn (20), ghép từ (20), vần (18), truyện (8), nhóm chữ tập viết, đồ vật đếm, danh sách bài
     ├── lessons.js      # Bản đồ bài học + trình chạy bài (~20 dạng bài tập), chấm sao, lưu tiến độ
     ├── minigame.js     # Khu trò chơi + Bắn Bóng Chữ & Số + Lật Thẻ Trí Nhớ; màn kết quả chung; window.minigame.register() cho game khác
-    ├── minigame-more.js # Giải Cứu Thú Cưng, Siêu Thị Của Bé, Tô Màu Kỳ Diệu (đăng ký qua window.minigame.register)
+    ├── minigame-more.js # Giải Cứu Thú Cưng, Siêu Thị Của Bé, Tô Màu Kỳ Diệu (đăng ký qua window.minigame.register); xuất helpers { makeTimer, setupGame }
+    ├── minigame-extra.js # Câu Cá Vần, Tàu Hỏa Số (dùng window.minigameMore.helpers)
     ├── math-lab.js     # Tab Làm Toán: Phòng Luyện Toán 6 dạng (window.mathLab)
     ├── spell-lab.js    # Tab Đánh Vần: Xưởng Đánh Vần 4 dạng (window.spellLab), dùng chung CSS .mt-* với math-lab
     ├── blend-lab.js    # Tab Ghép Vần: 4 chế độ quanh Cỗ máy (Thử thách, Bảng ghép, Sổ sưu tập) (window.blendLab)
@@ -69,7 +70,7 @@ PI App Android/
      * (9) Số đến 20 – 2 khung 10 ô (1 khung đầy = 1 chục) + nhận biết số 11–20 (`numWord()` đọc được 11–20);
      * (10) Xem đồng hồ – giờ đúng, nhìn đồng hồ chọn giờ / nghe giờ chọn đồng hồ (dùng `mathLab.clockSvg`).
    * Chấm sao cuối bài: sai ≤1 lần → 3⭐, ≤3 lần → 2⭐, còn lại 1⭐. Mỗi lần học xong bài (kể cả học lại) → +1 🔑.
-2. **🎮 Trò Chơi:** Sảnh trò chơi; game **Lật Thẻ Trí Nhớ** (tốn 1 🔑, 120 giây, lượt lẻ ghép chữ ↔ hình có âm đầu đó, lượt chẵn ghép số ↔ nhóm đồ vật; lượt đầu 4 cặp, sau đó 6 cặp; không cho 2 chữ lồng nhau như c/ch cùng lượt; lưu kỷ lục `beHocVui.memoryBest.v1`); game **Bắn Bóng Chữ & Số** (tốn 1 🔑, 120 giây, đếm ngược 3-2-1, bóng mang chữ/số bay lên, loa đọc "Tìm chữ…/Tìm số…", trúng 3 bóng thì đổi mục tiêu xen kẽ chữ/số, tạm dừng khi rời tab, lưu kỷ lục `beHocVui.balloonBest.v1`); game **Giải Cứu Thú Cưng** (nhảy qua 4 cột đá, mỗi cột 3 phiến mang chữ/số, chọn đúng theo lời cô thì bé nhảy lên, sai thì đá chìm; qua sông thì cứu được 1 bạn thú; lượt xen kẽ chữ/số; kỷ lục `beHocVui.rescueBest.v1`); game **Siêu Thị Của Bé** (đơn "Mẹ nhờ mua", chạm hàng trên kệ để bỏ vào giỏ, chạm hàng trong giỏ để bỏ ra, bấm Thanh toán; cô nhắc thiếu/thừa/sai món; độ khó: 1 loại 1–5 → 1 loại 3–8 → 2 loại; kỷ lục `beHocVui.marketBest.v1`); game **Tô Màu Kỳ Diệu** (tô màu theo số, 5 bút màu đỏ/vàng/xanh lá/xanh dương/nâu, 5 tranh SVG: ngôi nhà, chú cá, bông hoa, ô tô, cây táo; tô sai số thì cô nhắc bút đúng; kỷ lục `beHocVui.paintBest.v1`). Cả 5 game đều 2 phút/lượt, tốn 1 🔑, tạm dừng khi rời tab. Chơi game không cộng sao.
+2. **🎮 Trò Chơi:** Sảnh trò chơi; game **Lật Thẻ Trí Nhớ** (tốn 1 🔑, 120 giây, lượt lẻ ghép chữ ↔ hình có âm đầu đó, lượt chẵn ghép số ↔ nhóm đồ vật; lượt đầu 4 cặp, sau đó 6 cặp; không cho 2 chữ lồng nhau như c/ch cùng lượt; lưu kỷ lục `beHocVui.memoryBest.v1`); game **Bắn Bóng Chữ & Số** (tốn 1 🔑, 120 giây, đếm ngược 3-2-1, bóng mang chữ/số bay lên, loa đọc "Tìm chữ…/Tìm số…", trúng 3 bóng thì đổi mục tiêu xen kẽ chữ/số, tạm dừng khi rời tab, lưu kỷ lục `beHocVui.balloonBest.v1`); game **Giải Cứu Thú Cưng** (nhảy qua 4 cột đá, mỗi cột 3 phiến mang chữ/số, chọn đúng theo lời cô thì bé nhảy lên, sai thì đá chìm; qua sông thì cứu được 1 bạn thú; lượt xen kẽ chữ/số; kỷ lục `beHocVui.rescueBest.v1`); game **Siêu Thị Của Bé** (đơn "Mẹ nhờ mua", chạm hàng trên kệ để bỏ vào giỏ, chạm hàng trong giỏ để bỏ ra, bấm Thanh toán; cô nhắc thiếu/thừa/sai món; độ khó: 1 loại 1–5 → 1 loại 3–8 → 2 loại; kỷ lục `beHocVui.marketBest.v1`); game **Tô Màu Kỳ Diệu** (tô màu theo số, 5 bút màu đỏ/vàng/xanh lá/xanh dương/nâu, 5 tranh SVG: ngôi nhà, chú cá, bông hoa, ô tô, cây táo; tô sai số thì cô nhắc bút đúng; kỷ lục `beHocVui.paintBest.v1`). game **Câu Cá Vần** (`minigame-extra.js`: cá bơi ngang hồ 4 làn mang 18 vần, cô đọc "Con câu cá có vần …", câu đúng 3 con thì đổi vần; cá nhiễu hay mang vần dễ nhầm; kỷ lục `beHocVui.fishBest.v1`); game **Tàu Hỏa Số** (chạm số theo thứ tự để xếp lên toa, đủ toa thì tàu chạy; khó dần: 3 số 1–5 → 4 số 1–10 → 5 số 1–10 → xếp từ lớn đến bé → số đến 20; kỷ lục `beHocVui.trainBest.v1`). Cả 7 game đều 2 phút/lượt, tốn 1 🔑, tạm dừng khi rời tab. Sảnh là lưới 4 cột × 2 hàng, mỗi thẻ hiện 🏅 kỷ lục (thuộc tính `data-best-key`, cập nhật khi về sảnh). Chơi game không cộng sao.
 3. **🅰️ Chữ Cái:** 5 chế độ (thanh trên cùng, `abc-lab.js`; 4 dạng mới luyện tự do, đúng ngay lần đầu +1⭐, lưu `beHocVui.abcLab.v1`):
    * 🔤 **Bảng chữ cái** (`phonics.js`) – 3 nhóm màu (nguyên âm đỏ 12, phụ âm xanh dương 17, phụ âm ghép xanh lá 11); chạm là phát âm theo cách đánh vần mới ("bờ", "cờ") rồi đọc từ minh họa; O/Ô/Ơ có hiệu ứng lăn; chữ nghe lần đầu +1⭐;
    * ✍️ **Tập tô** – chữ mẫu font Comfortaa 280px trên canvas 440×330 có kẻ ô li, viền chấm; bé tô bằng ngón tay (nét 32px); đạt khi phủ ≥ 70% nét chữ (`PASS_COVER`) và tô ra ngoài vùng nới rộng ≤ 35% (`MAX_OUTSIDE`); tự chấm khi nhấc tay, nút ✅ Xong / 🧽 Xóa / ⏭️ Chữ khác; đi lần lượt 29 chữ, nhớ chữ đang tập (`traceIdx`);
@@ -107,6 +108,7 @@ PI App Android/
 * **Cách đọc âm** nằm trong `phonics-data.js`: `sound` (đọc khi chạm chữ) và `blend` (đọc khi ghép vần). Một số chữ đặt theo SGK hiện hành: k = "ca", q = "cu", gi = "di", gh/ngh = "gờ kép"/"ngờ kép" (ghép vần đọc "gờ"/"ngờ"). Cần đối chiếu với bộ sách bé học.
 * **File thu âm:** `audio/phonemes/<key>.mp3` + liệt kê key trong `index.json`. Key: `am-<chữ Telex>` (đ→dd, ă→aw, â→aa, ê→ee, ô→oo, ơ→ow, ư→uw), `am-<chữ>-ghep`, `thanh-<huyen|sac|hoi|nga|nang>`, `van-<vần>`. Key chưa có file thì dùng giọng máy.
 * **Game Giải Cứu / Siêu Thị / Tô Màu:** `RS_STEPS = 4`, `RS_STONES = 3`, `MK_PRODUCTS`, `MK_BASKET_MAX = 10`, `PT_COLORS`, `PT_PICTURES` (tranh viewBox 400×300, mỗi vùng `{tag, a, n, l}`; vùng không có `n` là trang trí) ở `minigame-more.js`.
+* **Game Câu Cá / Tàu Hỏa:** `FISH_LANES = 4`, `FISH_MAX = 6`, `FISH_SPAWN = 1.3`s, `FISH_CROSS = [7, 9.5]`s, `FISH_PER_TARGET = 3`, `trLevel()` (đầu `minigame-extra.js`).
 * **Game Lật Thẻ:** `MM_SECONDS = 120`, `MM_PAIRS = [4, 6]`, `MM_LETTERS` (đầu `minigame.js`).
 * **Game Bắn Bóng:** `GAME_SECONDS = 120`, `HITS_PER_TARGET = 3`, `MAX_BALLOONS = 7`, `SPAWN_EVERY = 0.85`s, `RISE_SECONDS = [5.5, 7.5]` (đầu `minigame.js`).
 * **Bài Đọc từ** chỉ dùng từ không có vần kết thúc p/t/c/ch (cách đánh vần các vần này khác nhau giữa các bộ sách).
@@ -147,6 +149,7 @@ PI App Android/
 ---
 
 ## 7. Nhật Ký Thay Đổi
+- **21/11/2026:** Tab Trò Chơi thêm 2 game Câu Cá Vần và Tàu Hỏa Số (`js/minigame-extra.js`); sảnh đổi sang lưới 4×2 có kỷ lục trên từng thẻ. Service Worker lên `behocvui-v12`.
 - **21/11/2026:** Thêm khu Phụ huynh (`js/parent.js`): cổng phép nhân, báo cáo (thời gian 7 ngày, tiến độ, dạng bài / chữ hay sai), giới hạn giờ mỗi ngày với màn hình hết giờ, quy tắc chìa khóa (học lại / tối đa mỗi ngày), xóa dữ liệu. Ôn tập không còn ghi tiến độ vào bản đồ. Service Worker lên `behocvui-v11`.
 - **21/11/2026:** Tab Bài Học thêm 4 bài (Tập viết, Đọc hiểu, Số đến 20, Xem đồng hồ), nút Ôn tập mỗi track, tổng sao trên nhãn track, bản đồ tự cuộn tới bài tiếp theo. Tách khối tô chữ thành `abcLab.createTracer()` dùng chung. Service Worker lên `behocvui-v10`.
 - **21/11/2026:** Tab Chữ Cái thêm 4 chế độ (`js/abc-lab.js`): Tập tô chữ bằng ngón tay (tự chấm), Hoa – thường, Thứ tự chữ, Tìm chữ trong từ. Service Worker lên `behocvui-v9`.

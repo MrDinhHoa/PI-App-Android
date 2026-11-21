@@ -642,5 +642,5 @@
 
   setupGame({ cardId: 'mgCardPaint', stopId: 'ptStop', timer: ptTimer, start: ptStart, end: ptEnd });
 
-  window.minigameMore = { rs, mk, pt, rsTimer, mkTimer, ptTimer, PT_PICTURES };
+  window.minigameMore = { rs, mk, pt, rsTimer, mkTimer, ptTimer, PT_PICTURES, helpers: { makeTimer, setupGame, GAME_SECONDS } };
 })();

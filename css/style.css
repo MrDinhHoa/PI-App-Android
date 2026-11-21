@@ -1555,12 +1555,24 @@ body {
 .ls-spell-word .ls-spell-tail + .ls-spell-slot { margin: 0 0 0 6px; }
 
 /* ==================== LẬT THẺ TRÍ NHỚ ==================== */
-/* Sảnh 5 trò chơi: 5 thẻ trên 1 hàng ở tablet ngang */
-.mg-cards { gap: 12px; padding: 0 8px; }
-.mg-card.ready { width: 178px; height: 250px; padding: 10px; animation: none; }
-.mg-card.ready .mg-card-icon { font-size: 76px; }
-.mg-card.ready .mg-card-title { font-size: 19px; line-height: 1.2; }
-.mg-card.ready .mg-card-cost { font-size: 14px; }
+/* Sảnh 7 trò chơi: lưới 4 cột x 2 hàng ở tablet ngang */
+.mg-lobby .section-title { margin-bottom: 6px; }
+.mg-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 200px);
+  grid-auto-rows: 1fr;
+  gap: 12px;
+  justify-content: center;
+  align-content: center;
+  padding: 8px;
+}
+.mg-card.ready { width: auto; height: auto; min-height: 0; padding: 8px 10px; gap: 4px; animation: none; }
+.mg-card.ready .mg-card-icon { font-size: 54px; animation: none; }
+.mg-card.ready .mg-card-title { font-size: 17px; line-height: 1.2; }
+.mg-card.ready .mg-card-cost { font-size: 13px; }
+.mg-card-best { font-size: 13px; font-weight: 800; color: #E67700; }
+.mg-card.ready.fs { background: linear-gradient(160deg, #E7F5FF, #C5F6FA); border-color: #22B8CF; }
+.mg-card.ready.tr { background: linear-gradient(160deg, #FFF5F5, #FFE3E3); border-color: #FA5252; }
 .mg-card.ready.mm { background: linear-gradient(160deg, #F3E5FF, #FFE3EC); border-color: #A55EEA; }
 .mg-card.ready.rs { background: linear-gradient(160deg, #E3F8FF, #D3F9D8); border-color: #20C997; }
 .mg-card.ready.mk { background: linear-gradient(160deg, #FFF4E6, #FFE8CC); border-color: #FF922B; }
@@ -2461,3 +2473,90 @@ body {
 .limit-title { font-size: 40px; font-weight: 900; }
 .limit-text { font-size: 22px; font-weight: 700; opacity: 0.9; }
 .limit-screen .action-btn { margin-top: 20px; }
+
+/* ==================== CÂU CÁ VẦN ==================== */
+.fs-pond {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  border-radius: 28px;
+  overflow: hidden;
+  touch-action: none;
+  box-shadow: var(--card-shadow);
+  background:
+    radial-gradient(ellipse at 20% 100%, rgba(81, 207, 102, 0.55) 0 12%, transparent 13%),
+    radial-gradient(ellipse at 85% 100%, rgba(81, 207, 102, 0.55) 0 10%, transparent 11%),
+    repeating-linear-gradient(180deg, rgba(255,255,255,0.12) 0 6px, transparent 6px 46px),
+    linear-gradient(180deg, #74C0FC, #1C7ED6);
+}
+.fs-bucket {
+  position: absolute; right: 14px; top: 10px; z-index: 2;
+  font-size: 54px; line-height: 1;
+  filter: drop-shadow(0 4px 4px rgba(0,0,0,0.25));
+}
+.fs-fish {
+  position: absolute; left: 0; top: 0;
+  display: flex; align-items: center;
+  cursor: pointer;
+  transition: opacity 0.6s;
+}
+.fs-fish.left { flex-direction: row-reverse; }
+.fs-fish-body { font-size: 72px; line-height: 1; display: inline-block; }
+.fs-fish:not(.left) .fs-fish-body { transform: scaleX(-1); }
+.fs-fish-tag {
+  min-width: 66px; padding: 4px 10px; margin: 0 -8px;
+  border-radius: 18px; background: #FFF; border: 4px solid #FFD43B;
+  font-family: var(--font-family); font-size: 30px; font-weight: 900; color: var(--vowel);
+  text-align: center;
+}
+.fs-fish.caught { transition: transform 0.6s ease-in, opacity 0.6s; opacity: 0; pointer-events: none; }
+
+/* ==================== TÀU HỎA SỐ ==================== */
+.tr-field { flex: 1; min-height: 0; display: flex; flex-direction: column; justify-content: space-around; gap: 10px; }
+.tr-track {
+  position: relative;
+  height: 160px;
+  overflow: hidden;
+  border-radius: 24px;
+  background: linear-gradient(180deg, #E7F5FF 0 70%, #D3F9D8 70%);
+  box-shadow: var(--card-shadow);
+}
+.tr-track::after {
+  content: ''; position: absolute; left: 0; right: 0; bottom: 22px; height: 8px;
+  background: repeating-linear-gradient(90deg, #868E96 0 18px, transparent 18px 30px);
+}
+.tr-train {
+  position: absolute; left: 40px; bottom: 28px;
+  display: flex; align-items: flex-end; gap: 8px;
+  transition: transform 1.6s ease-in;
+}
+.tr-train.leaving { transform: translateX(140vw); }
+.tr-engine { font-size: 96px; line-height: 0.9; transform: scaleX(-1); }
+.tr-car {
+  position: relative;
+  width: 96px; height: 84px; margin-bottom: 14px;
+  border-radius: 16px 16px 8px 8px;
+  border: 4px dashed #ADB5BD; background: #FFF;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 46px; font-weight: 900; color: #FFF;
+}
+.tr-car::before, .tr-car::after {
+  content: ''; position: absolute; bottom: -16px; width: 24px; height: 24px; border-radius: 50%;
+  background: #495057; border: 4px solid #CED4DA;
+}
+.tr-car::before { left: 10px; }
+.tr-car::after { right: 10px; }
+.tr-car.active { border-color: #FF7B54; background: #FFF3C4; animation: pulse 1.3s infinite; }
+.tr-car.filled { border: none; background: linear-gradient(180deg, #FF8787, #F03E3E); animation: bounce 0.4s ease; }
+.tr-car.filled:nth-child(even) { background: linear-gradient(180deg, #74C0FC, #1C7ED6); }
+.tr-station { display: flex; justify-content: center; gap: 18px; flex-wrap: wrap; }
+.tr-box {
+  width: 110px; height: 110px;
+  border-radius: 22px; border: 5px solid #FFF;
+  background: linear-gradient(160deg, #FFE8CC, #FFC078);
+  font-family: var(--font-family); font-size: 56px; font-weight: 900; color: #D9480F;
+  box-shadow: 0 8px 0 #E8590C, var(--card-shadow);
+  cursor: pointer;
+}
+.tr-box:active { transform: translateY(4px); box-shadow: 0 4px 0 #E8590C; }
+.tr-box.used { visibility: hidden; }

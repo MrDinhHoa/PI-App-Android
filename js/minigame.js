@@ -79,6 +79,16 @@
   // Mỗi màn hình trong tab Trò Chơi có data-view (lobby, play, memory, result, rescue, market, paint)
   function showView(name) {
     section.querySelectorAll(':scope > [data-view]').forEach(v => v.classList.toggle('is-hidden', v.dataset.view !== name));
+    if (name === 'lobby') refreshBest();
+  }
+
+  // Kỷ lục của từng trò hiện trên thẻ ở sảnh
+  function refreshBest() {
+    section.querySelectorAll('.mg-card[data-best-key]').forEach(card => {
+      const b = loadBest(card.dataset.bestKey);
+      const line = card.querySelector('.mg-card-best');
+      if (line) line.textContent = b ? `🏅 Kỷ lục: ${b}` : '🏅 Chưa có kỷ lục';
+    });
   }
 
   // Trò chơi viết ở file khác (minigame-more.js) đăng ký qua window.minigame.register(game):
