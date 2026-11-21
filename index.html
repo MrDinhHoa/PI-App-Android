@@ -304,29 +304,11 @@
 
     <!-- SECTION 3: MATH (BÉ LÀM TOÁN TRỰC QUAN) -->
     <section class="game-section" id="sec-math">
-      <div class="section-title">
-        <h2>Cùng làm toán với các bạn hoa quả đáng yêu nào! ➕ ➖</h2>
-      </div>
-      <div class="math-game-box">
-        <!-- Visual Equation Row -->
-        <div class="math-equation-row">
-          <div class="math-items-box" id="mathGroup1"></div>
-          <div class="math-symbol" id="mathOp">+</div>
-          <div class="math-items-box" id="mathGroup2"></div>
-          <div class="math-symbol">=</div>
-          <div class="math-target-box" id="mathTarget">?</div>
-        </div>
-
-        <!-- Prompt Text & Sound -->
-        <div class="math-prompt-container">
-          <button class="action-btn" id="btnMathAudio">🔊 Nghe câu hỏi</button>
-          <span class="math-prompt-text" id="mathPromptText">Bé hãy tính xem có tất cả bao nhiêu quả nhé!</span>
-        </div>
-
-        <!-- Choices -->
-        <div class="math-choices-row" id="mathChoices">
-          <!-- Choice buttons -->
-        </div>
+      <div class="mt-modes" id="mtModes"></div>
+      <div class="mt-area" id="mtArea"></div>
+      <div class="mt-bottom">
+        <button class="ls-home ls-replay" id="mtReplay" title="Nghe lại">🔊</button>
+        <div class="game-hint-banner mt-banner" id="mtBanner"></div>
       </div>
     </section>
 
@@ -344,6 +326,7 @@
   <script src="js/lessons.js"></script>
   <script src="js/minigame.js"></script>
   <script src="js/minigame-more.js"></script>
+  <script src="js/math-lab.js"></script>
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {

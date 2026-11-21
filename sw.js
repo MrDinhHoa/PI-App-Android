@@ -1,4 +1,4 @@
-const CACHE_NAME = 'behocvui-v5';
+const CACHE_NAME = 'behocvui-v6';
 
 const CORE_ASSETS = [
   './',
@@ -14,6 +14,7 @@ const CORE_ASSETS = [
   './js/lessons.js',
   './js/minigame.js',
   './js/minigame-more.js',
+  './js/math-lab.js',
   './audio/phonemes/index.json',
   './audio/voice/index.json',
   './icons/icon-192.png',

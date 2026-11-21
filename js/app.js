@@ -79,8 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
         window.kidsAudio.speak('Con cùng cô tập đánh vần nhé!');
         loadSpellingWord();
       } else if (btn.dataset.tab === 'math') {
-        window.kidsAudio.speak('Con cùng cô làm toán vui nhé!');
-        newMathQuestion();
+        window.mathLab.enter();
       }
     });
   });
@@ -226,125 +225,6 @@ document.addEventListener('DOMContentLoaded', () => {
     window.kidsAudio.playPop();
     const item = spellingData[currentSpellingIdx];
     window.kidsAudio.speakSequence(['Con hãy ghép chữ', item.word.toLowerCase(), item.name], { gap: 200, rate: 0.85 });
-  });
-
-  // ==================== 3. MATH MODULE (BÉ LÀM TOÁN) ====================
-  const MATH_NUM_WORDS = ['không', 'một', 'hai', 'ba', 'bốn', 'năm', 'sáu', 'bảy', 'tám', 'chín', 'mười'];
-  const mathNumWord = n => MATH_NUM_WORDS[n] || String(n);
-
-  const mathEmojis = [
-    { emoji: '🍎', name: 'quả táo' },
-    { emoji: '🍓', name: 'quả dâu' },
-    { emoji: '🦆', name: 'chú vịt' },
-    { emoji: '🚗', name: 'chiếc xe' },
-    { emoji: '🎈', name: 'quả bóng' }
-  ];
-
-  const mathGroup1El = document.getElementById('mathGroup1');
-  const mathGroup2El = document.getElementById('mathGroup2');
-  const mathOpEl = document.getElementById('mathOp');
-  const mathTargetEl = document.getElementById('mathTarget');
-  const mathPromptTextEl = document.getElementById('mathPromptText');
-  const mathChoicesEl = document.getElementById('mathChoices');
-  const btnMathAudio = document.getElementById('btnMathAudio');
-
-  let currentAnswer = 0;
-  let currentMathQuestionParts = [];
-
-  function newMathQuestion() {
-    mathTargetEl.textContent = '?';
-    mathTargetEl.classList.remove('solved');
-
-    const item = mathEmojis[Math.floor(Math.random() * mathEmojis.length)];
-    // Random operator: 70% addition, 30% subtraction
-    const isAddition = Math.random() > 0.3;
-
-    let num1, num2;
-    if (isAddition) {
-      num1 = Math.floor(Math.random() * 4) + 1; // 1 to 4
-      num2 = Math.floor(Math.random() * 4) + 1; // 1 to 4
-      currentAnswer = num1 + num2;
-      mathOpEl.textContent = '+';
-      currentMathQuestionParts = [mathNumWord(num1), item.name, 'cộng', mathNumWord(num2), item.name, 'bằng mấy', item.name];
-      mathPromptTextEl.textContent = `Bé hãy tính: ${num1} ${item.name} + ${num2} ${item.name} = ?`;
-    } else {
-      num1 = Math.floor(Math.random() * 4) + 2; // 2 to 5
-      num2 = Math.floor(Math.random() * (num1 - 1)) + 1; // 1 to num1-1
-      currentAnswer = num1 - num2;
-      mathOpEl.textContent = '−';
-      currentMathQuestionParts = [mathNumWord(num1), item.name, 'bớt', mathNumWord(num2), item.name, 'còn mấy', item.name];
-      mathPromptTextEl.textContent = `Bé hãy tính: ${num1} ${item.name} − ${num2} ${item.name} = ?`;
-    }
-
-    // Render items in Group 1
-    mathGroup1El.innerHTML = '';
-    for (let i = 0; i < num1; i++) {
-      const span = document.createElement('span');
-      span.className = 'math-mini-item';
-      span.textContent = item.emoji;
-      span.addEventListener('click', () => {
-        window.kidsAudio.playPop();
-        window.kidsAudio.speak(mathNumWord(i + 1));
-      });
-      mathGroup1El.appendChild(span);
-    }
-
-    // Render items in Group 2
-    mathGroup2El.innerHTML = '';
-    for (let i = 0; i < num2; i++) {
-      const span = document.createElement('span');
-      span.className = 'math-mini-item';
-      span.textContent = item.emoji;
-      span.addEventListener('click', () => {
-        window.kidsAudio.playPop();
-        window.kidsAudio.speak(mathNumWord(i + 1));
-      });
-      mathGroup2El.appendChild(span);
-    }
-
-    // Create 3 answer choices (1 correct, 2 distractors)
-    const choices = [currentAnswer];
-    while (choices.length < 3) {
-      const distractor = Math.max(1, currentAnswer + (Math.random() > 0.5 ? 1 : -1) * (Math.floor(Math.random() * 2) + 1));
-      if (!choices.includes(distractor) && distractor > 0) {
-        choices.push(distractor);
-      }
-    }
-    choices.sort(() => Math.random() - 0.5);
-
-    mathChoicesEl.innerHTML = '';
-    choices.forEach(val => {
-      const btn = document.createElement('button');
-      btn.className = 'math-choice-btn';
-      btn.textContent = val;
-      btn.addEventListener('click', () => {
-        if (val === currentAnswer) {
-          // Correct answer
-          mathTargetEl.textContent = val;
-          mathTargetEl.classList.add('solved');
-          window.kidsAudio.playCelebration();
-          addStar(2);
-
-          mathPromptTextEl.textContent = `🎉 Hoan hô! Kết quả là ${val}!`;
-          setTimeout(() => {
-            window.kidsAudio.speakSequence(['Cô khen con, đúng rồi! Kết quả là', mathNumWord(val)], { gap: 180, rate: 0.88 });
-            setTimeout(newMathQuestion, 2800);
-          }, 300);
-        } else {
-          // Wrong answer
-          window.kidsAudio.playBoing();
-          btn.style.transform = 'scale(0.85)';
-          setTimeout(() => btn.style.transform = '', 200);
-          window.kidsAudio.speak('Chưa đúng rồi, con đếm lại cùng cô nhé!');
-        }
-      });
-      mathChoicesEl.appendChild(btn);
-    });
-  }
-
-  btnMathAudio.addEventListener('click', () => {
-    window.kidsAudio.playPop();
-    window.kidsAudio.speakSequence(currentMathQuestionParts, { gap: 150, rate: 0.88 });
   });
 
   // ==================== CONFETTI EFFECT ====================

@@ -1621,133 +1621,6 @@ body {
   transform: scale(0.8);
 }
 
-/* ==================== SECTION 3: MATH (BÉ LÀM TOÁN) ==================== */
-.math-game-box {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-around;
-  padding: 10px 20px;
-}
-
-.math-equation-row {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  background: #FFFFFF;
-  padding: 18px 36px;
-  border-radius: 35px;
-  box-shadow: var(--card-shadow);
-  border: 4px solid #FFE0C2;
-}
-
-.math-items-box {
-  display: flex;
-  gap: 8px;
-  min-width: 140px;
-  justify-content: center;
-  align-items: center;
-  background: #FFF6EA;
-  padding: 12px 18px;
-  border-radius: 24px;
-  border: 2px dashed #FFB26B;
-}
-
-.math-mini-item {
-  font-size: 42px;
-  animation: float 2.5s ease-in-out infinite;
-  cursor: pointer;
-  transition: transform 0.2s;
-}
-
-.math-mini-item:active {
-  transform: scale(1.3);
-}
-
-.math-symbol {
-  font-size: 44px;
-  font-weight: 900;
-  color: #FF7B54;
-}
-
-.math-target-box {
-  width: 80px;
-  height: 80px;
-  background: #FFF1E6;
-  border: 4px dashed #FF7B54;
-  border-radius: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 44px;
-  font-weight: 900;
-  color: #E64A19;
-  animation: pulse 1.8s infinite;
-}
-
-.math-target-box.solved {
-  background: #2ECC71;
-  color: white;
-  border-style: solid;
-  border-color: #27AE60;
-  animation: bounce 0.5s ease;
-}
-
-.math-prompt-container {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  background: #FFFFFF;
-  padding: 8px 24px;
-  border-radius: 30px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-}
-
-.math-prompt-text {
-  font-size: 19px;
-  font-weight: 700;
-  color: #5D4037;
-}
-
-.math-choices-row {
-  display: flex;
-  gap: 28px;
-}
-
-.math-choice-btn {
-  width: 90px;
-  height: 90px;
-  border-radius: 50%;
-  border: 4px solid #FFF;
-  background: linear-gradient(135deg, #48DBFB, #0ABDE3);
-  color: white;
-  font-size: 42px;
-  font-weight: 900;
-  font-family: var(--font-family);
-  cursor: pointer;
-  box-shadow: 0 8px 20px rgba(10, 189, 227, 0.4);
-  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-.math-choice-btn:nth-child(2) {
-  background: linear-gradient(135deg, #FED330, #F7B731);
-  box-shadow: 0 8px 20px rgba(247, 183, 49, 0.4);
-}
-
-.math-choice-btn:nth-child(3) {
-  background: linear-gradient(135deg, #1DD1A1, #10AC84);
-  box-shadow: 0 8px 20px rgba(16, 172, 132, 0.4);
-}
-
-.math-choice-btn:hover {
-  transform: translateY(-8px) scale(1.12);
-}
-
-.math-choice-btn:active {
-  transform: scale(0.85);
-}
-
 /* ==================== CONFETTI OVERLAY ==================== */
 #confettiCanvas {
   position: fixed;
@@ -2072,3 +1945,222 @@ body {
   text-shadow: 0 2px 0 rgba(0,0,0,0.35);
 }
 .pt-crayon.selected { transform: translateX(-14px) scale(1.08); border-color: #343A40; }
+
+/* ==================== PHÒNG LUYỆN TOÁN (tab Làm Toán) ==================== */
+.mt-modes {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.mt-mode {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 22px;
+  border: 3px solid #FFE0C2;
+  background: #FFF;
+  font-family: var(--font-family);
+  font-size: 15px;
+  font-weight: 800;
+  color: #795548;
+  cursor: pointer;
+  transition: transform 0.15s;
+}
+.mt-mode:active { transform: scale(0.94); }
+.mt-mode-icon { font-size: 22px; line-height: 1; }
+.mt-mode.active { background: #FF7B54; border-color: #FF7B54; color: #FFF; box-shadow: 0 6px 14px rgba(255, 123, 84, 0.35); }
+.mt-mode-lv {
+  position: absolute; top: -9px; right: -4px;
+  font-size: 10px; font-weight: 900; color: #FFF; background: #10AC84;
+  padding: 1px 6px; border-radius: 10px;
+}
+
+.mt-area {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  gap: 8px;
+  padding-top: 6px;
+}
+.mt-bottom { display: flex; align-items: center; justify-content: center; gap: 12px; }
+.mt-bottom .mt-banner { margin-top: 0; max-width: 820px; font-size: 19px; }
+
+.mt-choices { display: flex; gap: 22px; justify-content: center; }
+.mt-card {
+  min-width: 110px;
+  height: 104px;
+  padding: 0 18px;
+  border-radius: 26px;
+  border: 5px solid #FFF;
+  background: #FFF;
+  font-family: var(--font-family);
+  font-weight: 900;
+  box-shadow: var(--card-shadow);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.mt-card:active { transform: scale(0.9); }
+.mt-num { font-size: 58px; color: #E64A19; }
+.mt-word { font-size: 36px; color: #2E86DE; }
+.mt-area .right { border-color: #2ECC71 !important; background: #E8F8F5 !important; animation: bounce 0.5s ease; }
+
+/* Cộng trừ */
+.mt-calc-row { display: flex; align-items: center; gap: 18px; }
+.mt-sym { font-size: 56px; font-weight: 900; color: #FF7B54; }
+.mt-group {
+  display: grid;
+  grid-template-columns: repeat(3, 62px);
+  gap: 6px;
+  padding: 12px;
+  background: #FFF;
+  border-radius: 24px;
+  border: 4px dashed #FFD8A8;
+}
+.mt-group.many { grid-template-columns: repeat(5, 62px); }
+.mt-item {
+  position: relative;
+  width: 62px; height: 62px;
+  border: none; background: transparent;
+  font-size: 46px; line-height: 1;
+  cursor: pointer;
+}
+.mt-item.gone { opacity: 0.35; cursor: default; }
+.mt-item.gone::after {
+  content: '✕';
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 54px; font-weight: 900; color: #E03131;
+}
+.mt-badge {
+  position: absolute; top: -4px; right: -4px;
+  min-width: 24px; height: 24px; border-radius: 12px;
+  background: #FF7B54; color: #FFF;
+  font-family: var(--font-family); font-size: 15px; font-weight: 900;
+  display: flex; align-items: center; justify-content: center;
+}
+.mt-formula {
+  display: flex; align-items: center; gap: 12px;
+  font-size: 46px; font-weight: 900; color: #5D4037;
+  transition: opacity 0.4s;
+}
+.mt-slot {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 76px; height: 70px; padding: 0 8px;
+  border: 4px dashed #FF7B54; border-radius: 18px;
+  background: #FFF3C4; color: #E64A19;
+}
+.mt-slot.solved { border-style: solid; border-color: #2ECC71; background: #E8F8F5; color: #27AE60; animation: bounce 0.5s ease; }
+.is-hidden-soft { opacity: 0; }
+
+/* Số liền trước - liền sau */
+.mt-line { display: flex; gap: 8px; align-items: center; }
+.mt-line-cell {
+  width: 88px; height: 88px;
+  border-radius: 50%;
+  background: #FFF;
+  border: 4px solid #FFE0C2;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 40px; font-weight: 900; color: #795548;
+  box-shadow: var(--card-shadow);
+}
+.mt-line-cell.given { background: #E7F5FF; border-color: #4DABF7; color: #1971C2; }
+.mt-line-cell.blank { background: #FFF3C4; border: 4px dashed #FF7B54; color: #E64A19; }
+.mt-line-cell.solved { border-style: solid; border-color: #2ECC71; background: #E8F8F5; color: #27AE60; animation: bounce 0.5s ease; }
+.mt-line-hint { font-size: 24px; font-weight: 800; color: #5D4037; }
+
+/* Toán có lời văn */
+.mt-scene {
+  position: relative;
+  width: min(760px, 92%);
+  min-height: 150px;
+  border-radius: 28px;
+  background: linear-gradient(180deg, #E7F5FF, #D3F9D8);
+  box-shadow: var(--card-shadow);
+  overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+}
+.mt-scene-bg { position: absolute; left: 14px; bottom: 4px; font-size: 80px; opacity: 0.55; }
+.mt-crowd { position: relative; display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 10px; max-width: 560px; padding: 14px; }
+.mt-actor { font-size: 50px; line-height: 1; transition: transform 0.6s ease, opacity 0.6s ease; }
+.mt-actor.waiting { transform: translateX(420px); opacity: 0; }
+.mt-actor.leaving { transform: translate(260px, -140px) scale(0.6); opacity: 0; }
+
+/* Dài ngắn - cao thấp */
+.mt-pencils { width: min(720px, 90%); display: flex; flex-direction: column; gap: 16px; }
+.mt-pencil-row {
+  height: 74px;
+  border: 4px solid transparent;
+  border-radius: 20px;
+  background: #FFF;
+  padding: 0 40px 0 14px;
+  display: flex; align-items: center;
+  cursor: pointer;
+  box-shadow: var(--card-shadow);
+}
+.mt-pencil {
+  position: relative;
+  display: block;
+  height: 34px;
+  border-radius: 6px 0 0 6px;
+  background: linear-gradient(180deg, var(--c) 0 33%, rgba(0,0,0,0.12) 33% 36%, var(--c) 36% 64%, rgba(0,0,0,0.12) 64% 67%, var(--c) 67%);
+}
+.mt-pencil::after {
+  content: '';
+  position: absolute; right: -30px; top: 0;
+  border-left: 30px solid #F4D8B0; border-top: 17px solid transparent; border-bottom: 17px solid transparent;
+}
+.mt-towers { display: flex; align-items: flex-end; gap: 48px; height: 340px; }
+.mt-tower {
+  display: flex; flex-direction: column-reverse; align-items: center; gap: 3px;
+  padding: 10px 14px 14px;
+  border: 4px solid transparent;
+  border-radius: 20px;
+  background: #FFF;
+  cursor: pointer;
+  box-shadow: var(--card-shadow);
+}
+.mt-block { width: 64px; height: 40px; border-radius: 8px; box-shadow: inset 0 -5px 0 rgba(0,0,0,0.15); }
+
+/* Đồng hồ */
+.mt-clock { display: block; }
+.mt-clock.big { width: 250px; height: 250px; filter: drop-shadow(0 10px 16px rgba(255,123,84,0.25)); }
+.mt-clock.small { width: 170px; height: 170px; }
+.mt-clock-num {
+  font-family: var(--font-family);
+  font-size: 22px; font-weight: 900; fill: #5D4037;
+  text-anchor: middle; dominant-baseline: central;
+}
+.mt-clock-card { height: auto; padding: 10px; }
+
+/* Vị trí */
+.mt-pos-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 120px);
+  grid-template-rows: repeat(3, 110px);
+  gap: 6px;
+  align-items: center;
+  justify-items: center;
+}
+.mt-pos-center { grid-area: 2 / 2; font-size: 96px; line-height: 1; }
+.mt-pos-animal {
+  width: 104px; height: 100px;
+  border-radius: 24px;
+  border: 4px solid #FFF;
+  background: #FFF;
+  font-size: 62px; line-height: 1;
+  cursor: pointer;
+  box-shadow: var(--card-shadow);
+}
+.mt-pos-animal.pos-top { grid-area: 1 / 2; }
+.mt-pos-animal.pos-bottom { grid-area: 3 / 2; }
+.mt-pos-animal.pos-left { grid-area: 2 / 1; }
+.mt-pos-animal.pos-right { grid-area: 2 / 3; }

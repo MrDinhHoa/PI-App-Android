@@ -24,7 +24,7 @@ PI App Android/
 │   └── phonemes/       # Chỗ đặt file thu âm âm vị thật (.mp3) + index.json + README.md (quy tắc đặt tên)
 ├── css/
 │   └── style.css       # Định kiểu giao diện mầm non, nút bấm to, layout tablet
-└── js/                 # Thứ tự nạp trong index.html: audio → wallet → app → phonics-data → phonics → lessons-data → lessons → minigame → minigame-more
+└── js/                 # Thứ tự nạp trong index.html: audio → wallet → app → phonics-data → phonics → lessons-data → lessons → minigame → minigame-more → math-lab
     ├── audio.js        # Âm thanh Web Audio + giọng đọc SpeechSynthesis; speakSequence() đọc chậm từng phần; ưu tiên file thu âm nếu có
     ├── wallet.js       # Ví sao ⭐ + chìa khóa 🔑, lưu localStorage (window.wallet)
     ├── app.js          # Điều hướng tab, các module cũ, confetti; xuất window.addStar / awardKey / spawnConfetti / goToTab
@@ -33,7 +33,8 @@ PI App Android/
     ├── lessons-data.js # Nội dung 17 bài học: từ 2 tiếng (36), câu đơn (20), ghép từ (20), vần (18), đồ vật đếm, danh sách bài
     ├── lessons.js      # Bản đồ bài học + trình chạy bài (~20 dạng bài tập), chấm sao, lưu tiến độ
     ├── minigame.js     # Khu trò chơi + Bắn Bóng Chữ & Số + Lật Thẻ Trí Nhớ; màn kết quả chung; window.minigame.register() cho game khác
-    └── minigame-more.js # Giải Cứu Thú Cưng, Siêu Thị Của Bé, Tô Màu Kỳ Diệu (đăng ký qua window.minigame.register)
+    ├── minigame-more.js # Giải Cứu Thú Cưng, Siêu Thị Của Bé, Tô Màu Kỳ Diệu (đăng ký qua window.minigame.register)
+    └── math-lab.js     # Tab Làm Toán: Phòng Luyện Toán 6 dạng (window.mathLab)
 ```
 
 ---
@@ -67,7 +68,13 @@ PI App Android/
 
 ### Module tự do có từ bản prototype đầu
 6. **🔤 Tập Đánh Vần:** Ghép chữ cái vào ô theo hình (Cá, Gà, Bò, Xe, Mèo, Chó, Táo, Hoa).
-7. **➕ Làm Toán Trực Quan:** Cộng/trừ qua hình ảnh, chạm để đếm.
+7. **➕ Làm Toán – Phòng Luyện Toán** (`math-lab.js`, luyện tự do, không tốn 🔑; đúng ngay lần đầu +1⭐; số câu đúng mỗi dạng lưu `beHocVui.mathLab.v1`, đúng 8 câu thì lên **Cấp 2**). 6 dạng chọn ở thanh trên cùng:
+   * ➕ Cộng trừ – chạm đếm từng hình (hiện số thứ tự), phép trừ gạch ✕ các hình bị bớt, công thức `a ± b = ?`; cấp 1 phạm vi 5, cấp 2 phạm vi 10;
+   * 🔢 Trước – sau – dãy 7 số có 1 ô trống, hỏi số liền trước / liền sau; cấp 1 đến 10, cấp 2 đến 20 (`vnNum()` đọc 11–20);
+   * 📖 Lời văn – cô kể bài toán 3 câu (chim, cá, gà con, bướm, ếch, vịt), hình động con vật tới / đi theo câu chuyện, hiện công thức; cấp 1 ≤5, cấp 2 ≤10;
+   * 📏 Dài – cao – 3 bút chì (dài nhất / ngắn nhất) hoặc 3 tháp khối (cao nhất / thấp nhất);
+   * 🕐 Đồng hồ – giờ đúng (đồng hồ SVG): nhìn đồng hồ chọn giờ, hoặc nghe giờ chọn đồng hồ;
+   * 🧭 Vị trí – 4 con vật quanh một đồ vật, hỏi bạn ở phía trên / phía dưới / bên trái / bên phải.
 
 > Đã bỏ (19/11/2026, theo yêu cầu người dùng): Vườn Thú, Đếm Số & Nổ Bóng Bay, Sắc Màu, Nối Hình – xóa cả HTML, JS và CSS.
 
@@ -115,6 +122,7 @@ PI App Android/
 ---
 
 ## 7. Nhật Ký Thay Đổi
+- **21/11/2026:** Tab Làm Toán thay bằng Phòng Luyện Toán 6 dạng (`js/math-lab.js`), xóa module toán cũ trong `app.js` và CSS `.math-*`. Service Worker lên `behocvui-v6`.
 - **21/11/2026:** Thêm 3 game Giải Cứu Thú Cưng, Siêu Thị Của Bé, Tô Màu Kỳ Diệu (`js/minigame-more.js`); sảnh trò chơi đủ 5 game. `minigame.js` thêm `register()` + màn kết quả chung `showResult()`; các màn hình trong tab Trò Chơi chuyển bằng `data-view`. Service Worker lên `behocvui-v5`.
 - **21/11/2026:** Thêm bài Tiếng Việt 9 "Vần cơ bản" và game Lật Thẻ Trí Nhớ; bổ sung dữ liệu (Đọc từ 10→36, Đọc câu 6→20, Ghép từ 10→20, thêm 4 đồ vật đếm); sửa lời nhắc "gấu" (ớ → â) và thay câu ghép từ "bình nước" 🍶 (nhiều đáp án đúng) bằng "quả bóng". Service Worker lên `behocvui-v4`. Các câu đọc mới chưa có file giọng HoaiMy trong `audio/voice/` nên dùng giọng máy của thiết bị.
 - **19/11/2026:** Bỏ 4 tab Động Vật, Đếm Số, Màu Sắc, Nối Hình (HTML/JS/CSS); header còn 6 tab nên phóng to lại tab và hiện lại tên "Bé Học Vui".
