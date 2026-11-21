@@ -24,7 +24,7 @@ PI App Android/
 │   └── phonemes/       # Chỗ đặt file thu âm âm vị thật (.mp3) + index.json + README.md (quy tắc đặt tên)
 ├── css/
 │   └── style.css       # Định kiểu giao diện mầm non, nút bấm to, layout tablet
-└── js/                 # Thứ tự nạp trong index.html: audio → wallet → app → phonics-data → phonics → lessons-data → lessons → minigame → minigame-more → math-lab → spell-lab → blend-lab
+└── js/                 # Thứ tự nạp trong index.html: audio → wallet → app → phonics-data → phonics → lessons-data → lessons → minigame → minigame-more → math-lab → spell-lab → blend-lab → abc-lab
     ├── audio.js        # Âm thanh Web Audio + giọng đọc SpeechSynthesis; speakSequence() đọc chậm từng phần; ưu tiên file thu âm nếu có
     ├── wallet.js       # Ví sao ⭐ + chìa khóa 🔑, lưu localStorage (window.wallet)
     ├── app.js          # Điều hướng tab, các module cũ, confetti; xuất window.addStar / awardKey / spawnConfetti / goToTab
@@ -36,7 +36,8 @@ PI App Android/
     ├── minigame-more.js # Giải Cứu Thú Cưng, Siêu Thị Của Bé, Tô Màu Kỳ Diệu (đăng ký qua window.minigame.register)
     ├── math-lab.js     # Tab Làm Toán: Phòng Luyện Toán 6 dạng (window.mathLab)
     ├── spell-lab.js    # Tab Đánh Vần: Xưởng Đánh Vần 4 dạng (window.spellLab), dùng chung CSS .mt-* với math-lab
-    └── blend-lab.js    # Tab Ghép Vần: 4 chế độ quanh Cỗ máy (Thử thách, Bảng ghép, Sổ sưu tập) (window.blendLab)
+    ├── blend-lab.js    # Tab Ghép Vần: 4 chế độ quanh Cỗ máy (Thử thách, Bảng ghép, Sổ sưu tập) (window.blendLab)
+    └── abc-lab.js      # Tab Chữ Cái: Tập tô, Hoa – thường, Thứ tự chữ, Tìm chữ (window.abcLab)
 ```
 
 ---
@@ -64,7 +65,12 @@ PI App Android/
      * (8) Hình học & Quy luật – nhận biết 5 hình khối cơ bản và giải chuỗi logic ABAB / AAB.
    * Chấm sao cuối bài: sai ≤1 lần → 3⭐, ≤3 lần → 2⭐, còn lại 1⭐. Mỗi lần học xong bài (kể cả học lại) → +1 🔑.
 2. **🎮 Trò Chơi:** Sảnh trò chơi; game **Lật Thẻ Trí Nhớ** (tốn 1 🔑, 120 giây, lượt lẻ ghép chữ ↔ hình có âm đầu đó, lượt chẵn ghép số ↔ nhóm đồ vật; lượt đầu 4 cặp, sau đó 6 cặp; không cho 2 chữ lồng nhau như c/ch cùng lượt; lưu kỷ lục `beHocVui.memoryBest.v1`); game **Bắn Bóng Chữ & Số** (tốn 1 🔑, 120 giây, đếm ngược 3-2-1, bóng mang chữ/số bay lên, loa đọc "Tìm chữ…/Tìm số…", trúng 3 bóng thì đổi mục tiêu xen kẽ chữ/số, tạm dừng khi rời tab, lưu kỷ lục `beHocVui.balloonBest.v1`); game **Giải Cứu Thú Cưng** (nhảy qua 4 cột đá, mỗi cột 3 phiến mang chữ/số, chọn đúng theo lời cô thì bé nhảy lên, sai thì đá chìm; qua sông thì cứu được 1 bạn thú; lượt xen kẽ chữ/số; kỷ lục `beHocVui.rescueBest.v1`); game **Siêu Thị Của Bé** (đơn "Mẹ nhờ mua", chạm hàng trên kệ để bỏ vào giỏ, chạm hàng trong giỏ để bỏ ra, bấm Thanh toán; cô nhắc thiếu/thừa/sai món; độ khó: 1 loại 1–5 → 1 loại 3–8 → 2 loại; kỷ lục `beHocVui.marketBest.v1`); game **Tô Màu Kỳ Diệu** (tô màu theo số, 5 bút màu đỏ/vàng/xanh lá/xanh dương/nâu, 5 tranh SVG: ngôi nhà, chú cá, bông hoa, ô tô, cây táo; tô sai số thì cô nhắc bút đúng; kỷ lục `beHocVui.paintBest.v1`). Cả 5 game đều 2 phút/lượt, tốn 1 🔑, tạm dừng khi rời tab. Chơi game không cộng sao.
-3. **🅰️ Chữ Cái:** Bảng chữ cái 3 nhóm màu (nguyên âm đỏ 12, phụ âm xanh dương 17, phụ âm ghép xanh lá 11); chạm là phát âm theo cách đánh vần mới ("bờ", "cờ") rồi đọc từ minh họa; O/Ô/Ơ có hiệu ứng lăn; chữ nghe lần đầu +1⭐.
+3. **🅰️ Chữ Cái:** 5 chế độ (thanh trên cùng, `abc-lab.js`; 4 dạng mới luyện tự do, đúng ngay lần đầu +1⭐, lưu `beHocVui.abcLab.v1`):
+   * 🔤 **Bảng chữ cái** (`phonics.js`) – 3 nhóm màu (nguyên âm đỏ 12, phụ âm xanh dương 17, phụ âm ghép xanh lá 11); chạm là phát âm theo cách đánh vần mới ("bờ", "cờ") rồi đọc từ minh họa; O/Ô/Ơ có hiệu ứng lăn; chữ nghe lần đầu +1⭐;
+   * ✍️ **Tập tô** – chữ mẫu font Comfortaa 280px trên canvas 440×330 có kẻ ô li, viền chấm; bé tô bằng ngón tay (nét 32px); đạt khi phủ ≥ 70% nét chữ (`PASS_COVER`) và tô ra ngoài vùng nới rộng ≤ 35% (`MAX_OUTSIDE`); tự chấm khi nhấc tay, nút ✅ Xong / 🧽 Xóa / ⏭️ Chữ khác; đi lần lượt 29 chữ, nhớ chữ đang tập (`traceIdx`);
+   * 🔠 **Hoa – thường** – nhìn chữ hoa chọn chữ thường hoặc ngược lại, có chữ dễ nhầm;
+   * 🚂 **Thứ tự chữ** – đoàn tàu 5 toa theo thứ tự 29 chữ cái, thiếu 1 toa;
+   * 🔍 **Tìm chữ** – hình + tiếng (từ `spellLab.BANK`), chạm vào chữ cô đọc (bỏ dấu thanh khi so, ví dụ "è" là chữ e).
 4. **⚙️ Ghép Vần:** 4 chế độ (thanh trên cùng, `blend-lab.js`):
    * ⚙️ **Cỗ máy** (`phonics.js`) – kéo thả (pointer events, hỗ trợ cả chạm) 24 phụ âm + khay bên phải chuyển **Âm** (9 nguyên âm) / **Vần** (18 vần của bài Vần, file `van-*.mp3`) → "Mờ… eo… meo!"; chọn 1 trong 6 thanh → "Mờ – eo – meo – huyền – mèo"; dấu đặt đúng chỗ bằng `phonicsUtil.placeTone()` (kiểu cũ: hòa, mèo, bóng, dừa); tiếng có nghĩa hiện hình + thưởng sao; luật chính tả c/k, g/gh, ng/ngh xét theo chữ đầu của vần;
    * 🎯 **Thử thách** – cô đưa hình + đọc tiếng, bé tự ghép trong cỗ máy (tự chuyển khay Âm/Vần); ghép sai cô nhắc âm đầu; 💡 Gợi ý nhấp nháy 2 thẻ đúng + đánh vần; đúng +1⭐;
@@ -132,6 +138,7 @@ PI App Android/
 ---
 
 ## 7. Nhật Ký Thay Đổi
+- **21/11/2026:** Tab Chữ Cái thêm 4 chế độ (`js/abc-lab.js`): Tập tô chữ bằng ngón tay (tự chấm), Hoa – thường, Thứ tự chữ, Tìm chữ trong từ. Service Worker lên `behocvui-v9`.
 - **21/11/2026:** Tab Ghép Vần thêm 4 chế độ (`js/blend-lab.js`): cỗ máy có khay Vần + đặt dấu đúng chỗ (`placeTone`), Thử thách, Bảng ghép, Sổ sưu tập (lưu tiến độ). Service Worker lên `behocvui-v8`.
 - **21/11/2026:** Tab Đánh Vần thay bằng Xưởng Đánh Vần 4 dạng (`js/spell-lab.js`), xóa module đánh vần cũ (8 từ viết hoa) trong `app.js` và CSS `.spelling-*`. Service Worker lên `behocvui-v7`.
 - **21/11/2026:** Tab Làm Toán thay bằng Phòng Luyện Toán 6 dạng (`js/math-lab.js`), xóa module toán cũ trong `app.js` và CSS `.math-*`. Service Worker lên `behocvui-v6`.

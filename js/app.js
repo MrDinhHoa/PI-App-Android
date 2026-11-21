@@ -70,8 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
       } else if (btn.dataset.tab === 'games') {
         window.minigame.enter();
       } else if (btn.dataset.tab === 'alphabet') {
-        window.kidsAudio.speak('Bảng chữ cái! Con chạm vào chữ để nghe cô đọc nhé!');
-        window.phonics.enterAlphabet();
+        window.abcLab.enter();
       } else if (btn.dataset.tab === 'blend') {
         window.blendLab.enter();
       } else if (btn.dataset.tab === 'spelling') {

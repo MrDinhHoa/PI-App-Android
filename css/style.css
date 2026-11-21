@@ -2234,3 +2234,73 @@ body {
 .bl-sticker.got { border: 3px solid #FFD43B; background: linear-gradient(160deg, #FFF, #FFF9DB); box-shadow: var(--card-shadow); }
 .bl-sticker.got .bl-sticker-pic { filter: none; opacity: 1; }
 .bl-sticker.got .bl-sticker-word { color: #E64A19; }
+
+/* ==================== CHỮ CÁI: 5 CHẾ ĐỘ (abc-lab.js) ==================== */
+#sec-alphabet .mt-modes { margin-bottom: 8px; }
+.ab-letter { font-size: 60px; min-width: 110px; }
+.ab-letter.vowel { color: var(--vowel); background: var(--vowel-soft); }
+.ab-letter.consonant { color: var(--consonant); background: var(--consonant-soft); }
+.ab-hero-letter {
+  min-width: 170px; height: 170px; padding: 0 20px;
+  border-radius: 40px; background: #FFF;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 120px; font-weight: 900;
+  box-shadow: var(--card-shadow);
+  animation: float 3s ease-in-out infinite;
+}
+.ab-hero-letter.vowel { color: var(--vowel); border: 6px solid var(--vowel-soft); }
+.ab-hero-letter.consonant { color: var(--consonant); border: 6px solid var(--consonant-soft); }
+
+/* Đoàn tàu thứ tự chữ */
+.ab-train { display: flex; align-items: flex-end; gap: 6px; }
+.ab-engine { font-size: 92px; line-height: 1; transform: scaleX(-1); }
+.ab-car {
+  position: relative;
+  width: 104px; height: 96px;
+  border-radius: 18px 18px 10px 10px;
+  background: linear-gradient(180deg, #4DABF7, #1C7ED6);
+  color: #FFF;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 52px; font-weight: 900;
+  margin-bottom: 16px;
+  cursor: pointer;
+}
+.ab-car::before, .ab-car::after {
+  content: ''; position: absolute; bottom: -16px; width: 26px; height: 26px; border-radius: 50%;
+  background: #495057; border: 4px solid #CED4DA;
+}
+.ab-car::before { left: 12px; }
+.ab-car::after { right: 12px; }
+.ab-car:nth-child(odd) { background: linear-gradient(180deg, #FF8787, #F03E3E); }
+.ab-car.blank { background: #FFF3C4; color: #E64A19; border: 4px dashed #FF7B54; }
+.ab-car.solved { background: linear-gradient(180deg, #69DB7C, #2F9E44); animation: bounce 0.5s ease; }
+
+/* Tìm chữ trong từ */
+.ab-find-pic { font-size: 100px; line-height: 1; animation: float 3s ease-in-out infinite; }
+.ab-find-word { display: flex; gap: 10px; }
+.ab-find-char {
+  min-width: 96px; height: 116px; padding: 0 10px;
+  border-radius: 24px; border: 5px solid #FFF; background: #FFF;
+  font-family: var(--font-family); font-size: 74px; font-weight: 900; color: #5D4037;
+  box-shadow: var(--card-shadow); cursor: pointer;
+}
+.ab-find-char.found { border-color: #2ECC71; background: #E8F8F5; color: #27AE60; animation: bounce 0.5s ease; }
+
+/* Tập tô chữ */
+.ab-trace { display: flex; align-items: center; gap: 20px; }
+.ab-trace-stage {
+  position: relative;
+  width: 440px; height: 330px;
+  border-radius: 28px;
+  background: #FFF;
+  box-shadow: var(--card-shadow);
+  border: 5px solid #FFE0C2;
+  overflow: hidden;
+}
+.ab-trace-stage.done { border-color: #2ECC71; }
+.ab-trace-stage canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.ab-trace-ink { touch-action: none; cursor: crosshair; opacity: 0.85; }
+.ab-trace-side { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.ab-trace-pic { font-size: 74px; line-height: 1; }
+.ab-trace-word { font-size: 22px; font-weight: 900; color: #795548; margin-bottom: 6px; }
+.ab-trace-side .action-btn { min-width: 150px; }

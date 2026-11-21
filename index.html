@@ -218,9 +218,8 @@
 
     <!-- PHASE 1 - LEVEL 1: ALPHABET & PHONEMES (BẢNG CHỮ CÁI) -->
     <section class="game-section" id="sec-alphabet">
-      <div class="section-title">
-        <h2>Bé chạm vào chữ cái để nghe âm nhé! 🔤</h2>
-      </div>
+      <div class="mt-modes" id="abModes"></div>
+      <div class="bl-view" id="abBoardView">
       <div class="abc-layout">
         <div class="abc-left">
           <div class="abc-groups">
@@ -242,6 +241,14 @@
           <div class="abc-word" id="abcWord">Chạm vào một chữ nhé!</div>
           <div class="abc-note" id="abcNote"></div>
           <button class="action-btn" id="btnAbcReplay">🔊 Nghe lại</button>
+        </div>
+      </div>
+      </div>
+      <div class="bl-view is-hidden" id="abLabView">
+        <div class="mt-area" id="abArea"></div>
+        <div class="mt-bottom">
+          <button class="ls-home ls-replay" id="abReplay" title="Nghe lại">🔊</button>
+          <div class="game-hint-banner mt-banner" id="abBanner"></div>
         </div>
       </div>
     </section>
@@ -324,6 +331,7 @@
   <script src="js/math-lab.js"></script>
   <script src="js/spell-lab.js"></script>
   <script src="js/blend-lab.js"></script>
+  <script src="js/abc-lab.js"></script>
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
