@@ -1785,3 +1785,72 @@ body {
   0%, 100% { transform: scale(1); }
   50% { transform: scale(1.18) rotate(6deg); }
 }
+
+/* ==================== BÀI VẦN CƠ BẢN ==================== */
+.ls-rhyme { color: var(--vowel); background: var(--vowel-soft); min-width: 130px; }
+.ls-spell-word .ls-spell-tail + .ls-spell-slot { margin: 0 0 0 6px; }
+
+/* ==================== LẬT THẺ TRÍ NHỚ ==================== */
+/* Sảnh có 2 trò chơi được: thu nhỏ thẻ để vừa 1 hàng trên tablet ngang */
+.mg-cards { gap: 14px; }
+.mg-card.ready { width: 220px; height: 270px; }
+.mg-card.ready .mg-card-icon { font-size: 84px; }
+.mg-card.ready.mm { background: linear-gradient(160deg, #F3E5FF, #FFE3EC); border-color: #A55EEA; }
+.mg-card.soon { width: 150px; height: 200px; }
+.mg-card.soon .mg-card-icon { font-size: 54px; }
+.mg-card.soon .mg-card-title { font-size: 15px; }
+.mm-hint .mg-target-kind { font-size: 20px; }
+
+.mm-board {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-auto-rows: 1fr;
+  gap: 14px;
+  padding: 6px 60px 10px;
+}
+.mm-board.big { grid-template-columns: repeat(4, 1fr); padding: 4px 20px 8px; gap: 10px; }
+
+.mm-card {
+  position: relative;
+  border: none;
+  background: transparent;
+  padding: 0;
+  perspective: 800px;
+  cursor: pointer;
+  min-height: 0;
+  font-family: var(--font-family);
+}
+.mm-inner {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.mm-card.open .mm-inner { transform: rotateY(180deg); }
+.mm-face {
+  position: absolute;
+  inset: 0;
+  border-radius: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  box-shadow: var(--card-shadow);
+  border: 5px solid #FFF;
+}
+.mm-back {
+  background: linear-gradient(135deg, #A55EEA, #FF9FF3);
+  font-size: 46px;
+}
+.mm-front { background: #FFF; transform: rotateY(180deg); }
+.mm-card.matched .mm-front { border-color: #2ECC71; background: #E8F8F5; animation: bounce 0.5s ease; }
+.mm-letter { font-size: 64px; font-weight: 900; color: var(--consonant); }
+.mm-pic { font-size: 62px; line-height: 1; }
+.mm-num { font-size: 66px; font-weight: 900; color: #E64A19; }
+.mm-dots { display: grid; grid-template-columns: repeat(2, auto); gap: 2px 8px; font-size: 34px; line-height: 1.1; }
+.mm-dots.many { grid-template-columns: repeat(4, auto); font-size: 28px; }
+.mm-board.big .mm-letter, .mm-board.big .mm-num { font-size: 54px; }
+.mm-board.big .mm-pic { font-size: 50px; }

@@ -30,17 +30,17 @@ PI App Android/
     ├── app.js          # Điều hướng tab, các module cũ, confetti; xuất window.addStar / awardKey / spawnConfetti / goToTab
     ├── phonics-data.js # Dữ liệu âm vị: bảng chữ cái (sound/blend/word/emoji), luật c/k-g/gh-ng/ngh, 6 thanh, ~50 tiếng có nghĩa
     ├── phonics.js      # Bảng chữ cái + Cỗ máy ghép vần; window.phonicsUtil (analyzeSyllable, spellParts, applyTone...)
-    ├── lessons-data.js # Nội dung 10 bài học: từ 2 tiếng, câu đơn, đồ vật đếm, danh sách bài
-    ├── lessons.js      # Bản đồ bài học + trình chạy bài (11 dạng bài tập), chấm sao, lưu tiến độ
-    └── minigame.js     # Khu trò chơi + game Bắn Bóng Chữ & Số (2 phút/lượt, tốn 1 chìa khóa)
+    ├── lessons-data.js # Nội dung 17 bài học: từ 2 tiếng (36), câu đơn (20), ghép từ (20), vần (18), đồ vật đếm, danh sách bài
+    ├── lessons.js      # Bản đồ bài học + trình chạy bài (~20 dạng bài tập), chấm sao, lưu tiến độ
+    └── minigame.js     # Khu trò chơi: Bắn Bóng Chữ & Số + Lật Thẻ Trí Nhớ (2 phút/lượt, tốn 1 chìa khóa)
 ```
 
 ---
 
 ## 3. Các Module Tính Năng Hiện Có
 ### Lộ trình 16 Bài Học Tiền Tiểu Học (theo `tientieuhoc.md`)
-1. **📚 Bài Học (tab mặc định):** Bản đồ 2 track × 8 bài (tổng 16 bài), mở khóa lần lượt trong từng track; tiến độ lưu localStorage (`beHocVui.lessons.v1`).
-   * **Tiếng Việt (8 bài):**
+1. **📚 Bài Học (tab mặc định):** Bản đồ Tiếng Việt 9 bài + Toán 8 bài (tổng 17 bài), mở khóa lần lượt trong từng track; tiến độ lưu localStorage (`beHocVui.lessons.v1`).
+   * **Tiếng Việt (9 bài):**
      * (1) Nguyên âm – nghe âm chọn chữ, có trộn chữ dễ nhầm;
      * (2) Phụ âm – nghe âm chọn chữ / chọn hình theo âm đầu;
      * (3) Ghép vần & dấu – nghe tiếng chọn đúng dấu, nhìn hình chọn chữ;
@@ -48,7 +48,8 @@ PI App Android/
      * (5) Đọc câu – karaoke highlight, bé chạm từng chữ trái → phải, chọn hình;
      * (6) Phụ âm ghép – nghe và nhận biết 11 phụ âm ghép (ch, th, ph, nh, kh, tr, ng, ngh, gi, qu);
      * (7) Luật chính tả – quy tắc cốt lõi: k, gh, ngh đi với e, ê, i; c, g, ng đi với các âm còn lại;
-     * (8) Ghép từ – nhìn hình điền tiếng còn thiếu để tạo thành từ có nghĩa.
+     * (8) Ghép từ – nhìn hình điền tiếng còn thiếu để tạo thành từ có nghĩa;
+     * (9) Vần cơ bản – 18 vần (ai, ay, oi, ao, eo, am, âm, ăn, em, en, ên, im, in, oa, ong, ông, ua, ưa), mỗi vần có file thu âm `van-*.mp3`: nghe vần chọn vần, nghe vần chọn hình, nhìn hình chọn vần ghép với âm đầu. Phương án nhiễu lấy từ nhóm vần dễ nhầm (`rhymeConfusable`). Đặt ở cuối track để không làm khóa lại bài đã học của bé.
    * **Toán tư duy (8 bài):**
      * (1) Đếm 1–5 và (2) Đếm 6–10 – chạm đếm từng hình, đếm xong mới hiện thẻ số;
      * (3) Nhận biết số / chọn nhóm đúng số lượng;
@@ -58,7 +59,7 @@ PI App Android/
      * (7) Phép cộng & trừ trong phạm vi 10 – công thức trực quan kết hợp hình vẽ;
      * (8) Hình học & Quy luật – nhận biết 5 hình khối cơ bản và giải chuỗi logic ABAB / AAB.
    * Chấm sao cuối bài: sai ≤1 lần → 3⭐, ≤3 lần → 2⭐, còn lại 1⭐. Mỗi lần học xong bài (kể cả học lại) → +1 🔑.
-2. **🎮 Trò Chơi:** Sảnh trò chơi; game **Bắn Bóng Chữ & Số** (tốn 1 🔑, 120 giây, đếm ngược 3-2-1, bóng mang chữ/số bay lên, loa đọc "Tìm chữ…/Tìm số…", trúng 3 bóng thì đổi mục tiêu xen kẽ chữ/số, tạm dừng khi rời tab, lưu kỷ lục `beHocVui.balloonBest.v1`). 3 game còn lại hiển thị "Sắp có". Chơi game không cộng sao.
+2. **🎮 Trò Chơi:** Sảnh trò chơi; game **Lật Thẻ Trí Nhớ** (tốn 1 🔑, 120 giây, lượt lẻ ghép chữ ↔ hình có âm đầu đó, lượt chẵn ghép số ↔ nhóm đồ vật; lượt đầu 4 cặp, sau đó 6 cặp; không cho 2 chữ lồng nhau như c/ch cùng lượt; lưu kỷ lục `beHocVui.memoryBest.v1`); game **Bắn Bóng Chữ & Số** (tốn 1 🔑, 120 giây, đếm ngược 3-2-1, bóng mang chữ/số bay lên, loa đọc "Tìm chữ…/Tìm số…", trúng 3 bóng thì đổi mục tiêu xen kẽ chữ/số, tạm dừng khi rời tab, lưu kỷ lục `beHocVui.balloonBest.v1`). 3 game còn lại hiển thị "Sắp có". Chơi game không cộng sao.
 3. **🅰️ Chữ Cái:** Bảng chữ cái 3 nhóm màu (nguyên âm đỏ 12, phụ âm xanh dương 17, phụ âm ghép xanh lá 11); chạm là phát âm theo cách đánh vần mới ("bờ", "cờ") rồi đọc từ minh họa; O/Ô/Ơ có hiệu ứng lăn; chữ nghe lần đầu +1⭐.
 4. **⚙️ Ghép Vần:** Kéo thả (pointer events, hỗ trợ cả chạm) 24 phụ âm + 9 nguyên âm vào cỗ máy → "Bờ… a… ba!"; chọn 1 trong 6 thanh → "Bờ – a – ba – huyền – bà"; tiếng có nghĩa hiện hình + thưởng sao; dạy luật chính tả c/k, g/gh, ng/ngh (gợi ý chữ đúng).
 5. **Sao & chìa khóa:** Header hiển thị ⭐ và 🔑, lưu localStorage (`beHocVui.wallet.v1`); chìa khóa nhận được có hiệu ứng bay lên header.
@@ -72,7 +73,8 @@ PI App Android/
 ### Hằng số / quy ước quan trọng
 * **Cách đọc âm** nằm trong `phonics-data.js`: `sound` (đọc khi chạm chữ) và `blend` (đọc khi ghép vần). Một số chữ đặt theo SGK hiện hành: k = "ca", q = "cu", gi = "di", gh/ngh = "gờ kép"/"ngờ kép" (ghép vần đọc "gờ"/"ngờ"). Cần đối chiếu với bộ sách bé học.
 * **File thu âm:** `audio/phonemes/<key>.mp3` + liệt kê key trong `index.json`. Key: `am-<chữ Telex>` (đ→dd, ă→aw, â→aa, ê→ee, ô→oo, ơ→ow, ư→uw), `am-<chữ>-ghep`, `thanh-<huyen|sac|hoi|nga|nang>`, `van-<vần>`. Key chưa có file thì dùng giọng máy.
-* **Game:** `GAME_SECONDS = 120`, `HITS_PER_TARGET = 3`, `MAX_BALLOONS = 7`, `SPAWN_EVERY = 0.85`s, `RISE_SECONDS = [5.5, 7.5]` (đầu `minigame.js`).
+* **Game Lật Thẻ:** `MM_SECONDS = 120`, `MM_PAIRS = [4, 6]`, `MM_LETTERS` (đầu `minigame.js`).
+* **Game Bắn Bóng:** `GAME_SECONDS = 120`, `HITS_PER_TARGET = 3`, `MAX_BALLOONS = 7`, `SPAWN_EVERY = 0.85`s, `RISE_SECONDS = [5.5, 7.5]` (đầu `minigame.js`).
 * **Bài Đọc từ** chỉ dùng từ không có vần kết thúc p/t/c/ch (cách đánh vần các vần này khác nhau giữa các bộ sách).
 
 ---
@@ -112,6 +114,7 @@ PI App Android/
 ---
 
 ## 7. Nhật Ký Thay Đổi
+- **21/11/2026:** Thêm bài Tiếng Việt 9 "Vần cơ bản" và game Lật Thẻ Trí Nhớ; bổ sung dữ liệu (Đọc từ 10→36, Đọc câu 6→20, Ghép từ 10→20, thêm 4 đồ vật đếm); sửa lời nhắc "gấu" (ớ → â) và thay câu ghép từ "bình nước" 🍶 (nhiều đáp án đúng) bằng "quả bóng". Service Worker lên `behocvui-v4`. Các câu đọc mới chưa có file giọng HoaiMy trong `audio/voice/` nên dùng giọng máy của thiết bị.
 - **19/11/2026:** Bỏ 4 tab Động Vật, Đếm Số, Màu Sắc, Nối Hình (HTML/JS/CSS); header còn 6 tab nên phóng to lại tab và hiện lại tên "Bé Học Vui".
 - **19/11/2026:** Hoàn thành 3 giai đoạn MVP theo `tientieuhoc.md`: (1) tab Chữ Cái + Cỗ máy ghép vần & 6 thanh, hỗ trợ file thu âm; (2) tab Bài Học với 10 bài mẫu (5 Tiếng Việt, 5 Toán), chấm sao, lưu tiến độ; (3) ví sao/chìa khóa lưu localStorage, Khu trò chơi + game Bắn Bóng Chữ & Số 2 phút/lượt. Sửa lỗi layout `body` không đủ chiều cao (các tab bị dồn lên nửa trên).
 - **18/11/2026:** Khởi tạo dự án Bé Học Vui (PWA), tích hợp khung giả lập Tablet 10.9", hoàn thiện 6 module (Động vật, Đánh vần, Làm toán, Đếm số, Màu sắc, Nối hình) kèm hệ thống âm thanh Web Audio và lồng tiếng tiếng Việt.

@@ -1,4 +1,4 @@
-// Nội dung các bài học (5 bài cơ bản + 3 bài nâng cao mỗi track). Sửa / thêm nội dung ở đây.
+// Nội dung các bài học (Tiếng Việt 9 bài, Toán 8 bài). Sửa / thêm nội dung ở đây.
 window.LESSONS_DATA = {
   // Bài 4 - Đọc từ: từ 2 tiếng (tránh vần có âm cuối p, t, c, ch để đánh vần đơn giản)
   words: [
@@ -11,7 +11,33 @@ window.LESSONS_DATA = {
     { text: 'quả táo', emoji: '🍎', sound: 'Quả táo đỏ, ngon quá!' },
     { text: 'bông hoa', emoji: '🌸', sound: 'Hoa thơm quá!' },
     { text: 'cái ô', emoji: '☂️', sound: 'Cái ô che mưa!' },
-    { text: 'lá cờ', emoji: '🚩', sound: 'Lá cờ bay phấp phới!' }
+    { text: 'lá cờ', emoji: '🚩', sound: 'Lá cờ bay phấp phới!' },
+    { text: 'con cua', emoji: '🦀', sound: 'Cua bò ngang!' },
+    { text: 'con cá', emoji: '🐟', sound: 'Cá bơi tung tăng!' },
+    { text: 'con ong', emoji: '🐝', sound: 'Ong bay vo ve!' },
+    { text: 'con thỏ', emoji: '🐰', sound: 'Thỏ nhảy tung tăng!' },
+    { text: 'con khỉ', emoji: '🐒', sound: 'Khỉ leo cây giỏi quá!' },
+    { text: 'con rùa', emoji: '🐢', sound: 'Rùa bò chầm chậm!' },
+    { text: 'con hổ', emoji: '🐯', sound: 'Hổ kêu gừ gừ!' },
+    { text: 'con gấu', emoji: '🐻', sound: 'Gấu thích ăn mật ong!' },
+    { text: 'con heo', emoji: '🐷', sound: 'Ủn ỉn, ủn ỉn!' },
+    { text: 'con ngựa', emoji: '🐴', sound: 'Hí hí!' },
+    { text: 'quả nho', emoji: '🍇', sound: 'Chùm nho ngọt lịm!' },
+    { text: 'quả lê', emoji: '🍐', sound: 'Quả lê mát quá!' },
+    { text: 'quả cam', emoji: '🍊', sound: 'Quả cam vàng ươm!' },
+    { text: 'quả chuối', emoji: '🍌', sound: 'Chuối chín vàng!' },
+    { text: 'dưa hấu', emoji: '🍉', sound: 'Dưa hấu đỏ mọng!' },
+    { text: 'cái mũ', emoji: '🧢', sound: 'Cái mũ che nắng!' },
+    { text: 'cái kéo', emoji: '✂️', sound: 'Cái kéo cắt giấy!' },
+    { text: 'cái nơ', emoji: '🎀', sound: 'Cái nơ xinh quá!' },
+    { text: 'ô tô', emoji: '🚗', sound: 'Ô tô chạy bon bon!' },
+    { text: 'máy bay', emoji: '✈️', sound: 'Máy bay bay cao!' },
+    { text: 'tàu hỏa', emoji: '🚂', sound: 'Tàu hỏa xình xịch!' },
+    { text: 'ngôi sao', emoji: '⭐', sound: 'Ngôi sao lấp lánh!' },
+    { text: 'cầu vồng', emoji: '🌈', sound: 'Cầu vồng bảy màu!' },
+    { text: 'cây dừa', emoji: '🌴', sound: 'Cây dừa cao vút!' },
+    { text: 'đôi giày', emoji: '👟', sound: 'Đôi giày của bé!' },
+    { text: 'ngôi nhà', emoji: '🏠', sound: 'Ngôi nhà của bé!' }
   ],
 
   // Bài 5 - Đọc câu: 4–6 chữ, kèm hình minh họa để bé chọn
@@ -21,7 +47,21 @@ window.LESSONS_DATA = {
     { text: 'Chú gà gáy vang', emoji: '🐓🌅' },
     { text: 'Con bò ăn cỏ', emoji: '🐄🌿' },
     { text: 'Bà bế em bé', emoji: '👵👶' },
-    { text: 'Con mèo trèo cây', emoji: '🐱🌳' }
+    { text: 'Con mèo trèo cây', emoji: '🐱🌳' },
+    { text: 'Bố đọc báo', emoji: '👨📰' },
+    { text: 'Bé tô màu', emoji: '👧🖍️' },
+    { text: 'Mẹ nấu cơm', emoji: '👩🍚' },
+    { text: 'Con cá bơi', emoji: '🐟🌊' },
+    { text: 'Bé đá bóng', emoji: '👦⚽' },
+    { text: 'Chim hót líu lo', emoji: '🐦🎶' },
+    { text: 'Bé đi ngủ', emoji: '👶🛏️' },
+    { text: 'Ông tưới cây', emoji: '👴🌱' },
+    { text: 'Bé rửa tay', emoji: '🧒🧼' },
+    { text: 'Trời mưa to', emoji: '🌧️☔' },
+    { text: 'Con thỏ ăn cà rốt', emoji: '🐰🥕' },
+    { text: 'Bé đi xe đạp', emoji: '🧒🚲' },
+    { text: 'Con khỉ ăn chuối', emoji: '🐒🍌' },
+    { text: 'Bé đọc sách', emoji: '👧📚' }
   ],
 
   // Bài 7 (Nâng cao) - Luật chính tả c/k, g/gh, ng/ngh
@@ -33,7 +73,7 @@ window.LESSONS_DATA = {
     { prefix: 'gh', vowel: 'ế', full: 'ghế', emoji: '🪑', options: ['g', 'gh'], hint: 'Trước chữ ê, bé chọn gờ kép gh nhé!' },
     { prefix: 'g', vowel: 'à', full: 'gà', emoji: '🐔', options: ['g', 'gh'], hint: 'Trước chữ a, bé chọn chữ g đơn nhé!' },
     { prefix: 'gh', vowel: 'ẹ', full: 'ghẹ', emoji: '🦀', options: ['g', 'gh'], hint: 'Trước chữ e, bé chọn gờ kép gh nhé!' },
-    { prefix: 'g', vowel: 'ấu', full: 'gấu', emoji: '🐻', options: ['g', 'gh'], hint: 'Trước chữ ớ, bé chọn chữ g đơn nhé!' },
+    { prefix: 'g', vowel: 'ấu', full: 'gấu', emoji: '🐻', options: ['g', 'gh'], hint: 'Trước chữ â, bé chọn chữ g đơn nhé!' },
     { prefix: 'ngh', vowel: 'é', full: 'nghé', emoji: '🐃', options: ['ng', 'ngh'], hint: 'Trước chữ e, bé chọn ngờ kép ngh nhé!' },
     { prefix: 'ng', vowel: 'ô', full: 'ngô', emoji: '🌽', options: ['ng', 'ngh'], hint: 'Trước chữ ô, bé chọn chữ ng đơn nhé!' },
     { prefix: 'ngh', vowel: 'ỉ', full: 'nghỉ', emoji: '🏖️', options: ['ng', 'ngh'], hint: 'Trước chữ i, bé chọn ngờ kép ngh nhé!' },
@@ -49,9 +89,19 @@ window.LESSONS_DATA = {
     { first: 'chú', second: 'thỏ', emoji: '🐰', choices: ['thỏ', 'gấu', 'voi'], full: 'chú thỏ' },
     { first: 'máy', second: 'bay', emoji: '✈️', choices: ['bay', 'nước', 'giặt'], full: 'máy bay' },
     { first: 'mặt', second: 'trời', emoji: '☀️', choices: ['trời', 'trăng', 'đất'], full: 'mặt trời' },
-    { first: 'bình', second: 'nước', emoji: '🍶', choices: ['nước', 'sữa', 'trà'], full: 'bình nước' },
+    { first: 'quả', second: 'bóng', emoji: '⚽', choices: ['bóng', 'mèo', 'bàn'], full: 'quả bóng' },
     { first: 'con', second: 'cá', emoji: '🐟', choices: ['cá', 'tôm', 'cua'], full: 'con cá' },
-    { first: 'cái', second: 'ô', emoji: '☂️', choices: ['ô', 'mũ', 'nón'], full: 'cái ô' }
+    { first: 'cái', second: 'ô', emoji: '☂️', choices: ['ô', 'mũ', 'nón'], full: 'cái ô' },
+    { first: 'con', second: 'voi', emoji: '🐘', choices: ['voi', 'bàn', 'sách'], full: 'con voi' },
+    { first: 'quả', second: 'cam', emoji: '🍊', choices: ['cam', 'xe', 'mèo'], full: 'quả cam' },
+    { first: 'cái', second: 'kéo', emoji: '✂️', choices: ['kéo', 'gà', 'cá'], full: 'cái kéo' },
+    { first: 'bông', second: 'hoa', emoji: '🌸', choices: ['hoa', 'cá', 'xe'], full: 'bông hoa' },
+    { first: 'xe', second: 'đạp', emoji: '🚲', choices: ['đạp', 'mèo', 'cam'], full: 'xe đạp' },
+    { first: 'cầu', second: 'vồng', emoji: '🌈', choices: ['vồng', 'gà', 'táo'], full: 'cầu vồng' },
+    { first: 'con', second: 'ong', emoji: '🐝', choices: ['ong', 'ghế', 'bút'], full: 'con ong' },
+    { first: 'ngôi', second: 'nhà', emoji: '🏠', choices: ['nhà', 'cá', 'lá'], full: 'ngôi nhà' },
+    { first: 'cây', second: 'dừa', emoji: '🌴', choices: ['dừa', 'gà', 'bút'], full: 'cây dừa' },
+    { first: 'tàu', second: 'hỏa', emoji: '🚂', choices: ['hỏa', 'cam', 'mèo'], full: 'tàu hỏa' }
   ],
 
   // Toán: đồ vật để đếm
@@ -65,8 +115,37 @@ window.LESSONS_DATA = {
     { emoji: '🐞', name: 'con bọ rùa' },
     { emoji: '🍊', name: 'quả cam' },
     { emoji: '🚗', name: 'chiếc xe' },
-    { emoji: '🌸', name: 'bông hoa' }
+    { emoji: '🌸', name: 'bông hoa' },
+    { emoji: '🐥', name: 'chú gà con' },
+    { emoji: '🍌', name: 'quả chuối' },
+    { emoji: '🐢', name: 'con rùa' },
+    { emoji: '🧁', name: 'chiếc bánh' }
   ],
+
+  // Bài 9 Tiếng Việt - Vần cơ bản. Mỗi vần kèm 1 từ có hình minh họa (một tiếng, có âm đầu).
+  // Chỉ dùng vần đã có file thu âm trong audio/phonemes (van-<vần>.mp3).
+  rhymes: [
+    { rhyme: 'ai', word: 'tai', emoji: '👂' },
+    { rhyme: 'ay', word: 'tay', emoji: '✋' },
+    { rhyme: 'oi', word: 'voi', emoji: '🐘' },
+    { rhyme: 'ao', word: 'táo', emoji: '🍎' },
+    { rhyme: 'eo', word: 'mèo', emoji: '🐱' },
+    { rhyme: 'am', word: 'cam', emoji: '🍊' },
+    { rhyme: 'âm', word: 'nấm', emoji: '🍄' },
+    { rhyme: 'ăn', word: 'khăn', emoji: '🧣' },
+    { rhyme: 'em', word: 'kem', emoji: '🍦' },
+    { rhyme: 'en', word: 'kèn', emoji: '🎺' },
+    { rhyme: 'ên', word: 'nến', emoji: '🕯️' },
+    { rhyme: 'im', word: 'chim', emoji: '🐦' },
+    { rhyme: 'in', word: 'pin', emoji: '🔋' },
+    { rhyme: 'oa', word: 'hoa', emoji: '🌸' },
+    { rhyme: 'ong', word: 'bóng', emoji: '⚽' },
+    { rhyme: 'ông', word: 'trống', emoji: '🥁' },
+    { rhyme: 'ua', word: 'cua', emoji: '🦀' },
+    { rhyme: 'ưa', word: 'dưa', emoji: '🍉' }
+  ],
+  // Các vần dễ nhầm (dùng làm phương án nhiễu)
+  rhymeConfusable: [['ai', 'ay', 'oi'], ['ao', 'eo'], ['am', 'âm', 'ăn'], ['em', 'en', 'ên'], ['im', 'in'], ['ong', 'ông'], ['ua', 'ưa', 'oa']],
 
   numberWords: ['không', 'một', 'hai', 'ba', 'bốn', 'năm', 'sáu', 'bảy', 'tám', 'chín', 'mười'],
 
@@ -104,6 +183,7 @@ window.LESSONS_DATA = {
     { id: 'tv6', track: 'tv', icon: '🐯', title: 'Phụ âm ghép', intro: 'Bài sáu. Phụ âm ghép. Con nghe cô đọc và tìm đúng phụ âm ghép nhé!' },
     { id: 'tv7', track: 'tv', icon: '✨', title: 'Luật chính tả', intro: 'Bài bảy. Quy tắc chính tả. Con nhớ k, gh, và ngh chỉ đi với e, ê, i nhé!' },
     { id: 'tv8', track: 'tv', icon: '🧩', title: 'Ghép từ', intro: 'Bài tám. Ghép từ có nghĩa. Bé nhìn hình và tìm tiếng còn thiếu nhé!' },
+    { id: 'tv9', track: 'tv', icon: '🎵', title: 'Vần cơ bản', intro: 'Bài chín. Vần. Con nghe cô đọc vần và tìm cùng cô nhé!' },
 
     // 5 bài Toán cơ bản
     { id: 'toan1', track: 'toan', icon: '🍎', title: 'Đếm 1 đến 5', intro: 'Bài một. Đếm từ một đến năm. Con chạm vào từng hình để đếm cùng cô nhé!' },

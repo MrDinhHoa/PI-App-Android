@@ -1,4 +1,4 @@
-// Giai đoạn 2: 10 bài học mẫu (5 Tiếng Việt + 5 Toán) - bản đồ bài học + trình chạy bài
+// Bản đồ bài học (Tiếng Việt 9 bài + Toán 8 bài) + trình chạy bài
 (function () {
   const L = window.LESSONS_DATA;
   const PD = window.PHONICS_DATA;
@@ -80,6 +80,16 @@
   const dictEntries = Object.entries(PD.words).map(([text, w]) => ({ text, ...w }));
   const uniquePictures = dictEntries.filter(w => dictEntries.filter(x => x.emoji === w.emoji).length === 1);
 
+  // Vần: phương án nhiễu gồm 1 vần dễ nhầm (nếu có) + vần ngẫu nhiên
+  const rhymePart = r => ({ text: r, clip: `van-${P.slug(r)}` });
+  function rhymeOptions(target, n = 3) {
+    const group = (L.rhymeConfusable.find(g => g.includes(target.rhyme)) || []).filter(r => r !== target.rhyme);
+    const others = L.rhymes.filter(x => x !== target);
+    const close = shuffle(others.filter(x => group.includes(x.rhyme)));
+    const far = shuffle(others.filter(x => !group.includes(x.rhyme)));
+    return shuffle([target, ...[...close.slice(0, 1), ...far].slice(0, n - 1)]);
+  }
+
   const BUILD = {
     tv1: () => sample(vowels, 5).map(t => ({ type: 'pickLetter', group: 'vowel', target: t, options: letterOptions(t, vowels) })),
 
@@ -135,6 +145,15 @@
       puzzle: p,
       options: shuffle(p.choices)
     })),
+
+    tv9: () => {
+      const picks = sample(L.rhymes, 6);
+      return [
+        ...picks.slice(0, 2).map(t => ({ type: 'pickRhyme', target: t, options: rhymeOptions(t) })),
+        ...picks.slice(2, 4).map(t => ({ type: 'findRhymeWord', target: t, options: rhymeOptions(t) })),
+        ...picks.slice(4, 6).map(t => ({ type: 'completeRhyme', target: t, options: rhymeOptions(t) }))
+      ];
+    },
 
     toan1: () => shuffle([1, 2, 3, 4, 5]).map(n => ({ type: 'countTap', n, item: pick(L.counters), lo: 1, hi: 6 })),
 
@@ -833,6 +852,60 @@
 
       const text = `Bé nhìn hình và chọn tiếng đúng để ghép thành "${p.full}" nhé! 🧩`;
       setPrompt(text, ['Con nhìn hình và chọn tiếng đúng để ghép thành từ', p.full, 'nhé!']);
+    },
+
+    // Nghe vần -> chọn vần
+    pickRhyme(ex, area) {
+      const t = ex.target;
+      area.appendChild(bigSpeaker());
+      area.appendChild(choiceRow(ex.options, item => {
+        const c = el('button', 'ls-card ls-word ls-rhyme', item.rhyme);
+        c.addEventListener('click', () => {
+          if (item === t) correct(c, ['Vần', rhymePart(t.rhyme), ...P.spellParts(t.word)]);
+          else wrong(c, ['Đây là vần', rhymePart(item.rhyme), 'Con tìm vần', rhymePart(t.rhyme)]);
+        });
+        return c;
+      }));
+      setPrompt('Bé nghe cô đọc vần rồi chạm vào vần đúng nhé! 🎵', ['Con tìm vần', rhymePart(t.rhyme)]);
+    },
+
+    // Nghe vần -> chọn hình có vần đó
+    findRhymeWord(ex, area) {
+      const t = ex.target;
+      area.appendChild(bigSpeaker());
+      area.appendChild(choiceRow(ex.options, item => pictureCard(item.emoji, c => {
+        if (item === t) correct(c, P.spellParts(t.word));
+        else wrong(c, ['Đây là', item.word, 'Con tìm hình có vần', rhymePart(t.rhyme)]);
+      })));
+      setPrompt('Hình nào có vần bé vừa nghe? 🖼️', ['Hình nào có vần', rhymePart(t.rhyme)]);
+    },
+
+    // Nhìn hình -> chọn vần còn thiếu (âm đầu + ? = tiếng)
+    completeRhyme(ex, area) {
+      const t = ex.target;
+      const a = P.analyzeSyllable(t.word);
+      const hero = el('div', 'ls-spell-hero');
+      hero.appendChild(el('div', 'ls-hero-pic', t.emoji));
+      const wordRow = el('div', 'ls-spell-word');
+      const slot = el('span', 'ls-spell-slot', '?');
+      wordRow.append(el('span', 'ls-spell-tail', a.onset), slot);
+      hero.appendChild(wordRow);
+      area.appendChild(hero);
+
+      area.appendChild(choiceRow(ex.options, item => {
+        const c = el('button', 'ls-card ls-word ls-rhyme', item.rhyme);
+        c.addEventListener('click', () => {
+          if (item === t) {
+            slot.textContent = a.syllable.slice(a.onset.length);
+            slot.classList.add('filled');
+            correct(c, P.spellParts(t.word));
+          } else {
+            wrong(c, ['Đây là vần', rhymePart(item.rhyme), 'Con nhìn hình, đọc lại cùng cô nhé!', t.word]);
+          }
+        });
+        return c;
+      }));
+      setPrompt(`Bé chọn vần đúng để ghép thành "${t.word}" nhé! 🧩`, ['Con chọn vần đúng để ghép thành tiếng', t.word]);
     },
 
     // Gộp số

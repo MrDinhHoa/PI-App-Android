@@ -103,6 +103,11 @@
             <span class="mg-card-title">Bắn Bóng Chữ &amp; Số</span>
             <span class="mg-card-cost">🔑 x1 · ⏱️ 2 phút</span>
           </button>
+          <button class="mg-card ready mm" id="mgCardMemory">
+            <span class="mg-card-icon">🃏</span>
+            <span class="mg-card-title">Lật Thẻ Trí Nhớ</span>
+            <span class="mg-card-cost">🔑 x1 · ⏱️ 2 phút</span>
+          </button>
           <div class="mg-card soon">
             <span class="mg-card-icon">🐻</span>
             <span class="mg-card-title">Giải Cứu Thú Cưng</span>
@@ -138,10 +143,22 @@
         </div>
       </div>
 
+      <div class="mg-play is-hidden" id="mmPlay">
+        <div class="mg-topbar">
+          <button class="ls-home" id="mmStop" title="Dừng chơi">🏠</button>
+          <div class="mg-target mm-hint">
+            <span class="mg-target-kind" id="mmKind">Tìm cặp thẻ giống nhau</span>
+          </div>
+          <div class="mg-timer"><div class="mg-timer-fill" id="mmTimerFill"></div><span class="mg-timer-icon">⏱️</span></div>
+          <div class="mg-score">🃏 <span id="mmScore">0</span></div>
+        </div>
+        <div class="mm-board" id="mmBoard"></div>
+      </div>
+
       <div class="mg-result is-hidden" id="mgResult">
         <div class="mg-result-icon">⏰</div>
         <div class="mg-result-title">Hết giờ chơi rồi!</div>
-        <div class="mg-result-score">🎈 x <span id="mgResultScore">0</span></div>
+        <div class="mg-result-score"><span id="mgResultIcon">🎈</span> x <span id="mgResultScore">0</span></div>
         <div class="mg-result-best" id="mgResultBest"></div>
         <div class="mg-result-note">Mắt bé cần nghỉ một chút 😊 Học bài tiếp để nhận chìa khóa nhé!</div>
         <div class="ls-finish-actions">
