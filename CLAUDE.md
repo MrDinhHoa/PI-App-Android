@@ -24,7 +24,7 @@ PI App Android/
 │   └── phonemes/       # Chỗ đặt file thu âm âm vị thật (.mp3) + index.json + README.md (quy tắc đặt tên)
 ├── css/
 │   └── style.css       # Định kiểu giao diện mầm non, nút bấm to, layout tablet
-└── js/                 # Thứ tự nạp trong index.html: audio → wallet → app → phonics-data → phonics → lessons-data → lessons → minigame → minigame-more → math-lab
+└── js/                 # Thứ tự nạp trong index.html: audio → wallet → app → phonics-data → phonics → lessons-data → lessons → minigame → minigame-more → math-lab → spell-lab
     ├── audio.js        # Âm thanh Web Audio + giọng đọc SpeechSynthesis; speakSequence() đọc chậm từng phần; ưu tiên file thu âm nếu có
     ├── wallet.js       # Ví sao ⭐ + chìa khóa 🔑, lưu localStorage (window.wallet)
     ├── app.js          # Điều hướng tab, các module cũ, confetti; xuất window.addStar / awardKey / spawnConfetti / goToTab
@@ -34,7 +34,8 @@ PI App Android/
     ├── lessons.js      # Bản đồ bài học + trình chạy bài (~20 dạng bài tập), chấm sao, lưu tiến độ
     ├── minigame.js     # Khu trò chơi + Bắn Bóng Chữ & Số + Lật Thẻ Trí Nhớ; màn kết quả chung; window.minigame.register() cho game khác
     ├── minigame-more.js # Giải Cứu Thú Cưng, Siêu Thị Của Bé, Tô Màu Kỳ Diệu (đăng ký qua window.minigame.register)
-    └── math-lab.js     # Tab Làm Toán: Phòng Luyện Toán 6 dạng (window.mathLab)
+    ├── math-lab.js     # Tab Làm Toán: Phòng Luyện Toán 6 dạng (window.mathLab)
+    └── spell-lab.js    # Tab Đánh Vần: Xưởng Đánh Vần 4 dạng (window.spellLab), dùng chung CSS .mt-* với math-lab
 ```
 
 ---
@@ -67,7 +68,11 @@ PI App Android/
 5. **Sao & chìa khóa:** Header hiển thị ⭐ và 🔑, lưu localStorage (`beHocVui.wallet.v1`); chìa khóa nhận được có hiệu ứng bay lên header.
 
 ### Module tự do có từ bản prototype đầu
-6. **🔤 Tập Đánh Vần:** Ghép chữ cái vào ô theo hình (Cá, Gà, Bò, Xe, Mèo, Chó, Táo, Hoa).
+6. **🔤 Đánh Vần – Xưởng Đánh Vần** (`spell-lab.js`, luyện tự do, không tốn 🔑; đúng ngay lần đầu +1⭐; số câu đúng lưu `beHocVui.spellLab.v1`). Dạy theo cách lớp 1: **âm đầu + vần + dấu thanh**. Kho ~70 tiếng có hình (gộp `PD.words`, `L.rhymes`, `EXTRA_WORDS`; chỉ giữ tiếng có âm đầu, không có vần kết thúc p/t/c/ch, mỗi hình ứng với đúng 1 tiếng). 4 dạng:
+   * 🧱 Ghép tiếng – nhìn hình, chọn lần lượt âm đầu → vần → dấu (6 thanh); cô đọc "kh – ăn – khăn – ngang"; phương án nhiễu là âm/vần dễ nhầm;
+   * 🔤 Ghép chữ cái – xếp chữ thường theo thứ tự (phụ âm ghép là 1 thẻ), chạm sai được nhắc chữ tiếp theo ngay; xong thì chọn dấu; thẻ tô màu theo loại chữ (nguyên âm đỏ, phụ âm xanh) để không lộ âm đầu;
+   * 👂 Nghe đánh vần – cô đánh vần, bé chọn 1 trong 3 hình;
+   * 🔍 Phân tích tiếng – "Tiếng lá có âm đầu / vần / dấu gì?", đúng thì tô sáng phần đó trên chữ.
 7. **➕ Làm Toán – Phòng Luyện Toán** (`math-lab.js`, luyện tự do, không tốn 🔑; đúng ngay lần đầu +1⭐; số câu đúng mỗi dạng lưu `beHocVui.mathLab.v1`, đúng 8 câu thì lên **Cấp 2**). 6 dạng chọn ở thanh trên cùng:
    * ➕ Cộng trừ – chạm đếm từng hình (hiện số thứ tự), phép trừ gạch ✕ các hình bị bớt, công thức `a ± b = ?`; cấp 1 phạm vi 5, cấp 2 phạm vi 10;
    * 🔢 Trước – sau – dãy 7 số có 1 ô trống, hỏi số liền trước / liền sau; cấp 1 đến 10, cấp 2 đến 20 (`vnNum()` đọc 11–20);
@@ -122,6 +127,7 @@ PI App Android/
 ---
 
 ## 7. Nhật Ký Thay Đổi
+- **21/11/2026:** Tab Đánh Vần thay bằng Xưởng Đánh Vần 4 dạng (`js/spell-lab.js`), xóa module đánh vần cũ (8 từ viết hoa) trong `app.js` và CSS `.spelling-*`. Service Worker lên `behocvui-v7`.
 - **21/11/2026:** Tab Làm Toán thay bằng Phòng Luyện Toán 6 dạng (`js/math-lab.js`), xóa module toán cũ trong `app.js` và CSS `.math-*`. Service Worker lên `behocvui-v6`.
 - **21/11/2026:** Thêm 3 game Giải Cứu Thú Cưng, Siêu Thị Của Bé, Tô Màu Kỳ Diệu (`js/minigame-more.js`); sảnh trò chơi đủ 5 game. `minigame.js` thêm `register()` + màn kết quả chung `showResult()`; các màn hình trong tab Trò Chơi chuyển bằng `data-view`. Service Worker lên `behocvui-v5`.
 - **21/11/2026:** Thêm bài Tiếng Việt 9 "Vần cơ bản" và game Lật Thẻ Trí Nhớ; bổ sung dữ liệu (Đọc từ 10→36, Đọc câu 6→20, Ghép từ 10→20, thêm 4 đồ vật đếm); sửa lời nhắc "gấu" (ớ → â) và thay câu ghép từ "bình nước" 🍶 (nhiều đáp án đúng) bằng "quả bóng". Service Worker lên `behocvui-v4`. Các câu đọc mới chưa có file giọng HoaiMy trong `audio/voice/` nên dùng giọng máy của thiết bị.

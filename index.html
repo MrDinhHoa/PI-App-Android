@@ -277,28 +277,11 @@
 
     <!-- SECTION 2: SPELLING / PHONICS (TẬP ĐÁNH VẦN) -->
     <section class="game-section" id="sec-spelling">
-      <div class="section-title">
-        <h2>Bé hãy chọn chữ cái ghép thành tên đúng nhé! 🔤</h2>
-      </div>
-      <div class="spelling-game-box">
-        <div class="spelling-card-container">
-          <div class="spelling-pic" id="spellingPic">🐟</div>
-          <button class="action-btn" id="btnSpellingAudio">🔊 Nghe đọc mẫu</button>
-        </div>
-
-        <div class="spelling-slots-wrapper">
-          <div class="spelling-slots" id="spellingSlots">
-            <!-- Filled by JS -->
-          </div>
-        </div>
-
-        <div class="spelling-pool-wrapper">
-          <div class="spelling-letters-pool" id="spellingLettersPool">
-            <!-- Clickable letters -->
-          </div>
-        </div>
-
-        <div class="game-hint-banner" id="spellingStatus">Bé hãy chạm vào từng chữ cái để ghép từ nhé!</div>
+      <div class="mt-modes" id="spModes"></div>
+      <div class="mt-area" id="spArea"></div>
+      <div class="mt-bottom">
+        <button class="ls-home ls-replay" id="spReplay" title="Nghe lại">🔊</button>
+        <div class="game-hint-banner mt-banner" id="spBanner"></div>
       </div>
     </section>
 
@@ -327,6 +310,7 @@
   <script src="js/minigame.js"></script>
   <script src="js/minigame-more.js"></script>
   <script src="js/math-lab.js"></script>
+  <script src="js/spell-lab.js"></script>
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
