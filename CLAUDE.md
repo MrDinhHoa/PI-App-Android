@@ -24,9 +24,10 @@ PI App Android/
 │   └── phonemes/       # Chỗ đặt file thu âm âm vị thật (.mp3) + index.json + README.md (quy tắc đặt tên)
 ├── css/
 │   └── style.css       # Định kiểu giao diện mầm non, nút bấm to, layout tablet
-└── js/                 # Thứ tự nạp trong index.html: audio → wallet → app → phonics-data → phonics → lessons-data → lessons → minigame → minigame-more → math-lab → spell-lab → blend-lab → abc-lab
+└── js/                 # Thứ tự nạp trong index.html: audio → wallet → parent → app → phonics-data → phonics → lessons-data → lessons → minigame → minigame-more → math-lab → spell-lab → blend-lab → abc-lab
     ├── audio.js        # Âm thanh Web Audio + giọng đọc SpeechSynthesis; speakSequence() đọc chậm từng phần; ưu tiên file thu âm nếu có
     ├── wallet.js       # Ví sao ⭐ + chìa khóa 🔑, lưu localStorage (window.wallet)
+    ├── parent.js       # Khu phụ huynh: cổng phép nhân, giới hạn giờ/ngày, quy tắc chìa khóa, báo cáo (window.parentLog)
     ├── app.js          # Điều hướng tab, các module cũ, confetti; xuất window.addStar / awardKey / spawnConfetti / goToTab
     ├── phonics-data.js # Dữ liệu âm vị: bảng chữ cái (sound/blend/word/emoji), luật c/k-g/gh-ng/ngh, 6 thanh, ~50 tiếng có nghĩa
     ├── phonics.js      # Bảng chữ cái + Cỗ máy ghép vần; window.phonicsUtil (analyzeSyllable, spellParts, applyTone...)
@@ -80,7 +81,11 @@ PI App Android/
    * 🎯 **Thử thách** – cô đưa hình + đọc tiếng, bé tự ghép trong cỗ máy (tự chuyển khay Âm/Vần); ghép sai cô nhắc âm đầu; 💡 Gợi ý nhấp nháy 2 thẻ đúng + đánh vần; đúng +1⭐;
    * 📋 **Bảng ghép** – 3 trang phụ âm × 9 nguyên âm như bảng ôn SGK; chạm ô là đánh vần; ô sai luật chính tả gạch ✗ và giải thích; ô là tiếng có nghĩa có hình nhỏ;
    * 📒 **Sổ sưu tập** – 66 tiếng có hình ghép được bằng cỗ máy (lấy từ kho `spellLab.BANK`); tiếng đã ghép được lưu `beHocVui.blendFound.v1`; hình chưa tìm ra hiện bóng mờ, chạm vào thì mở Thử thách tiếng đó.
-5. **Sao & chìa khóa:** Header hiển thị ⭐ và 🔑, lưu localStorage (`beHocVui.wallet.v1`); chìa khóa nhận được có hiệu ứng bay lên header.
+5. **Sao & chìa khóa:** Header hiển thị ⭐ và 🔑, lưu localStorage (`beHocVui.wallet.v1`); chìa khóa nhận được có hiệu ứng bay lên header. Học xong bài → +1 🔑 nếu `parentLog.canAwardKey(replay)` cho phép (replay = học lại bài đã xong hoặc Ôn tập).
+5b. **👪 Phụ huynh** (`parent.js`, nút 👪 góc phải header; lưu `beHocVui.parent.v1`):
+   * **Cổng phụ huynh** – phép nhân ngẫu nhiên 3–9 × 3–9, bàn phím số;
+   * **Báo cáo** – thời gian dùng 7 ngày (biểu đồ cột), tiến độ 2 track + bài chỉ được 1⭐, "Dạng bài bé hay sai" (tỉ lệ sai, cần ≥ 3 lần trả lời), "Chữ, vần, số hay nhầm". Ghi qua `parentLog.answer(category, ok, detail)` trong `correct()/wrong()` của `lessons.js` (category = "Bài học: <tên bài>", detail = chữ/vần/số của câu), `math-lab.js`, `spell-lab.js` (detail = tiếng), `abc-lab.js`;
+   * **Cài đặt** – giới hạn thời gian/ngày (Không/15/20/30/45/60 phút; tính 5 giây một lần khi trang đang hiện; còn 2 phút cô nhắc; hết giờ hiện màn hình 🌙 phủ toàn app, tạm dừng game, chỉ mở lại qua cổng phụ huynh; nút "Cho thêm 15 phút hôm nay"); chìa khóa khi học lại/Ôn tập (bật/tắt); tối đa chìa khóa/ngày (Không/3/5/10); xóa báo cáo; xóa toàn bộ tiến độ (có hỏi lại).
 
 ### Module tự do có từ bản prototype đầu
 6. **🔤 Đánh Vần – Xưởng Đánh Vần** (`spell-lab.js`, luyện tự do, không tốn 🔑; đúng ngay lần đầu +1⭐; số câu đúng lưu `beHocVui.spellLab.v1`). Dạy theo cách lớp 1: **âm đầu + vần + dấu thanh**. Kho ~70 tiếng có hình (gộp `PD.words`, `L.rhymes`, `EXTRA_WORDS`; chỉ giữ tiếng có âm đầu, không có vần kết thúc p/t/c/ch, mỗi hình ứng với đúng 1 tiếng). 4 dạng:
@@ -127,7 +132,8 @@ PI App Android/
 * **Giọng đọc tiếng Việt:** Dùng Web Speech API (`SpeechSynthesis`), chất lượng phụ thuộc gói giọng tiếng Việt trên thiết bị. Giọng máy đọc âm đơn lẻ ("bờ", "ơ", vần "eo") có thể chưa chuẩn → cần nghe thử trên tablet; hướng xử lý là thu âm thật vào `audio/phonemes/`.
 * **Emoji khác nhau theo hệ điều hành:** không dùng hướng của emoji để truyền tải ý nghĩa (đã thay 🐊 trong bài dấu > < bằng SVG). Một số emoji mới (🪑 🪨 🪵 🪣 🫖) cần Android đời mới.
 * **Cảm ứng trên Tablet:** Đã thiết lập `-webkit-tap-highlight-color: transparent`, `user-select: none`; ô kéo thả và sân bóng dùng `touch-action: none`.
-* **Chìa khóa:** bấm 🏠 giữa lượt chơi thì kết thúc lượt, không hoàn lại chìa khóa. Học lại bài cũ vẫn được +1 🔑 (có thể cần siết lại).
+* **Chìa khóa:** bấm 🏠 giữa lượt chơi thì kết thúc lượt, không hoàn lại chìa khóa. Mặc định học lại bài cũ / Ôn tập vẫn được +1 🔑; phụ huynh tắt được trong Cài đặt.
+* **Giới hạn giờ** chỉ chặn trong app (dữ liệu ở localStorage của trình duyệt), không phải khóa thiết bị; xóa dữ liệu trình duyệt sẽ mất cài đặt.
 
 ---
 
@@ -135,13 +141,13 @@ PI App Android/
 - [ ] Kiểm thử trên tablet thật: giọng đọc âm vị, kéo thả bằng ngón tay, tốc độ bóng bay, kích thước chạm.
 - [ ] Thu âm chuẩn bộ âm vị / thanh điệu / vần, đặt vào `audio/phonemes/` (xem README trong thư mục).
 - [ ] Đối chiếu cách đọc k, q, gi, gh, ngh và cách đánh vần với bộ sách bé học (Cánh Diều / Kết nối tri thức).
-- [ ] Tính năng phụ huynh: Cổng phụ huynh (phép nhân), giới hạn thời gian dùng/ngày, báo cáo âm/dạng toán bé hay nghe lại.
 - [ ] Thêm file `sw.js` (Service Worker) để chạy offline hoàn toàn trên tablet.
 - [ ] Đưa ứng dụng lên GitHub Pages / Vercel để cài thử nghiệm qua *Add to Home Screen*.
 
 ---
 
 ## 7. Nhật Ký Thay Đổi
+- **21/11/2026:** Thêm khu Phụ huynh (`js/parent.js`): cổng phép nhân, báo cáo (thời gian 7 ngày, tiến độ, dạng bài / chữ hay sai), giới hạn giờ mỗi ngày với màn hình hết giờ, quy tắc chìa khóa (học lại / tối đa mỗi ngày), xóa dữ liệu. Ôn tập không còn ghi tiến độ vào bản đồ. Service Worker lên `behocvui-v11`.
 - **21/11/2026:** Tab Bài Học thêm 4 bài (Tập viết, Đọc hiểu, Số đến 20, Xem đồng hồ), nút Ôn tập mỗi track, tổng sao trên nhãn track, bản đồ tự cuộn tới bài tiếp theo. Tách khối tô chữ thành `abcLab.createTracer()` dùng chung. Service Worker lên `behocvui-v10`.
 - **21/11/2026:** Tab Chữ Cái thêm 4 chế độ (`js/abc-lab.js`): Tập tô chữ bằng ngón tay (tự chấm), Hoa – thường, Thứ tự chữ, Tìm chữ trong từ. Service Worker lên `behocvui-v9`.
 - **21/11/2026:** Tab Ghép Vần thêm 4 chế độ (`js/blend-lab.js`): cỗ máy có khay Vần + đặt dấu đúng chỗ (`placeTone`), Thử thách, Bảng ghép, Sổ sưu tập (lưu tiến độ). Service Worker lên `behocvui-v8`.

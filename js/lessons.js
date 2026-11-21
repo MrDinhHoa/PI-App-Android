@@ -425,9 +425,28 @@
     RENDER[ex.type](ex, areaEl);
   }
 
+  // Báo cáo phụ huynh: dạng bài = tên bài, chi tiết = chữ / vần / số đang hỏi
+  function exDetail(ex) {
+    if (!ex) return '';
+    const t = ex.target;
+    if (t && typeof t === 'object') return t.letter || t.rhyme || (t.text && t.text.split(' ').length === 1 ? t.text : '') || '';
+    if (ex.letter) return ex.letter;
+    if (ex.quiz) return ex.quiz.full;
+    if (ex.h) return `${ex.h} giờ`;
+    if (typeof ex.n === 'number') return String(ex.n);
+    return '';
+  }
+  function logAnswer(ok) {
+    if (!window.parentLog || !player.lesson) return;
+    const ex = player.exercises[player.idx];
+    const lesson = player.lesson.id.startsWith('review') ? 'Ôn tập' : player.lesson.title;
+    window.parentLog.answer(`Bài học: ${lesson}`, ok, exDetail(ex));
+  }
+
   async function correct(target, extraParts = []) {
     if (player.solved) return;
     player.solved = true;
+    logAnswer(true);
     const token = player.token;
     if (target) target.classList.add('right');
     audio().playCelebration();
@@ -448,6 +467,7 @@
   function wrong(target, hintParts) {
     if (player.solved) return;
     player.mistakes++;
+    logAnswer(false);
     audio().playBoing();
     if (target) bounce(target, 'anim-shake');
     audio().speakSequence(hintParts || ['Chưa đúng rồi, con thử lại cùng cô nhé!'], { gap: 180, rate: 0.85 });
@@ -456,9 +476,14 @@
   function finishLesson() {
     const lesson = player.lesson;
     const stars = player.mistakes <= 1 ? 3 : player.mistakes <= 3 ? 2 : 1;
+    const replay = !!progress[lesson.id] || lesson.id.startsWith('review');
     const prev = progress[lesson.id] ? progress[lesson.id].stars : 0;
-    progress[lesson.id] = { stars: Math.max(prev, stars) };
-    saveProgress();
+    if (!lesson.id.startsWith('review')) {
+      progress[lesson.id] = { stars: Math.max(prev, stars) };
+      saveProgress();
+    }
+    // Phụ huynh có thể tắt chìa khóa khi học lại / ôn tập, hoặc giới hạn số chìa mỗi ngày
+    const getKey = !window.parentLog || window.parentLog.canAwardKey(replay);
     player.prompt = null;
     renderDots();
 
@@ -474,7 +499,10 @@
     }
     box.appendChild(starRow);
 
-    box.appendChild(el('div', 'ls-finish-key', '+1 🔑 Chìa khóa mở trò chơi!'));
+    const noKeyText = replay && window.parentLog && !window.parentLog._data().settings.replayKeys
+      ? 'Học bài mới để nhận chìa khóa nhé 😊'
+      : 'Hôm nay bé đã nhận đủ chìa khóa rồi 😊';
+    box.appendChild(el('div', 'ls-finish-key', getKey ? '+1 🔑 Chìa khóa mở trò chơi!' : noKeyText));
 
     const actions = el('div', 'ls-finish-actions');
     const btnPlay = el('button', 'action-btn big play', '🎈 Chơi Bắn Bóng');
@@ -491,20 +519,19 @@
     box.appendChild(actions);
     areaEl.appendChild(box);
 
-    bannerEl.textContent = `Bé được ${stars} ngôi sao và 1 chìa khóa!`;
+    bannerEl.textContent = getKey ? `Bé được ${stars} ngôi sao và 1 chìa khóa!` : `Bé được ${stars} ngôi sao!`;
     window.addStar(stars);
-    setTimeout(() => window.awardKey(), 900);
+    if (getKey) {
+      if (window.parentLog) window.parentLog.keyAwarded();
+      setTimeout(() => window.awardKey(), 900);
+    }
     audio().playCelebration();
     setTimeout(() => window.spawnConfetti && window.spawnConfetti(), 400);
-    const starSentence = stars === 3
-      ? 'Hoàn thành bài học rồi! Cô tặng con ba ngôi sao và một chìa khóa!'
-      : stars === 2
-        ? 'Hoàn thành bài học rồi! Cô tặng con hai ngôi sao và một chìa khóa!'
-        : 'Hoàn thành bài học rồi! Cô tặng con một ngôi sao và một chìa khóa!';
-    audio().speakSequence([
-      starSentence,
-      'Con có thể chơi trò bắn bóng rồi đấy!'
-    ], { gap: 260, rate: 0.9 });
+    const starWord = ['', 'một', 'hai', 'ba'][stars];
+    audio().speakSequence(getKey
+      ? [`Hoàn thành bài học rồi! Cô tặng con ${starWord} ngôi sao và một chìa khóa!`, 'Con có thể chơi trò bắn bóng rồi đấy!']
+      : [`Hoàn thành bài học rồi! Cô tặng con ${starWord} ngôi sao!`],
+    { gap: 260, rate: 0.9 });
   }
 
   btnHome.addEventListener('click', () => { audio().playPop(); exitLesson(); audio().speak('Chào con! Con chọn bài học cùng cô nhé!'); });

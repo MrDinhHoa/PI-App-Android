@@ -53,6 +53,7 @@
   const level = mode => ((progress[mode] || 0) >= LEVEL_UP_AT ? 2 : 1);
 
   // ==================== DOM & STATE ====================
+  const logAnswer = ok => window.parentLog && window.parentLog.answer(`Làm toán: ${MODES[st.mode].label}`, ok, '');
   const section = $('sec-math');
   const modesEl = $('mtModes');
   const areaEl = $('mtArea');
@@ -85,6 +86,7 @@
   async function correct(node, parts = []) {
     if (st.solved) return;
     st.solved = true;
+    logAnswer(true);
     const token = st.token;
     if (node) node.classList.add('right');
     audio().playCelebration();
@@ -105,6 +107,7 @@
   function wrong(node, parts) {
     if (st.solved) return;
     st.mistakes++;
+    logAnswer(false);
     audio().playBoing();
     if (node) bounce(node, 'anim-shake');
     audio().speakSequence(parts || ['Chưa đúng rồi, con thử lại cùng cô nhé!'], { gap: 160, rate: 0.88 });

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'behocvui-v10';
+const CACHE_NAME = 'behocvui-v11';
 
 const CORE_ASSETS = [
   './',
@@ -7,6 +7,7 @@ const CORE_ASSETS = [
   './css/style.css',
   './js/audio.js',
   './js/wallet.js',
+  './js/parent.js',
   './js/app.js',
   './js/phonics-data.js',
   './js/phonics.js',

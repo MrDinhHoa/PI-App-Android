@@ -60,6 +60,7 @@
         <span class="star-icon">🔑</span>
         <span class="star-count" id="keyCount">0</span>
       </div>
+      <button class="parent-btn" id="parentBtn" title="Dành cho phụ huynh">👪</button>
     </div>
   </header>
 
@@ -316,11 +317,42 @@
 
   </main>
 
+  <!-- Màn hình hết giờ học trong ngày -->
+  <div class="limit-screen is-hidden" id="limitScreen">
+    <div class="limit-moon">🌙</div>
+    <div class="limit-title">Hết giờ học hôm nay rồi!</div>
+    <div class="limit-text">Bé cho mắt nghỉ ngơi nhé. Mai mình học tiếp! 😴</div>
+    <button class="action-btn secondary" id="limitParentBtn">👪 Phụ huynh</button>
+  </div>
+
+  <!-- Khu phụ huynh: cổng phép nhân + bảng báo cáo / cài đặt -->
+  <div class="parent-overlay is-hidden" id="parentOverlay">
+    <div class="parent-gate" id="parentGate">
+      <div class="pg-title">👪 Dành cho phụ huynh</div>
+      <div class="pg-sub">Nhập kết quả phép tính để tiếp tục</div>
+      <div class="pg-question" id="pgQuestion"></div>
+      <div class="pg-input" id="pgInput"></div>
+      <div class="pg-keypad" id="pgKeypad"></div>
+      <button class="pg-cancel" id="pgCancel">✕ Đóng</button>
+    </div>
+    <div class="parent-panel is-hidden" id="parentPanel">
+      <div class="pn-head">
+        <div class="pn-tabs">
+          <button class="pn-tab active" data-tab="report">📊 Báo cáo</button>
+          <button class="pn-tab" data-tab="settings">⚙️ Cài đặt</button>
+        </div>
+        <button class="pn-close" id="pnClose">✕ Đóng</button>
+      </div>
+      <div class="pn-body" id="pnBody"></div>
+    </div>
+  </div>
+
   <!-- Confetti Canvas overlay for celebrations -->
   <canvas id="confettiCanvas"></canvas>
 
   <script src="js/audio.js"></script>
   <script src="js/wallet.js"></script>
+  <script src="js/parent.js"></script>
   <script src="js/app.js"></script>
   <script src="js/phonics-data.js"></script>
   <script src="js/phonics.js"></script>

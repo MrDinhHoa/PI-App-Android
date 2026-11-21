@@ -97,6 +97,7 @@
   const saveProgress = () => { try { localStorage.setItem(STORE_KEY, JSON.stringify(progress)); } catch (e) { /* ignore */ } };
 
   // ==================== DOM & STATE ====================
+  const logAnswer = ok => window.parentLog && window.parentLog.answer(`Đánh vần: ${MODES[st.mode].label}`, ok, (st.lastWord ? st.lastWord.text : ''));
   const section = $('sec-spelling');
   const modesEl = $('spModes');
   const areaEl = $('spArea');
@@ -128,6 +129,7 @@
   async function correct(node, parts = []) {
     if (st.solved) return;
     st.solved = true;
+    logAnswer(true);
     const token = st.token;
     if (node) node.classList.add('right');
     audio().playCelebration();
@@ -146,6 +148,7 @@
   function wrong(node, parts) {
     if (st.solved) return;
     st.mistakes++;
+    logAnswer(false);
     audio().playBoing();
     if (node) bounce(node, 'anim-shake');
     audio().speakSequence(parts || ['Chưa đúng rồi, con thử lại cùng cô nhé!'], { gap: 300, rate: 0.82 });
